@@ -1,0 +1,19 @@
+parameters:
+  private_message.mapper.class: 'Drupal\private_message\Mapper\PrivateMessageMapper'
+  private_message.service.class: 'Drupal\private_message\Service\PrivateMessageService'
+  private_message.event_subscriber.class: 'Drupal\private_message\Event\PrivateMessageEventSubscriber'
+
+services:
+  private_message.mapper:
+    class: '%private_message.mapper.class%'
+    arguments:
+      - '@database'
+      - '@current_user'
+
+  private_message.service:
+    class: '%private_message.service.class%'
+    arguments:
+      - '@private_message.mapper'
+      - '@current_user'
+      - '@config.factory'
+      - '@user.data'

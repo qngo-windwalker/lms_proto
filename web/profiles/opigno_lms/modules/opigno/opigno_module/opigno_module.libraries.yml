@@ -1,0 +1,13 @@
+ajax_form:
+  version: VERSION
+  js:
+    js/opigno_module_iframe.js: {}
+
+activity:
+  version: VERSION
+  js:
+    js/opigno_module_activity.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupalSettings

@@ -1,0 +1,28 @@
+base theme: false
+type: theme
+
+name: Platon
+description: 'HTML5, SASS, Responsive grid base theme.'
+package: 'Platon'
+# core: 8.x
+
+regions:
+  help: 'Help'
+  branding: 'Branding'
+  menu: 'Menu'
+  status_messages: 'Status messages'
+  top: 'Top'
+  sidebar_first: 'Sidebar first'
+  content: 'Content'
+  footer_left: 'Footer left'
+  footer: 'Footer'
+  footer_right: 'Footer right'
+
+libraries:
+  - platon/global
+
+# Information added by Drupal.org packaging script on 2018-06-20
+version: '8.x-1.0-beta2'
+core: '8.x'
+project: 'platon'
+datestamp: 1529508231

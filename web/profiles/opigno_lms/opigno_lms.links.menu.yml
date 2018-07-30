@@ -1,0 +1,34 @@
+opigno_lms.home:
+  title: Home
+  route_name: '<front>'
+  menu_name: 'main'
+  weight: -10
+  description: 'Home'
+
+opigno_lms.catalog:
+  title: Catalog
+  route_name: view.opigno_training_catalog.training_catalogue
+  menu_name: 'main'
+  weight: -9
+  description: 'Catalog'
+
+opigno_lms.messages:
+  title: Messages
+  route_name: private_message.private_message_page
+  menu_name: 'main'
+  weight: -8
+  description: 'Private messages'
+
+opigno_lms.achievements:
+  title: Achievements
+  route_name: opigno_learning_path.achievements
+  menu_name: 'main'
+  weight: -7
+  description: 'Achievements'
+
+opigno_lms.calendar:
+  title: Calendar
+  route_name: view.opigno_calendar.page_month
+  menu_name: 'main'
+  weight: -6
+  description: 'Calendar'

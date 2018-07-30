@@ -1,0 +1,5 @@
+opigno_h5p.main:
+  js:
+    js/opigno_h5p.js: {}
+  dependencies:
+    - core/jquery

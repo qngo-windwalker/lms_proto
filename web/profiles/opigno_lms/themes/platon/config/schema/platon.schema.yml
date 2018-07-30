@@ -1,0 +1,4 @@
+platon.settings:
+  type: theme_settings
+  label: 'Platon theme settings'
+  mapping:

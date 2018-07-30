@@ -1,0 +1,93 @@
+name: Opigno LMS
+type: profile
+description: 'Install Opigno with commonly used features pre-configured.'
+# core: 8.x
+distribution:
+  name: "Opigno LMS"
+dependencies:
+  - node
+  - history
+  - block
+  - breakpoint
+  - ckeditor
+  - color
+  - config
+  - contextual
+  - contact
+  - menu_link_content
+  - datetime
+  - block_content
+  - quickedit
+  - editor
+  - help
+  - image
+  - media
+  - menu_ui
+  - options
+  - path
+  - page_cache
+  - dynamic_page_cache
+  - taxonomy
+  - dblog
+  - search
+  - shortcut
+  - toolbar
+  - field
+  - field_ui
+  - file
+  - filter
+  - rdf
+  - views
+  - views_ui
+  - tour
+  - automated_cron
+  - system
+  - update
+  - user
+  - better_exposed_filters
+  - calendar
+  - calendar_datetime
+  - config_rewrite
+  - entity
+  - field_group
+  - ggroup
+  - group
+  - h5p
+  - h5peditor
+  - multiselect
+  - opigno_calendar
+  - opigno_calendar_event
+  - opigno_calendar_event_group
+  - opigno_catalog
+  - opigno_certificate
+  - opigno_class
+  - opigno_course
+  - opigno_dashboard
+  - opigno_file_upload
+  - opigno_group_manager
+  - opigno_h5p
+  - opigno_learning_path
+  - opigno_long_answer
+  - opigno_messaging
+  - opigno_module
+  - opigno_module_group
+  - opigno_notification
+  - opigno_scorm
+  - opigno_scorm_activity
+  - popup_field_group
+  - private_message
+  - tft
+  - token
+  - token_filter
+  - view_mode_selector
+  - views_role_based_global_text
+  - views_templates
+themes:
+  - platon
+  - seven
+
+# Information added by Drupal.org packaging script on 2018-06-20
+version: '8.x-1.0-beta3'
+core: '8.x'
+project: 'opigno_lms'
+datestamp: 1529509134

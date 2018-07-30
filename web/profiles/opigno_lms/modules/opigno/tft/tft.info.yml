@@ -1,0 +1,17 @@
+name: Taxonomy File Tree
+type: module
+description: Taxonomy based file tree
+# core: 8.x
+package: Opigno
+dependencies:
+  - file
+  - group
+  - media
+  - path
+  - taxonomy
+
+# Information added by Drupal.org packaging script on 2018-06-15
+version: '8.x-1.0-beta1'
+core: '8.x'
+project: 'tft'
+datestamp: 1529065504

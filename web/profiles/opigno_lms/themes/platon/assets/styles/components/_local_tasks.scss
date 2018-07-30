@@ -1,0 +1,20 @@
+#block-platon-local-tasks {
+  ul:not(.contextual-links) {
+    li {
+      margin-bottom: 5px;
+
+      a {
+        display: block;
+        padding: 0.3em 2em;
+        color: white;
+        background-color: $light-blue;
+        text-decoration: none;
+
+        &.is-active,
+        &:hover {
+          background-color: $dark-blue;
+        }
+      }
+    }
+  }
+}

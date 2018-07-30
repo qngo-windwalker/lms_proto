@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - private_message
+id: private_message.private_message.default
+targetEntityType: private_message
+bundle: private_message
+mode: default
+content:
+  message:
+    type: string_textarea
+    label: hidden
+    settings:
+      placeholder: Message
+      rows: 5
+    region: content
+    third_party_settings: {  }
+    weight: null
+hidden: {  }

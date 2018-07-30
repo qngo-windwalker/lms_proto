@@ -1,0 +1,15 @@
+# Schema for the configuration files of the "Calendar event" module.
+
+opigno_calendar_event.type.*:
+  type: config_entity
+  label: 'Calendar event type'
+  mapping:
+    label:
+      type: label
+      label: 'Label'
+    id:
+      type: string
+      label: 'Machine-readable name'
+    description:
+      type: text
+      label: 'Description'

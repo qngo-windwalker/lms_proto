@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.opigno_activity.activity
+    - field.field.opigno_activity.opigno_slide.opigno_body
+    - field.field.opigno_activity.opigno_slide.opigno_slide_pdf
+    - opigno_module.opigno_activity_type.opigno_slide
+  module:
+    - text
+id: opigno_activity.opigno_slide.activity
+targetEntityType: opigno_activity
+bundle: opigno_slide
+mode: activity
+content:
+  opigno_body:
+    type: text_default
+    weight: 0
+    region: content
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  name: true
+  opigno_slide_pdf: true
+  uid: true

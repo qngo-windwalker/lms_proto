@@ -1,0 +1,4 @@
+opigno_notification:
+  version: VERSION
+  js:
+    js/opigno_notification.js: {}

@@ -1,0 +1,43 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.group.opigno_class.field_class_description
+    - field.field.group.opigno_class.field_class_image
+    - group.type.opigno_class
+  module:
+    - image
+    - text
+id: group.opigno_class.default
+targetEntityType: group
+bundle: opigno_class
+mode: default
+content:
+  field_class_description:
+    weight: -4
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_class_image:
+    weight: -3
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  label:
+    label: hidden
+    type: string
+    weight: -5
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  changed: true
+  created: true
+  uid: true

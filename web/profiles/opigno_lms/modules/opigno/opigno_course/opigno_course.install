@@ -1,0 +1,41 @@
+<?php
+
+//function opigno_course_schema() {
+//  return [
+//    'opigno_courses_contents' => [
+//
+//      'description' => 'Contains all the content for the courses',
+//      'fields' => [
+//
+//        'course_nid' => [
+//          'type' => 'int',
+//          'unsigned' => TRUE,
+//          'not null' => TRUE
+//        ],
+//
+//        'content_entity_type' => [
+//          'type' => 'varchar',
+//          'length' => 255,
+//          'not null' => TRUE,
+//          'default' => ''
+//        ],
+//
+//        'content_entity_bundle' => [
+//          'type' => 'varchar',
+//          'length' => 255,
+//          'not null' => TRUE,
+//          'default' => ''
+//        ],
+//
+//        'content_id' => [
+//          'type' => 'int',
+//          'unsigned' => TRUE,
+//          'not null' => TRUE
+//        ]
+//
+//      ],
+//      'primary key' => ['course_nid', 'content_entity_type', 'content_entity_bundle', 'content_id']
+//
+//    ]
+//  ];
+//}

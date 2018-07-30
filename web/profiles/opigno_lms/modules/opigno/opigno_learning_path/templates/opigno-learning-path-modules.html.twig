@@ -1,0 +1,27 @@
+<!-- group/{group}/inner-modules -->
+
+<base href="{{ base_path ~ base_href }}">
+
+<script type="text/javascript">
+  window.appConfig = {
+    formSubmitBtn: false,
+    groupId: {{ learning_path_id }},
+    apiBaseUrl: '{{ base_path }}',
+    moduleContext: {{ module_context }},
+    viewType: 'activities',
+    getEntitiesUrl: '/group/%groupId/get-items',
+    getEntitiesPositionsUrl: '/group/%groupId/get-positions',
+    getModulesUrl: '/group/%groupId/modules/get-items',
+    getActivitiesUrl: '/group/%moduleId/get-activities',
+    updateActivityUrl: '/group/%moduleId/update-activity',
+    deleteActivityUrl: '/group/%moduleId/delete-activity',
+    getActivityTypesUrl: '/module/manager/get-activity-types',
+    getActivityFormUrl: '/module/%opigno_module/item-form/%type/%item',
+    getActivityListUrl: '/module/manager/get-activities-list',
+    addActivityUrl: '/module/%opigno_module/add-activity/%opigno_activity',
+    updateWeightUrl: '/module/manager/update-weight',
+    nextLink: '{{ next_link }}',
+  };
+</script>
+
+<app-root class="d-block">Loading app...</app-root>

@@ -1,0 +1,11 @@
+opigno_learning_path.opigno_admin_index:
+  title: Opigno
+  route_name: opigno_learning_path.opigno_admin_index
+  parent: system.admin_config
+  description: 'Opigno package settings.'
+
+opigno_learning_path.learning_path_settings:
+  title: Learning Path
+  route_name: opigno_learning_path.learning_path_settings
+  parent: opigno_learning_path.opigno_admin_index
+  description: 'Learning Path Group type settings.'

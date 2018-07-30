@@ -1,0 +1,15 @@
+<base href="{{ base_path ~ base_href }}">
+
+<script type="text/javascript">
+  window.appConfig = {
+    columns: 3,
+    positions: [[], [], [], []],
+    apiBaseUrl: '{{ base_path }}',
+    getPositioningUrl: '/opigno_dashboard/get-positioning',
+    setPositioningUrl: '/opigno_dashboard/set-positioning',
+    getBlocksContentUrl: '/opigno_dashboard/get-blocks',
+    defaultConfig: '{{ default_config|raw }}',
+  };
+</script>
+
+<app-root class="d-block dashboard">Loading dashboard...</app-root>

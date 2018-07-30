@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the module.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Core\Config\FileStorage;
+use Drupal\opigno_learning_path\LearningPathAccess;
+
+/**
+ * Creates database table for Learning Path group user statuses.
+ *
+ * On module install.
+ */
+function opigno_learning_path_install() {
+  LearningPathAccess::createUserStatusTable();
+}
+
+/**
+ * Creates database table for Learning Path group user statuses.
+ *
+ * For existing instances.
+// */
+function opigno_learning_path_update_8002() {
+  LearningPathAccess::createUserStatusTable();
+}
+
+/**
+ * Creates database table for Latest Activity entity type.
+ */
+function opigno_learning_path_update_8004() {
+  $database = \Drupal::database();
+
+  if (!$database->schema()->tableExists('opigno_latest_group_activity')) {
+    $entityTypeManager = \Drupal::entityTypeManager();
+    $entityTypeManager->clearCachedDefinitions();
+    $definition = $entityTypeManager
+      ->getDefinition('opigno_latest_group_activity');
+    \Drupal::entityDefinitionUpdateManager()->installEntityType($definition);
+  }
+  else {
+    return 'Latest Activity entity already exists';
+  }
+
+  return NULL;
+}
+
+/**
+ * Creates forum field in the learning path group type.
+ */
+function opigno_learning_path_update_8005() {
+}
+
+/**
+ * Creates enable forum field in the learning path group type.
+ */
+function opigno_learning_path_update_8006() {
+  $config_path = drupal_get_path('module', 'opigno_learning_path')
+    . '/config/install';
+  $storage = new FileStorage($config_path);
+
+  $data = $storage->read('field.storage.group.field_learning_path_enable_forum');
+  if (!FieldStorageConfig::loadByName($data['entity_type'], $data['field_name'])) {
+    FieldStorageConfig::create($data)->save();
+  }
+
+  $data = $storage->read('field.field.group.learning_path.field_learning_path_enable_forum');
+  if (!FieldConfig::loadByName($data['entity_type'], $data['bundle'], $data['field_name'])) {
+    FieldConfig::create($data)->save();
+  }
+}

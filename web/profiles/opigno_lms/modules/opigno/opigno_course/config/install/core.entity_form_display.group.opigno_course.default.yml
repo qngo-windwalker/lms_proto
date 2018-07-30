@@ -1,0 +1,43 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.group.opigno_course.field_course_description
+    - field.field.group.opigno_course.field_course_image
+    - group.type.opigno_course
+    - image.style.thumbnail
+  module:
+    - image
+    - text
+id: group.opigno_course.default
+targetEntityType: group
+bundle: opigno_course
+mode: default
+content:
+  field_course_description:
+    weight: 1
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_course_image:
+    weight: 2
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content
+  label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  path: true
+  uid: true
