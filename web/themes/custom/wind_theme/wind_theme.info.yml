@@ -5,6 +5,10 @@ package: 'Windwalker'
 core: 8.x
 base theme: false
 
+libraries:
+  - wind_theme/global-css
+  - wind_theme/global-js
+
 regions:
   help: 'Help'
   branding: 'Branding'

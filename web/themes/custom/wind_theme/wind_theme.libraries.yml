@@ -1,0 +1,12 @@
+global-css:
+  css:
+      theme:
+          css/wind_theme.css: {}
+          css/bootstrap.css: {}
+
+global-js:
+  js:
+    js/dist/wind_theme.js: {}
+  dependencies:
+  - core/drupal
+  - core/jquery
