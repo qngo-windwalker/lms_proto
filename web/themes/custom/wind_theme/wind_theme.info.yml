@@ -1,0 +1,18 @@
+name: 'Windwalker Theme'
+type: theme
+description: 'Built to use Bootstrap, a sleek, intuitive, and powerful front-end framework for faster and easier web development.'
+package: 'Windwalker'
+core: 8.x
+base theme: false
+
+regions:
+  help: 'Help'
+  branding: 'Branding'
+  menu: 'Menu'
+  status_messages: 'Status messages'
+  top: 'Top'
+  sidebar_first: 'Sidebar first'
+  content: 'Content'
+  footer_left: 'Footer left'
+  footer: 'Footer'
+  footer_right: 'Footer right'
