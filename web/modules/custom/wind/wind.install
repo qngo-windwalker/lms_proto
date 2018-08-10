@@ -15,4 +15,7 @@ function wind_install() {
   // Uses 'Seven' theme for admin UI.
   $config = \Drupal::service('config.factory')->getEditable('system.theme');
   $config->set('admin', 'seven')->save();
+
+  // Uninstall unused module to reduce footprint.
+  \Drupal::service('module_installer')->uninstall(['opigno_dashboard']);
 }
