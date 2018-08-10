@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function wind_install() {
+  // Note: There's a report of fail installing theme inside hook_install
+  // @see https://www.drupal.org/node/2790315
+
+  // Enable Windwalker custom theme
+  \Drupal::service('theme_installer')->install(['wind_theme']);
+  // Removes the theme that Opigno enabled
+  \Drupal::service('theme_installer')->uninstall(['platon']);
+
+  // Uses 'Seven' theme for admin UI.
+  $config = \Drupal::service('config.factory')->getEditable('system.theme');
+  $config->set('admin', 'seven')->save();
+}

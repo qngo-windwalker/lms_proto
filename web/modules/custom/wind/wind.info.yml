@@ -1,0 +1,6 @@
+name: Windwalker Module
+description: Provide Windwalker system functionalities
+package: Windwalker
+type: module
+version: 1.0
+core: 8.x

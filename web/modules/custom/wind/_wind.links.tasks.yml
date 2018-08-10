@@ -1,0 +1,9 @@
+wind.list_tabs:
+  route_name: wind.list
+  title: 'List'
+  base_route: wind.list
+
+wind.settings_tabs:
+  route_name: wind.settings
+  title: 'Settings'
+  base_route: wind.list
