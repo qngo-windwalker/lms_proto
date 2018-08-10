@@ -1,0 +1,135 @@
+<?php
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function wind_theme_preprocess_page(&$variables){
+  dpm($variables);
+//  $route = \Drupal::routeMatch()->getRouteName();
+//  $account = \Drupal::currentUser();
+//  $variables['route_name'] = $route;
+//
+//  /** Login form */
+//  $variables['login_form'] = null;
+//  if (!$account->id()) {
+//    $form = Drupal::formBuilder()->getForm(Drupal\user\Form\UserLoginForm::class);
+//    $render = Drupal::service('renderer');
+//
+//    $form['name']['#attributes']['placeholder'] = $form['name']['#title'];
+//    $form['pass']['#attributes']['placeholder'] = $form['pass']['#title'];
+//    $form['name']['#title'] = $form['name']['#description'] = null;
+//    $form['pass']['#title'] = $form['pass']['#description'] = null;
+//    $variables['login_form'] = $render->renderPlain($form);
+//  }
+//
+//  /** Password form */
+//  $variables['password_form'] = null;
+//  if (!$account->id()) {
+//    $form = Drupal::formBuilder()->getForm(Drupal\user\Form\UserPasswordForm::class);
+//    $render = Drupal::service('renderer');
+//
+//    $form['name']['#attributes']['placeholder'] = $form['name']['#title'];
+//    $form['name']['#title'] = $form['name']['#description'] = null;
+//    $form['mail']['#access'] = false;
+//    $variables['password_form'] = $render->renderPlain($form);
+//  }
+//
+//  /** Password form */
+//  $variables['register_form'] = null;
+//  if (!$account->id()) {
+//    $entity = \Drupal::entityManager()
+//      ->getStorage('user')
+//      ->create(array());
+//
+//    $formObject = \Drupal::entityManager()
+//      ->getFormObject('user', 'register')
+//      ->setEntity($entity);
+//
+//    $form = \Drupal::formBuilder()->getForm($formObject);
+//
+//    $form['account']['mail']['#attributes']['placeholder'] = $form['account']['mail']['#title'];
+//    $form['account']['name']['#attributes']['placeholder'] = $form['account']['name']['#title'];
+//    $form['account']['mail']['#title'] = null;
+//    $form['account']['name']['#title'] = null;
+//    $form['user_picture']['#access'] = false;
+//    $form['contact']['#access'] = false;
+//    $form['timezone']['#access'] = false;
+//    $variables['register_form'] = $form;
+//  }
+//
+//  /** Search form */
+//  $variables['search_form'] = null;
+//  $form = Drupal::formBuilder()->getForm(Drupal\search\Form\SearchBlockForm::class);
+//  $render = Drupal::service('renderer');
+//  $form['keys']['#attributes']['placeholder'] = $form['keys']['#title'];
+//  $form['keys']['#title'] = null;
+//  $variables['search_form'] = $render->renderPlain($form);
+//
+//  /** Frontpage slider */
+//  $variables['frontpage_slider'] = false;
+//  if (platon_anonymous_has_slider()) {
+//    $platon_home_page_settings = theme_get_setting('platon_home_page_settings');
+//    $variables['frontpage_slider'] = true;
+//    $content = null;
+//    $content .= '<div class="anonymous-slider list-unstyled d-flex">';
+//
+//    $nb_items = 0;
+//    foreach ($platon_home_page_settings['platon_home_page_slides'] as $slide) {
+//      if (!isset($slide['platon_home_page_image_path'])
+//        && !isset($slide['platon_home_page_markup_wrapper']['value'])
+//      ) {
+//        continue;
+//      }
+//
+//      $background_image_uri = 'public://' . $slide['platon_home_page_image_path'];
+//      $background_image_url = (ImageStyle::load(PLATON_HOMEPAGE_IMAGE_STYLE)) ? ImageStyle::load(PLATON_HOMEPAGE_IMAGE_STYLE)->buildUrl($background_image_uri) : file_create_url($background_image_uri);
+//      $markup = $slide['platon_home_page_markup_wrapper']['value'];
+//      if ($slide['platon_home_page_markup_wrapper']['format'] == 'restricted_html') {
+//        $markup = '<pre>' . $markup . '</pre>';
+//      }
+//
+//      $content .= '<div class="slider-item" style="background-image: url(' . Xss::filter($background_image_url) . ')">';
+//      $content .= '<div class="slider-markup">' . Xss::filterAdmin($markup) . '</div>';
+//      $content .= '</div>';
+//
+//      $nb_items++;
+//    }
+//    $content .= '</div>';
+//
+//    $variables['page']['content'] = new FormattableMarkup($content, []);
+//  }
+//
+//  /** Frontpage menu */
+//  if (!platon_anonymous_has_menu($variables) && $account->isAnonymous()) {
+//    $variables['page']['menu'] = null;
+//  }
+//
+//  /** Pages with faded background */
+//  if (platon_page_has_faded_background()) {
+//    $variables['content_wrapper_classes'] = 'faded-form-wrapper';
+//  }
+//
+//  /** Header variables */
+//  if (method_exists('\Drupal\opigno_notification\Entity\OpignoNotification', 'unreadCount')) {
+//    $variables['notifications_unread_count'] = \Drupal\opigno_notification\Entity\OpignoNotification::unreadCount();
+//  }
+//
+//  $variables['notifications_unread'] = views_embed_view('opigno_notifications', 'block_unread', $account->id());
+//  $variables['notifications'] = views_embed_view('opigno_notifications', 'block_all', $account->id());
+//  $variables['private_messages'] = views_embed_view('private_message', 'block_last', $account->id());
+//
+//  /** Header user picture */
+//  if (!$account->isAnonymous()) {
+//    $user = \Drupal\user\Entity\User::load($account->id());
+//    $user_picture = $user->get('user_picture')->getValue();
+//    if (isset($user_picture[0]['target_id'])) {
+//      $user_picture = \Drupal\file\Entity\File::load($user_picture[0]['target_id']);
+//      $variables['user_picture'] = file_create_url($user_picture->getFileUri());
+//    }
+//  }
+//
+//  $pm_service = \Drupal::service('private_message.service');
+//  if (isset($pm_service)) {
+//    $variables['unread_thread_count'] = $pm_service->getUnreadThreadCount();
+//  }
+}

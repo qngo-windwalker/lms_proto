@@ -1,12 +1,13 @@
 global-css:
   css:
       theme:
+          components/bootstrap/css/bootstrap.css: {}
           css/wind_theme.css: {}
-          css/bootstrap.css: {}
 
 global-js:
   js:
-    js/dist/wind_theme.js: {}
+    components/bootstrap/js/bootstrap.bundle.js: {}
+    js/dist/wind_theme.bundle.main.js: {}
   dependencies:
   - core/drupal
   - core/jquery

@@ -1,4 +1,13 @@
 <header id="site-header">
+
+  <div class="container-fluid">
+    <div class="row">
+      <div id="header-top" class="col-md-12">
+        <img src="/themes/custom/wind_theme/img/windwalker_logo.jpg" alt="Windwalker Group logo" />
+      </div>
+    </div>
+  </div>
+
   <div class="container d-flex align-items-center">
     {% if page.branding %}
       <div id="header-left">
@@ -79,14 +88,6 @@
 
       <button class="navbar-toggler"></button>
     </div>
-  </div>
-  <div class="search-trigger d-flex align-items-center">
-    <a href="#">
-      <div class="picto search">{{ 'search'|t }}</div>
-    </a>
-  </div>
-  <div id="search-form" style="display: none;">
-    {{search_form}}
   </div>
 </header>
 
