@@ -4,6 +4,11 @@
     <div class="row">
       <div id="header-top" class="col-md-12">
         <img src="/themes/custom/wind_theme/img/windwalker_logo.jpg" alt="Windwalker Group logo" />
+          {% if page.header_top_right %}
+            <div id="header-top-right">
+                {{ page.header_top_right }}
+            </div>
+          {% endif %}
       </div>
     </div>
   </div>
