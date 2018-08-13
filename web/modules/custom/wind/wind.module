@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Contains wind.module
+ */
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Implements hook_user_login().
+ *
+ * @param $account
+ */
+function wind_user_login($account) {
+  $response = new RedirectResponse('manager');
+  $response->send();
+}

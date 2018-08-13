@@ -18,4 +18,7 @@ function wind_install() {
 
   // Uninstall unused module to reduce footprint.
   \Drupal::service('module_installer')->uninstall(['opigno_dashboard']);
+
+  // Set page.front (aka <front>) to /node instead of /user/login.
+  \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/wind-home')->save();
 }

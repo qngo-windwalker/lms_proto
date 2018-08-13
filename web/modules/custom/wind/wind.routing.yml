@@ -5,3 +5,35 @@ wind.content:
     _title: 'Hello world'
   requirements:
     _permission: 'access content'
+
+wind.home:
+  path: 'wind-home'
+  defaults:
+    _controller: '\Drupal\wind\Controller\HomePageController::content'
+    _title: 'Welcome to Windwalker LMS!'
+  requirements:
+    _permission: 'access content'
+
+wind.dev:
+  path: 'wind-dev'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindDevPageController::content'
+    _title: 'Wind Dev'
+  requirements:
+    _permission: 'access content'
+
+wind.manager:
+  path: 'manager'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindManagerPageController::content'
+    _title: 'Windwalker'
+  requirements:
+    _permission: 'access content'
+
+wind.course:
+  path: 'course'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindCoursePageController::content'
+    _title: 'Windwalker'
+  requirements:
+    _permission: 'access content'
