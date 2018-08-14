@@ -1,0 +1,9 @@
+uuid: bdf6d745-fe7a-4c06-8c94-46fdf43e3616
+langcode: en
+status: true
+dependencies: {  }
+id: learner
+label: Learner
+weight: 3
+is_admin: null
+permissions: {  }

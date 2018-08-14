@@ -13,6 +13,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * @param $account
  */
 function wind_user_login($account) {
-  $response = new RedirectResponse('manager');
-  $response->send();
+  $account_roles = $account->getRoles();
+  if(in_array('learner', $account_roles)){
+    $response = new RedirectResponse('course');
+    $response->send();
+  }
+
+  if(in_array('user_manager', $account_roles)){
+    $response = new RedirectResponse('manager');
+    $response->send();
+  }
 }

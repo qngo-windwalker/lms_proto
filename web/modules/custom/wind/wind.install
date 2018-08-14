@@ -22,3 +22,11 @@ function wind_install() {
   // Set page.front (aka <front>) to /node instead of /user/login.
   \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/wind-home')->save();
 }
+
+/**
+ * Implements hook_update().
+ *
+ */
+//function wind_update_8001(){
+//  // @see https://www.drupal.com/docs/8/api/update-api/updating-configuration-in-drupal-8
+//}
