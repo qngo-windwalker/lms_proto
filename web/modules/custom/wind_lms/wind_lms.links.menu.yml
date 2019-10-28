@@ -1,0 +1,6 @@
+wind_lms.group.group_users:
+  title: 'Group Users'
+  description: 'View groups and their users.'
+  route_name: 'wind_lms.group.group_users'
+  parent: 'system.admin_group'
+  weight: 11

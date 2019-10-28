@@ -1,0 +1,19 @@
+q_devel.dev:
+  path: 'qdev'
+  defaults:
+    _controller: '\Drupal\q_devel\Controller\QDevelDevPageController::content'
+    _title: 'Dev'
+  requirements:
+    _permission: 'access content'
+  options:
+    _admin_route: TRUE
+
+q_devel.dev.user:
+  path: 'qdev/user/{user}'
+  defaults:
+    _controller: '\Drupal\q_devel\Controller\QDevelUserController::getContent'
+    _title: 'Dev'
+  requirements:
+    _permission: 'access content'
+  options:
+    _admin_route: TRUE

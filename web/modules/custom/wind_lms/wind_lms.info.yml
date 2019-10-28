@@ -1,0 +1,11 @@
+name: Windwalker LMS
+description: Provide customization for Windwalker Training based on Opigno LMS
+type: module
+package: Windwalker
+dependencies:
+  - wind
+#  Requires Opigno system
+  - opigno_module
+
+version: 1.0
+core: 8.x

@@ -1,0 +1,36 @@
+wind_help.help:
+  path: help
+  defaults:
+    _controller: \Drupal\wind_help\Controller\WindHelpController::getContent
+    _title: 'Help'
+  requirements:
+    _permission: 'access content'
+  options:
+    _custom_theme: 'cn_theme'
+wind_help.support_ticket_collection:
+  path: help/support-ticket
+  defaults:
+    _controller: \Drupal\wind_help\Controller\WindHelpSupportTicketCollectionController::getContent
+    _title: 'Support Tickets'
+  requirements:
+    _permission: 'access content'
+  options:
+    _custom_theme: 'cn_theme'
+wind_help.support_ticket:
+  path: help/support-ticket/#
+  defaults:
+    _controller: \Drupal\wind_help\Controller\WindHelpSupportTicketController::getContent
+    _title: 'Support Tickets'
+  requirements:
+    _permission: 'access content'
+  options:
+    _custom_theme: 'cn_theme'
+wind_help.support_ticket_data:
+  path: help/support-ticket-datatable
+  defaults:
+    _controller: \Drupal\wind_help\Controller\WindHelpSupportTicketDatatableController::getContent
+    _title: 'Support Tickets'
+  requirements:
+    _permission: 'access content'
+  options:
+    _custom_theme: 'cn_theme'

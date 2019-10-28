@@ -1,0 +1,191 @@
+<?php
+
+use Drupal\Component\Utility\UrlHelper;
+use Drupal\opigno_module\Entity\OpignoModule;
+use Drupal\Core\Controller\ControllerBase;
+use Drupal\group\Entity\Group;
+use Drupal\opigno_group_manager\OpignoGroupContext;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+
+use Drupal\opigno_group_manager\Entity\OpignoGroupManagedContent;
+use Drupal\opigno_module\Entity\OpignoActivity;
+use Drupal\opigno_group_manager\OpignoGroupContentTypesManager;
+
+function wind_lms_create_group_learning_path($title) {
+  $group = \Drupal\group\Entity\Group::create([
+      'type' => 'learning_path',
+      'label' => $title,
+    ]
+  );
+  $group->enforceIsNew();
+  $group->save();
+
+  return $group;
+}
+
+function wind_lms_get_all_user_in_group($gid) {
+  $users  = array();
+  $result = \Drupal::entityQuery('group_content')
+    ->condition('gid', $gid)
+    ->execute();
+
+  if ($result) {
+    $relations = \Drupal\group\Entity\GroupContent::loadMultiple($result);
+    foreach ($relations as $relation) {
+      $entity = $relation->getEntity();
+      if ($entity->getEntityTypeId() == 'user') {
+        $users[$entity->id()] = $entity;
+      }
+    }
+  }
+  return $users;
+}
+
+/**
+ * Get all of the groups the user belongs to.
+ */
+function wind_lms_get_all_user_groups($user) {
+  $groups = array();
+  $group_membership_service = \Drupal::service('group.membership_loader');
+  $groupServices = $group_membership_service->loadByUser($user);
+  foreach($groupServices as $groupService){
+    $group = $groupService->getGroup();
+    $groups[$group->id()] = $group;
+  }
+  return $groups;
+}
+
+function wind_lms_add_user_to_group($uid, $gid) {
+  $account = \Drupal\user\Entity\User::load($uid);
+  $group = \Drupal\group\Entity\Group::load($gid);
+  $group->addContent($account, 'group_membership', array());
+}
+
+function wind_lms_create_module($name) {
+  $entity = OpignoModule::create(array(
+    'name' => $name,
+    'status' => true,
+  ));
+  $entity->save();
+
+  return $entity;
+}
+
+function wind_lms_createScormActivity($name, $fid){
+  // Create activity.
+  $activity = \Drupal\opigno_module\Entity\OpignoActivity::create([
+    'type' => 'opigno_scorm',
+    'name' => $name,
+    'opigno_scorm_package' => [
+      'target_id' => $fid,
+    ],
+  ]);
+
+  $activity->save();
+  return $activity;
+}
+
+/**
+ * @param $filepath
+ * @return \Drupal\Core\Entity\EntityInterface|\Drupal\file\Entity\File|\Drupal\file\FileInterface|false|null|void
+ */
+function wind_lms_setFileRecord($filepath){
+  $parsed_url = UrlHelper::parse($filepath);
+  $filepath = $parsed_url['path'];
+  $contents = file_get_contents($filepath);
+  $file_name = drupal_basename($filepath);
+  // Prepare folder.
+  $public_external_package_dir = 'public://external_packages';
+  file_prepare_directory($public_external_package_dir, FILE_CREATE_DIRECTORY);
+  $temporary_file_path = $public_external_package_dir . '/' . $file_name;
+  /** @var \Drupal\file\FileInterface|false $file */
+  $result = file_save_data($contents, $temporary_file_path);
+  if (!$result) {
+    return FALSE;
+  }
+  $file = \Drupal\file\Entity\File::load($result->id());
+  return $file;
+}
+
+/**
+ * @return \Drupal\group\Entity\Group[]
+ */
+function wind_lms_get_all_group_learning_path(){
+  $collection = array();
+  $groups = \Drupal\group\Entity\Group::loadMultiple();
+  /**
+   * Todo: Optimize - Convert to DB query.
+   * @var  $gid
+   * @var \Drupal\group\Entity\Group $group
+   */
+  foreach ($groups as $gid => $group) {
+    if ($group->getGroupType()->label() == 'Learning Path') {
+      $collection[$gid] = $group;
+    }
+  }
+  return $collection;
+}
+
+function wind_lms_get_user_group_learning_paths($user) {
+  $filtered_groups = [];
+  $groupMembershipService = \Drupal::service('group.membership_loader');
+  $groups = $groupMembershipService->loadByUser($user);
+  /** @var \Drupal\group\GroupMembership $groupMembership */
+  foreach ($groups as $groupMembership) {
+    $group = $groupMembership->getGroup();
+    if($group->getGroupType()->label() == 'Learning Path'){
+      $filtered_groups[$group->id()] = $group;
+    }
+  }
+  return $filtered_groups;
+}
+
+function wind_lms_get_group_ids($options = array()) {
+  $query = \Drupal::entityQuery('group');
+  foreach ($options as $key => $val) {
+    $query->condition($key, $val);
+  }
+  $result = $query->execute();
+
+  if ($result) {
+    return $result;
+  } else {
+    return array();
+  }
+}
+
+/**
+ * @param $user
+ * @param Group $group
+ * @return \Drupal\group\Entity\GroupRole[]
+ */
+function wind_lms_get_user_group_roles($user, Group $group) {
+  /** @var \Drupal\group\GroupMembership $membership */
+  $membership = $group->getMember($user);
+  if (!$membership) {
+    return [];
+  }
+  return $membership->getRoles();
+}
+
+/**
+ * @param $currentUser
+ * @param $target_user
+ * @param $exclude_group_type_label
+ * @return \Drupal\group\GroupMembership[]
+ */
+function wind_lms_current_user_and_target_user_in_groups($currentUser, $target_user, $exclude_group_type_label) {
+  $currentUserGroups = wind_lms_get_all_user_groups($currentUser);
+  $currentUserSameGroups = [];
+  foreach ($currentUserGroups as $currentUserGroup) {
+    if($currentUserGroup->getGroupType()->label() == $exclude_group_type_label){
+      continue;
+    }
+    $targetUserMembership = $currentUserGroup->getMember($target_user);
+    if($targetUserMembership){
+      $currentUserSameGroups[] = $currentUserGroup;
+    }
+  }
+  return $currentUserSameGroups;
+}

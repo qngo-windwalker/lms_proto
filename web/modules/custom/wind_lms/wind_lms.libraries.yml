@@ -1,0 +1,10 @@
+course:
+  js:
+    js/wind_lms.course.js: {}
+  dependencies:
+    - wind/datatable
+datatable_users:
+  js:
+    js/wind_lms.users.js: {}
+  dependencies:
+    - wind/datatable

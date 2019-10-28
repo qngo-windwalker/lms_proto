@@ -1,0 +1,5 @@
+services:
+  wind_lms.commands:
+    class: \Drupal\wind_lms\Commands\WindLmsCommands
+    tags:
+      - { name: drush.command }

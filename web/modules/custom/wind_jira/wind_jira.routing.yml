@@ -1,0 +1,9 @@
+wind_jira.connect:
+  path: 'wind-jira/connect'
+  defaults:
+    _controller: \Drupal\wind_jira\Controller\WindJiraConnect::getContent
+    _title: 'connect'
+  requirements:
+    _permission: 'access content'
+  options:
+    _custom_theme: cn_theme

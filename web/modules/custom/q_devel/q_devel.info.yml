@@ -1,0 +1,6 @@
+name: Quan Devel Module
+description: Development helper module. Do not enabled in Production.
+type: module
+package: Dev
+version: 1.0
+core: 8.x

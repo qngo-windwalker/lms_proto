@@ -1,0 +1,42 @@
+<?php
+
+use Drupal\jira_rest\JiraRestWrapperService;
+use Drupal\wind_jira\JiraRest\WindJiraWrapperService;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $user
+ */
+function wind_jira_user_insert(Drupal\Core\Entity\EntityInterface $user) {
+  $numberOfUsers = (int) $user->get('field_number_of_users')->value;
+  if ($numberOfUsers >= 50) {
+    $companyTitle = $user->get('field_company')->value;
+    $configFactory = \Drupal::configFactory();
+    $jiraRestWrapperService = new JiraRestWrapperService($configFactory);
+    // Used \\\\ because \n will be escaped when json_encode gets executed.
+    $comment = 'Company title: '. $companyTitle . '\\\\Number of employee: ' . $numberOfUsers;
+    /** @var \biologis\JIRA_PHP_API\Issue $issue */
+    $issue = $jiraRestWrapperService->getIssueService()->create();
+    //mandatory fields to set
+    $issue->fields->project->setKey('ESD'); //or you can use the project id with: $issue->fields->project->setId($jiraProjectId);
+    $issue->fields->setDescription(utf8_encode('New account check list:\n\n * Assign account manager \n *Check system status'));
+    $issue->fields->issuetype->setId('10103');	// Issue type : Bug
+    $issue->fields->addGenericJiraObject('priority');
+    // Priority #: 1 = Highest; 4 = Minor
+    $issue->fields->priority->setId('1');
+    $issue->fields->setSummary(utf8_encode('New account has been created: ' . $companyTitle));
+    $result = $issue->save();
+  }
+}
+
+/**
+ * @param $id
+ * @example wind_jira_issue_load('CLH-25');
+ * @return \biologis\JIRA_PHP_API\Issue
+ */
+function wind_jira_issue_load($id) {
+  $configFactory = \Drupal::configFactory();
+  $jiraRestWrapperService = new JiraRestWrapperService($configFactory);
+  return $jiraRestWrapperService->getIssueService()->load($id);
+}

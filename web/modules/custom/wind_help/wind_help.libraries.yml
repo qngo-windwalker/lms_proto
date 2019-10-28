@@ -1,0 +1,5 @@
+support_ticket:
+  js:
+    js/wind_help.support-ticket.js: {}
+  dependencies:
+    - wind/datatable

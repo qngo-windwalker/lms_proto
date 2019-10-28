@@ -1,0 +1,8 @@
+name: Windwalker Help
+description: Provide users way to submit a request to the help desk.
+type: module
+package: Windwalker
+dependencies:
+  - wind_jira
+version: 1.0
+core: 8.x

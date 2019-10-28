@@ -1,0 +1,50 @@
+<?php
+
+use Drupal\jira_rest\JiraRestWrapperService;
+use Drupal\wind_jira\JiraRest\WindJiraWrapperService;
+use Drupal\user\UserInterface;
+use Drupal\user\Entity\User;
+use Drupal\group\Entity\Group;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\invite\Entity\Invite;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $group
+ */
+function wind_help_group_insert(Drupal\Core\Entity\EntityInterface $group) {
+  // When a group organization is created, sync the group with the Jira Service Desk
+  if($group->getGroupType()->label() == 'Organization'){
+    $jiraRestWrapperService = new WindJiraWrapperService();
+    $orgService = $jiraRestWrapperService->getOrganizationService();
+    // If we submit a new Jira Organization that alread exist name in the system,
+    // Jira will return the existing organization
+    /** @var \Drupal\wind_jira\JiraRest\JiraOrganization $org */
+    $org = $orgService->create($group->label());
+    $result = $org->save();
+    $org->addToProject($org->id, 'ESD');
+    if ($result && $group->hasField('field_service_desk_org_id')) {
+      $group->set('field_service_desk_org_id', ['value' => $org->id]);
+      $group->save();
+    }
+  }
+}
+
+/**
+ * @param \Drupal\Core\Session\AccountInterface $account
+ * @return bool|\Drupal\group\Entity\GroupInterface
+ */
+function wind_help_get_user_group_organization(\Drupal\Core\Session\AccountInterface $account) {
+  $groupMembershipService = \Drupal::service('group.membership_loader');
+  $groups = $groupMembershipService->loadByUser($account);
+  /** @var \Drupal\group\GroupMembership $groupMembership */
+  foreach ($groups as $groupMembership) {
+    $group = $groupMembership->getGroup();
+    if($group->getGroupType()->label() == 'Organization'){
+      return $group;
+    }
+  }
+  return false;
+}

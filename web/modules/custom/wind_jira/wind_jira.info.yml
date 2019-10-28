@@ -1,0 +1,8 @@
+name: Windwalker JIRA
+description: A connector for Drupal and Windwalker JIRA
+type: module
+package: Windwalker
+dependencies:
+  - jira_rest
+version: 1.0
+core: 8.x

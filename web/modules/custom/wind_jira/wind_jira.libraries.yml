@@ -1,0 +1,3 @@
+connect:
+  js:
+    js/wind_jira.connect.js: {}

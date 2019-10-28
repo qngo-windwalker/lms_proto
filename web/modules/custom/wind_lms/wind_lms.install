@@ -1,0 +1,34 @@
+<?php
+
+use Drupal\block\Entity\Block;
+
+/**
+ * Disable a block with checking.
+ * @param $id string : block id.
+ */
+function _wind_lms_delete_block($id) {
+  /** @var \Drupal\block\Entity\Block $block */
+  $block = Block::load($id);
+  if ($block) {
+    if($block->delete()){
+      $block->save();
+    }
+  }
+}
+
+function _wind_lms_disable_block($id) {
+  /** @var \Drupal\block\Entity\Block $block */
+  $block = Block::load($id);
+  if ($block) {
+    $block->disable()->save();
+  }
+
+}
+
+/**
+ * Implements hook_update().
+ *
+ */
+//function wind_update_8001(){
+//  // @see https://www.drupal.com/docs/8/api/update-api/updating-configuration-in-drupal-8
+//}
