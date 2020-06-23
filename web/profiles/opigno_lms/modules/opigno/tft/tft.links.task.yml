@@ -1,5 +1,0 @@
-tft.group:
-  route_name : tft.group
-  title: Files
-  base_route: entity.group.canonical
-  weight: 10

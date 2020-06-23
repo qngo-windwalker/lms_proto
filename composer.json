@@ -1,14 +1,13 @@
 {
-    "name": "drupal-composer/drupal-project",
-    "description": "Project template for Drupal 8 projects with composer",
+    "name": "drupal/recommended-project",
+    "description": "Project template for Drupal 8 projects with a relocated document root",
     "type": "project",
     "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "",
-            "role": ""
-        }
-    ],
+    "homepage": "https://www.drupal.org/project/drupal",
+    "support": {
+        "docs": "https://www.drupal.org/docs/user_guide/en/index.html",
+        "chat": "https://www.drupal.org/node/314178"
+    },
     "repositories": [
         {
             "type": "composer",
@@ -16,26 +15,12 @@
         }
     ],
     "require": {
-        "composer/installers": "^1.2",
-        "cweagans/composer-patches": "^1.6",
-        "drupal-composer/drupal-scaffold": "^2.5",
-        "drupal/better_exposed_filters": "^3.0",
-        "drupal/bootstrap": "^3.12",
-        "drupal/calendar": "^1.0",
-        "drupal/console": "^1.0.2",
-        "drupal/core": "~8.5.3",
-        "drupal/devel": "~1.0",
-        "drupal/entity": "^1.0",
-        "drupal/h5p": "^1.0",
-        "drupal/token": "^1.0",
-        "drupal/webform": "^5.0@RC",
-        "drush/drush": "^9.3",
-        "vlucas/phpdotenv": "^2.4",
-        "webflo/drupal-finder": "^1.0.0",
-        "webmozart/path-util": "^2.3"
-    },
-    "require-dev": {
-        "webflo/drupal-core-require-dev": "~8.5.3"
+        "composer/installers": "^1.9",
+        "drupal/core-composer-scaffold": "^9",
+        "drupal/core-project-message": "^9",
+        "drupal/core-recommended": "^9",
+        "drupal/devel": "^1.2",
+        "drush/drush": "^10.3"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -45,34 +30,58 @@
     "config": {
         "sort-packages": true
     },
-    "autoload": {
-        "classmap": [
-            "scripts/composer/ScriptHandler.php"
-        ],
-        "files": ["load.environment.php"]
-    },
-    "scripts": {
-        "pre-install-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
-        ],
-        "pre-update-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
-        ],
-        "post-install-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
-        ],
-        "post-update-cmd": [
-            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
-        ]
-    },
     "extra": {
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "web/"
+            }
+        },
         "installer-paths": {
-            "web/core": ["type:drupal-core"],
-            "web/libraries/{$name}": ["type:drupal-library"],
-            "web/modules/contrib/{$name}": ["type:drupal-module"],
-            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
-            "web/themes/contrib/{$name}": ["type:drupal-theme"],
-            "drush/Commands/{$name}": ["type:drupal-drush"]
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "web/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "web/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ]
+        },
+        "drupal-core-project-message": {
+            "include-keys": [
+                "homepage",
+                "support"
+            ],
+            "post-create-project-cmd-message": [
+                "<bg=blue;fg=white>                                                         </>",
+                "<bg=blue;fg=white>  Congratulations, you’ve installed the Drupal codebase  </>",
+                "<bg=blue;fg=white>  from the drupal/recommended-project template!          </>",
+                "<bg=blue;fg=white>                                                         </>",
+                "",
+                "<bg=yellow;fg=black>Next steps</>:",
+                "  * Install the site: https://www.drupal.org/docs/8/install",
+                "  * Read the user guide: https://www.drupal.org/docs/user_guide/en/index.html",
+                "  * Get support: https://www.drupal.org/support",
+                "  * Get involved with the Drupal community:",
+                "      https://www.drupal.org/getting-involved",
+                "  * Remove the plugin that prints this message:",
+                "      composer remove drupal/core-project-message"
+            ]
         }
     }
 }

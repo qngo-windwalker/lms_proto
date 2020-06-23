@@ -1,6 +1,0 @@
-private_message.private_message_add:
-  route_name: private_message.private_message_create
-  title: 'Create Private Message'
-  appears_on:
-    - private_message.private_message_page
-    - entity.private_message_thread.canonical

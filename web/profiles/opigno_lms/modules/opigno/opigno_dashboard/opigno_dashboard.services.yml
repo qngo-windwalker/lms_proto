@@ -1,4 +1,0 @@
-services:
-  opigno_dashboard.block:
-    class: Drupal\opigno_dashboard\BlockService
-    arguments: []
