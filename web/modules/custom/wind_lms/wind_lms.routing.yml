@@ -1,7 +1,7 @@
 wind_lms.learner_dashboard:
-  path: learner-dashboard
+  path: dashboard
   defaults:
-    _controller: \Drupal\wind_lms\Controller\WindLMSLearnerDashboardController:getContent
+    _controller: \Drupal\wind_lms\Controller\WindLMSDashboardController:getContent
     _title: 'Welcome To Your Dashboard'
   requirements:
     _user_is_logged_in: 'TRUE'

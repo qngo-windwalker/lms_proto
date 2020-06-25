@@ -17,7 +17,7 @@ use Drupal\opigno_module\Entity\OpignoModule;
 use Drupal\opigno_module\Entity\OpignoActivity;
 use Drupal\opigno_group_manager\OpignoGroupContentTypesManager;
 
-class WindLMSLearnerDashboardController extends ControllerBase {
+class WindLMSDashboardController extends ControllerBase {
 
   /**
    * @see \Drupal\opigno_learning_path\Plugin\Block\StepsBlock.
@@ -26,57 +26,9 @@ class WindLMSLearnerDashboardController extends ControllerBase {
   public function getContent() {
     $user = $this->currentUser();
     $uid = $user->id();
-
-    /** @var \Drupal\group\GroupMembershipLoader $grp_membership_service */
-    $grp_membership_service = \Drupal::service('group.membership_loader');
-    $grps = $grp_membership_service->loadByUser($user);
-    foreach ($grps as $grp) {
-      $group = $grp->getGroup();
-      $gid = $group->id();
-    }
-
-    if (!isset($gid)) {
-      return [
-        '#type' => 'markup',
-        '#markup' => 'There are no courses enrolled to you at this time.'
-      ];
-    }
-
-    $group = Group::load($gid);
-    $title = $group->label();
-
-    //    $this->getScormScore($uid, $gid);
-    // @see \Drupal\opigno_learning_path\Controller\LearningPathStepsController::start().
-    $group_steps = opigno_learning_path_get_steps($gid, $uid);
-    $steps = [];
-
-    // Load courses substeps.
-    // Another look is load all of the opigno_module(s) of the 'group' the user belongs to.
-    array_walk($group_steps, function ($step) use ($uid, &$steps) {
-      if ($step['typology'] === 'Course') {
-        $course_steps = opigno_learning_path_get_steps($step['id'], $uid);
-        $steps = array_merge($steps, $course_steps);
-      } else {
-        $steps[] = $step;
-      }
-    });
-
-    // Calculate score.
-    $mandatory_steps = array_filter($steps, function ($step) {
-      return $step['mandatory'];
-    });
-    if (!empty($mandatory_steps)) {
-      $score = round(array_sum(array_map(function ($step) {
-          return $step['best score'];
-        }, $mandatory_steps)) / count($mandatory_steps));
-    } else {
-      $score = 0;
-    }
-
-    $progress = opigno_learning_path_progress($gid, $uid);
-    $progress = round(100 * $progress);
-
-    $is_passed = opigno_learning_path_is_passed($group, $uid);
+    $score = 0;
+    $progress = round(100 * .2);
+    $is_passed = false;
 
     if ($is_passed) {
       $state_class = 'lp_steps_block_summary_state_passed';
@@ -85,16 +37,6 @@ class WindLMSLearnerDashboardController extends ControllerBase {
       $state_class = 'lp_steps_block_summary_state_pending';
       $state_title = t('In progress');
     }
-    // Each step is an opigno_module.
-    $steps = array_map(function ($step) {
-      return [
-        $this->buildCourseLink($step),
-//        $step['name'],
-//        $this->buildScore($step),
-        $this->buildState($step),
-      ];
-    }, $steps);
-
     $summary = [
       '#type' => 'container',
       '#attributes' => [
@@ -137,7 +79,7 @@ class WindLMSLearnerDashboardController extends ControllerBase {
         ]),
       ],
     ];
-//
+    $steps = [];
     return [
       '#type' => 'container',
       '#attributes' => [
@@ -147,7 +89,7 @@ class WindLMSLearnerDashboardController extends ControllerBase {
       [
         '#type' => 'html_tag',
         '#tag' => 'h3',
-        '#value' => $title,
+        '#value' => '$title',
         '#attributes' => [
           'class' => ['lp_steps_block_title'],
         ],
@@ -156,7 +98,7 @@ class WindLMSLearnerDashboardController extends ControllerBase {
         '#type' => 'table',
         '#header' => [
           t('Name'),
-//          t('Score'),
+          //          t('Score'),
           t('State'),
         ],
         '#rows' => $steps,
@@ -171,7 +113,6 @@ class WindLMSLearnerDashboardController extends ControllerBase {
         ],
       ],
     ];
-
   }
 
   /**

@@ -4,8 +4,9 @@ type: module
 package: Windwalker
 dependencies:
   - wind
+  - wind_tincan
 #  Requires Opigno system
-  - opigno_module
+#  - opigno_module
 
 version: 1.0
-core: 8.x
+core_version_requirement: ^8.8 || ^9

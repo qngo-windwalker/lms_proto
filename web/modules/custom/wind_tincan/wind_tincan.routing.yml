@@ -1,0 +1,67 @@
+wind_tincan.render:
+  path: course
+  defaults:
+    _controller: \Drupal\wind_tincan\Controller\WindTincanController::courseRender
+    _title: 'Course'
+  requirements:
+    _role: 'authenticated'
+wind_tincan.course:
+  path: course/{id}
+  defaults:
+    _controller: \Drupal\wind_tincan\Controller\WindTincanController::getContent
+    _title: 'Course'
+  requirements:
+    _role: 'authenticated'
+wind_tincan.tcapi:
+  path: course/tcapi
+  defaults:
+    _controller: \Drupal\wind_tincan\Controller\WindTincanAPIController::getContent
+  requirements:
+    _role: 'authenticated'
+wind_tincan.tcapi.put_statements:
+  path: course/tcapi/statements
+  defaults:
+    _controller: \Drupal\wind_tincan\Controller\WindTincanAPIStatementController::putStatements
+  requirements:
+    _role: 'authenticated'
+  methods: [PUT]
+wind_tincan.tcapi.get_statements:
+  path: course/tcapi/statements
+  defaults:
+    _controller: \Drupal\wind_tincan\Controller\WindTincanAPIStatementController::getStatements
+  requirements:
+    _permission: 'access content'
+wind_tincan.tcapi.activities.put_state:
+  path: course/tcapi/activities/state
+  defaults:
+    _controller: \Drupal\wind_tincan\Controller\WindTincanAPIActivitiesStateController::putActivitiesState
+  requirements:
+    _role: 'authenticated'
+  methods: [PUT]
+wind_tincan.tcapi.activities.get_state:
+  path: course/tcapi/activities/state
+  defaults:
+    _controller: \Drupal\wind_tincan\Controller\WindTincanAPIActivitiesStateController::getActivitiesState
+  requirements:
+    _role: 'authenticated'
+wind_tincan.certificate.id:
+  path: certificate/{statement_id}
+  defaults:
+    _controller: \Drupal\wind_tincan\Controller\WindTincanCertificateIdController::getContent
+    _title: 'Certificate'
+  requirements:
+    _permission: 'access content'
+wind_tincan.user.course_progresses:
+  path: '/admin/people/course-progresses'
+  defaults:
+    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminUserCourseProgressesController::getContent'
+    _title: 'Course Progresses'
+  requirements:
+    _permission: 'administer users'
+wind_tincan.user.course_progress_datatable:
+  path: '/wind-tincan-course/course-progress-datatable'
+  defaults:
+    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminUserCourseProgressesDatatableController::getContent'
+    _title: 'User Course Progresses'
+  requirements:
+    _permission: 'administer users'

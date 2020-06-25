@@ -9,24 +9,19 @@ function wind_install() {
 
   // Enable Windwalker custom theme
   \Drupal::service('theme_installer')->install(['wind_theme']);
-  // Removes the theme that Opigno enabled
-  \Drupal::service('theme_installer')->uninstall(['platon']);
 
   // Uses 'Seven' theme for admin UI.
   $config = \Drupal::service('config.factory')->getEditable('system.theme');
   $config->set('admin', 'seven')->save();
 
-  // Uninstall unused module to reduce footprint.
-  \Drupal::service('module_installer')->uninstall(['opigno_dashboard']);
-
   // Set page.front (aka <front>) to /node instead of /user/login.
-  \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/wind-home')->save();
+//  \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/wind-home')->save();
 }
 
 /**
  * Implements hook_update().
  *
  */
-//function wind_update_8001(){
+//function wind_update_9001(){
 //  // @see https://www.drupal.com/docs/8/api/update-api/updating-configuration-in-drupal-8
 //}

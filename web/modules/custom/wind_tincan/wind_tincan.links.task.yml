@@ -1,0 +1,4 @@
+wind_tincan.user.course_progresses:
+  title: 'Course Progress'
+  route_name: wind_tincan.user.course_progresses
+  base_route: entity.user.collection

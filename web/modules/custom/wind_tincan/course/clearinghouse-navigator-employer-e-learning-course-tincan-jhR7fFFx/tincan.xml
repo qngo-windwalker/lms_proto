@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tincan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://projecttincan.com/tincan.xsd">
+  <activities>
+    <activity id="http://employer_course_2019_12_31" type="http://adlnet.gov/expapi/activities/course">
+      <name lang="en-US">Clearinghouse Navigator: Employer eLearning Course</name>
+      <description lang="en-US">&lt;p&gt;Welcome to Clearinghouse Navigator&amp;rsquo;s Employer Training Module. The Federal Motor Carrier Safety Administration&amp;rsquo;s drug and alcohol Clearinghouse is an important new safety rule being implemented to prevent commercial drivers who have violated DOT drug and alcohol testing rules from avoiding the consequences of that violation by applying for safety-sensitive work with a new employer without disclosing the prior violation.&amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;In this module, you will learn about DOT drug and alcohol testing rules and their associated requirements; the Federal Motor Carrier Safety Administration&amp;#39;s new drug and alcohol Clearinghouse requirement, effective January, 2020; your role and your responsibilities as an employer covered by this new requirement; how to report drug and alcohol violations into the Clearinghouse database; how to register to gain access to the Clearinghouse so that you may perform those queries and violations; and general administrative requirements.&amp;nbsp;&lt;/p&gt;</description>
+    <launch lang="en-US">index.html</launch>
+    </activity>
+      <activity id="http://employer_course_2019_12_31/51QNfz0u-hUMuq48f3hhtpjrXr1zNSVP" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Introduction/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://employer_course_2019_12_31/AwHb2BdGb_OY5d5RxphLMeIA2xCYRDV3" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">US DOT Drug and Alcohol Testing /blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://employer_course_2019_12_31/eDuHqSHnLeVz3h7Jlu0Iwbpuh5JkRcpJ" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Lesson 2 Knowledge Check/quiz</name>
+      <description lang="en-US">&lt;p&gt;Let&amp;#39;s do a quick check for understanding. You must score at least 66% to continue to the next lesson. You will have unlimited attempts to pass the Knowledge Check.&lt;/p&gt;</description>
+    </activity>
+              <activity id="http://employer_course_2019_12_31/eDuHqSHnLeVz3h7Jlu0Iwbpuh5JkRcpJ/ck4ip1g5b00043m5ygim0gd5u" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;Why was the &amp;nbsp;Omnibus Transportation Employee Testing Act passed?&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</id>
+            <description lang="en-US">&lt;p&gt;To improve safety for all persons interacting with the wider transportation system.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</id>
+            <description lang="en-US">&lt;p&gt;To punish employees who drink on the job.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip683c00313m5yldsdky2t</id>
+            <description lang="en-US">&lt;p&gt;To track employees who have been caught abusing substances on the job.&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://employer_course_2019_12_31/eDuHqSHnLeVz3h7Jlu0Iwbpuh5JkRcpJ/ck4ip1g5b00073m5yijpku1s7" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;True or False:&amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;FMCSA prohibits commercial drivers from using illegal drugs at all times, on duty or off.&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</id>
+            <description lang="en-US">&lt;p&gt;True&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c000a3m5yb4w5snr2</id>
+            <description lang="en-US">&lt;p&gt;False&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://employer_course_2019_12_31/eDuHqSHnLeVz3h7Jlu0Iwbpuh5JkRcpJ/ck4ip788h00323m5y13ckp1nz" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;If a driver violates one of the prohibitions of Part 382 they must be:&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</id>
+            <description lang="en-US">&lt;p&gt;Immediately removed from safety-sensitive duty.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00343m5yi38uwbkm</id>
+            <description lang="en-US">&lt;p&gt;Provided with contact information for a list of Substance Abuse Professionals (SAPs) readily available in the employee&amp;rsquo;s home area.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip7x8k00353m5ysev5zhs7</id>
+            <description lang="en-US">&lt;p&gt;Asked to visit with a qualified SAP to complete the treatment and return-to-duty requirements of DOT&amp;rsquo;s Part 40.&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip81av00363m5ygulx05ob</id>
+            <description lang="en-US">&lt;p&gt;Promptly fired and escorted off the premises.&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+              <activity id="http://employer_course_2019_12_31/KUUlGMEV1jUTCbt42q1OHRo17rfrWa0G" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">The Clearinghouse/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://employer_course_2019_12_31/QsMo3Xaq8-z9ovxK4nMaAiOKs5uvNe1_" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Lesson 3 Knowledge Check/quiz</name>
+      <description lang="en-US">&lt;p&gt;Let&amp;#39;s do a quick check for understanding. You must score at least 66% to continue to the next lesson. You will have unlimited attempts to pass the Knowledge Check.&lt;/p&gt;</description>
+    </activity>
+              <activity id="http://employer_course_2019_12_31/QsMo3Xaq8-z9ovxK4nMaAiOKs5uvNe1_/ck4ip1g5b00043m5ygim0gd5u" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;Who does the Clearinghouse rule apply to?&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</id>
+            <description lang="en-US">&lt;p&gt;Only employees who have had a testing violation in the past.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</id>
+            <description lang="en-US">&lt;p&gt;All persons and employers covered by Part 382.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip683c00313m5yldsdky2t</id>
+            <description lang="en-US">&lt;p&gt;Transit bus and subway operators.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://employer_course_2019_12_31/QsMo3Xaq8-z9ovxK4nMaAiOKs5uvNe1_/ck4ip1g5b00073m5yijpku1s7" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;When a new hire or current employee is transferred into a safety-sensitive position the employer must:&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</id>
+            <description lang="en-US">&lt;p&gt;Conduct a full, detailed query of the Clearinghouse database.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c000a3m5yb4w5snr2</id>
+            <description lang="en-US">&lt;p&gt;Simply ask the employee if they have had any violations.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ipnmqp00383m5y6xgzq353</id>
+            <description lang="en-US">&lt;p&gt;Conduct a basic, limited query.&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://employer_course_2019_12_31/QsMo3Xaq8-z9ovxK4nMaAiOKs5uvNe1_/ck4ip788h00323m5y13ckp1nz" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;In cases where your submission of a limited query indicates there may be a violation on record, you must:&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</id>
+            <description lang="en-US">&lt;p&gt;Conduct a &amp;quot;full&amp;quot; query within 24 hours. &amp;nbsp;&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00343m5yi38uwbkm</id>
+            <description lang="en-US">&lt;p&gt;Terminate the employee immediately.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip7x8k00353m5ysev5zhs7</id>
+            <description lang="en-US">&lt;p&gt;File the response away and do nothing.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+              <activity id="http://employer_course_2019_12_31/xL7Y7BQHWlDPyyEuDe8apCmPSFEpYB2k" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Querying the Database/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://employer_course_2019_12_31/ogFLCsR70RxS5KEHPLbcw_BSoRzxHzoA" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Lesson 4 Knowledge Check/quiz</name>
+      <description lang="en-US">&lt;p&gt;Let&amp;#39;s do a quick check for understanding. You must score at least 66% to continue to the next lesson. You will have unlimited attempts to pass the Knowledge Check.&lt;/p&gt;</description>
+    </activity>
+              <activity id="http://employer_course_2019_12_31/ogFLCsR70RxS5KEHPLbcw_BSoRzxHzoA/ck4ip1g5b00043m5ygim0gd5u" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;True or False:&amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;No employer may use a driver in a safety-sensitive position without first ensuring that the driver gives full, electronic consent to FMCSA within the online Clearinghouse database itself.&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</id>
+            <description lang="en-US">&lt;p&gt;True&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</id>
+            <description lang="en-US">&lt;p&gt;False&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://employer_course_2019_12_31/ogFLCsR70RxS5KEHPLbcw_BSoRzxHzoA/ck4ip1g5b00073m5yijpku1s7" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;What should you do if you receive notification from FMCSA that a driver has new information in the database?&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c000a3m5yb4w5snr2</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</id>
+            <description lang="en-US">&lt;p&gt;Since I have already received a query response showing no violation history, there is nothing I need to do.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c000a3m5yb4w5snr2</id>
+            <description lang="en-US">&lt;p&gt;Cease to use that employee in safety-sensitive functions until you ascertain the nature of the violation and move forward accordingly.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ipnmqp00383m5y6xgzq353</id>
+            <description lang="en-US">&lt;p&gt;Ask the driver if the notification is accurate.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://employer_course_2019_12_31/ogFLCsR70RxS5KEHPLbcw_BSoRzxHzoA/ck4ip788h00323m5y13ckp1nz" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;How long must you retain information received from query?&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip788h00323m5y13ckp1nz_ck4ip7x8k00353m5ysev5zhs7</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</id>
+            <description lang="en-US">&lt;p&gt;6 months&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00343m5yi38uwbkm</id>
+            <description lang="en-US">&lt;p&gt;1 year&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip7x8k00353m5ysev5zhs7</id>
+            <description lang="en-US">&lt;p&gt;3 years&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ipz2jk003a3m5yyeymlc6u</id>
+            <description lang="en-US">&lt;p&gt;5 years&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+              <activity id="http://employer_course_2019_12_31/OcOgqe5qdAJmHmZ767pgJvt1Hh8BD8bv" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Employer Reporting /blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://employer_course_2019_12_31/tDO8n5CqoG3ZoEepC8__VsP74_f-GyTJ" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Lesson 5 Knowledge Check/quiz</name>
+      <description lang="en-US">&lt;p&gt;Let&amp;#39;s do a quick check for understanding. You must score at least 66% to continue to the next lesson. You will have unlimited attempts to pass the Knowledge Check.&lt;/p&gt;</description>
+    </activity>
+              <activity id="http://employer_course_2019_12_31/tDO8n5CqoG3ZoEepC8__VsP74_f-GyTJ/ck4ip1g5b00043m5ygim0gd5u" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;Because FMCSA&amp;rsquo;s Drug and Alcohol Clearinghouse only works when violations are appropriately reported into the Clearinghouse database, it is important that each stakeholder:&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</id>
+            <description lang="en-US">&lt;p&gt;Trust that the MRO and TPA will handle everything, and leave it at that.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</id>
+            <description lang="en-US">&lt;p&gt;Understand the intricacies of the reporting process.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4iq328a003c3m5ymiopgogv</id>
+            <description lang="en-US">&lt;p&gt;Report positive results for all employees, whether they are CMV drivers or not.&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://employer_course_2019_12_31/tDO8n5CqoG3ZoEepC8__VsP74_f-GyTJ/ck4tyc8g7002z3a66onrjyyor" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;What are the five key events FMCSA requires employers report by the end of the 3rd business day following the day on which they learned of the event?&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4tyc8g7002z3a66onrjyyor_ck4tyc8g800303a661qt3s0vt</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4tyc8g7002z3a66onrjyyor_ck4tyc8g800303a661qt3s0vt</id>
+            <description lang="en-US">&lt;p&gt;Alcohol confirmation test results of 0.04 or greater&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4tyc8g7002z3a66onrjyyor_ck4tyc8g800323a66sueu04vj</id>
+            <description lang="en-US">&lt;p&gt;Alcohol testing refusals&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4tyc8g7002z3a66onrjyyor_ck4tyc8g800333a6690oltzws</id>
+            <description lang="en-US">&lt;p&gt;Positive drug test results&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4tyc8g7002z3a66onrjyyor_ck4tyc8g800313a668ohtegi5</id>
+            <description lang="en-US">&lt;p&gt;Refusals to take a drug test not otherwise reported by the MRO&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4tyc8g7002z3a66onrjyyor_ck4tydck700343a66z8u2xum9</id>
+            <description lang="en-US">&lt;p&gt;Negative return-to-duty test result&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4tyc8g7002z3a66onrjyyor_ck4tydijp00353a66apaoed5o</id>
+            <description lang="en-US">&lt;p&gt;The completion of all SAP-required follow-up testing&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4tyc8g7002z3a66onrjyyor_ck4tydoby00363a660uqvcore</id>
+            <description lang="en-US">&lt;p&gt;New driver hired&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://employer_course_2019_12_31/tDO8n5CqoG3ZoEepC8__VsP74_f-GyTJ/ck4ip788h00323m5y13ckp1nz" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;What happens if a driver refuses to take a FMCSA-required drug or alcohol test?&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</id>
+            <description lang="en-US">&lt;p&gt;You must report it to the Clearinghouse by the end of the third day following the day on which the employer learned of the refusal.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00343m5yi38uwbkm</id>
+            <description lang="en-US">&lt;p&gt;Offer them a non-DOT test instead.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip7x8k00353m5ysev5zhs7</id>
+            <description lang="en-US">&lt;p&gt;You should immediately notify the driver&amp;#39;s previous employer(s) that they have refused testing.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+              <activity id="http://employer_course_2019_12_31/Tqn3SYLNUgBh8effU5yF-p94DquoO-ae" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Administrative Requirements/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://employer_course_2019_12_31/7Jzf73MCIovk2Ln6bLWNwjhT44CxiJte" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Lesson 6 Knowledge Check/quiz</name>
+      <description lang="en-US">&lt;p&gt;Let&amp;#39;s do a quick check for understanding. You must score at least 50% to continue to the next lesson. You will have unlimited attempts to pass the Knowledge Check.&lt;/p&gt;</description>
+    </activity>
+              <activity id="http://employer_course_2019_12_31/7Jzf73MCIovk2Ln6bLWNwjhT44CxiJte/ck4ip1g5b00043m5ygim0gd5u" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;True or False:&amp;nbsp;&lt;/p&gt;&lt;p&gt;If you believe information has been erroneously entered into the federal Clearinghouse database, you should submit a petition to FMCSA either electronically (via the Clearinghouse) or by mail.&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</id>
+            <description lang="en-US">&lt;p&gt;True&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</id>
+            <description lang="en-US">&lt;p&gt;False&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://employer_course_2019_12_31/7Jzf73MCIovk2Ln6bLWNwjhT44CxiJte/ck4ip1g5b00073m5yijpku1s7" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;True or False: &amp;nbsp;&lt;/p&gt;&lt;p&gt;Use of information from the database is strictly limited to making determinations as to whether a driver is currently prohibited from performing safety-sensitive functions under Part 382. Accordingly, you may not divulge information learned about an individual from the Clearinghouse to a person or entity not involved in that specific process.&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</id>
+            <description lang="en-US">&lt;p&gt;True&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c000a3m5yb4w5snr2</id>
+            <description lang="en-US">&lt;p&gt;False&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+              <activity id="http://employer_course_2019_12_31/o39MUZ1rIcsTOQXczIlMLJbXj_JWo_Sk" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Course Completion/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+        </activities>
+</tincan>

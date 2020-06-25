@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tincan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://projecttincan.com/tincan.xsd">
+  <activities>
+    <activity id="http://driver_course_2019_12_31" type="http://adlnet.gov/expapi/activities/course">
+      <name lang="en-US">Clearinghouse Navigator: Driver eLearning Course</name>
+      <description lang="en-US">&lt;p&gt;Welcome to Clearinghouse Navigator&amp;rsquo;s Driver Training Module. The Federal Motor Carrier Safety Administration&amp;rsquo;s drug and alcohol Clearinghouse is an important new safety rule being implemented to prevent commercial drivers who have violated DOT drug and alcohol testing rules from avoiding the consequences of that violation by applying for safety-sensitive work with a new employer without disclosing the prior violation.&amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;In this module, you will learn about DOT drug and alcohol testing rules, and their associated requirements; the Federal Motor Carrier Safety Administration&amp;#39;s new drug and alcohol Clearinghouse requirement effective in January of 2020; your role and your responsibilities as a driver covered by this new requirement; viewing your record; how to provide consent; how to select a SAP; and general administrative requirements.&lt;/p&gt;</description>
+    <launch lang="en-US">index.html</launch>
+    </activity>
+      <activity id="http://driver_course_2019_12_31/lXzIIEMiCEPbNqZQ5M4U9CRotQyT1REs" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Introduction/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://driver_course_2019_12_31/BmkCSfAWHnUcuklqBzDi3m2tt308_HN4" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">US DOT Drug and Alcohol Testing /blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://driver_course_2019_12_31/BFEFox1oQVeF0N42E0iqgMzxq8mx-Wqg" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Lesson 2 Knowledge Check/quiz</name>
+      <description lang="en-US">&lt;p&gt;Let&amp;#39;s do a quick check for understanding. You must score at least 66% to continue to the next lesson. You will have unlimited attempts to pass the Knowledge Check.&lt;/p&gt;</description>
+    </activity>
+              <activity id="http://driver_course_2019_12_31/BFEFox1oQVeF0N42E0iqgMzxq8mx-Wqg/ck4ip1g5b00043m5ygim0gd5u" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;Why was the &amp;nbsp;Omnibus Transportation Employee Testing Act passed?&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</id>
+            <description lang="en-US">&lt;p&gt;To improve safety for all persons interacting with the wider transportation system.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</id>
+            <description lang="en-US">&lt;p&gt;To punish employees who drink on the job.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip683c00313m5yldsdky2t</id>
+            <description lang="en-US">&lt;p&gt;To track employees who have been caught abusing substances on the job.&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://driver_course_2019_12_31/BFEFox1oQVeF0N42E0iqgMzxq8mx-Wqg/ck4ip1g5b00073m5yijpku1s7" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;True or False:&amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;FMCSA prohibits commercial drivers from using illegal drugs at all times, on duty or off.&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</id>
+            <description lang="en-US">&lt;p&gt;True&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c000a3m5yb4w5snr2</id>
+            <description lang="en-US">&lt;p&gt;False&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://driver_course_2019_12_31/BFEFox1oQVeF0N42E0iqgMzxq8mx-Wqg/ck4ip788h00323m5y13ckp1nz" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;If a driver violates one of the prohibitions of Part 382 they must be:&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</id>
+            <description lang="en-US">&lt;p&gt;Immediately removed from safety-sensitive duty.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00343m5yi38uwbkm</id>
+            <description lang="en-US">&lt;p&gt;Provided with contact information for a list of Substance Abuse Professionals (SAPs) readily available in the employee&amp;rsquo;s home area.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip7x8k00353m5ysev5zhs7</id>
+            <description lang="en-US">&lt;p&gt;Asked to visit with a qualified SAP to complete the treatment and return-to-duty requirements of DOT&amp;rsquo;s Part 40.&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip81av00363m5ygulx05ob</id>
+            <description lang="en-US">&lt;p&gt;Promptly fired and escorted off the premises.&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+              <activity id="http://driver_course_2019_12_31/UezqJZZzTNKwotjen4RyuF4qRET2qYT_" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">The Clearinghouse/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://driver_course_2019_12_31/49yxwnRi9f7sRaPUsGV_OBrvBCzMks3e" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Lesson 3 Knowledge Check/quiz</name>
+      <description lang="en-US">&lt;p&gt;Let&amp;#39;s do a quick check for understanding. You must score at least 66% to continue to the next lesson. You will have unlimited attempts to pass the Knowledge Check.&lt;/p&gt;</description>
+    </activity>
+              <activity id="http://driver_course_2019_12_31/49yxwnRi9f7sRaPUsGV_OBrvBCzMks3e/ck4ip1g5b00043m5ygim0gd5u" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;Who does the Clearinghouse rule apply to?&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</id>
+            <description lang="en-US">&lt;p&gt;Only employees who have had a testing violation in the past.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</id>
+            <description lang="en-US">&lt;p&gt;All persons and employers covered by Part 382.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://driver_course_2019_12_31/49yxwnRi9f7sRaPUsGV_OBrvBCzMks3e/ck4ip1g5b00073m5yijpku1s7" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;When a new hire or current employee is transferred into a safety-sensitive position the employer must:&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</id>
+            <description lang="en-US">&lt;p&gt;Conduct a full, detailed query of the Clearinghouse database.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c000a3m5yb4w5snr2</id>
+            <description lang="en-US">&lt;p&gt;Interview the new employee and ask them if they have an violations.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ipnmqp00383m5y6xgzq353</id>
+            <description lang="en-US">&lt;p&gt;Contact the new employees former supervisor to discuss whether they have any violations.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://driver_course_2019_12_31/49yxwnRi9f7sRaPUsGV_OBrvBCzMks3e/ck4ip788h00323m5y13ckp1nz" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;In cases where the employer&amp;#39;s submission of a limited query indicates there may be a violation on record, they must:&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00333m5yqu3jrt4d</id>
+            <description lang="en-US">&lt;p&gt;Conduct a &amp;quot;full&amp;quot; query within 24 hours. &amp;nbsp;&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip788h00343m5yi38uwbkm</id>
+            <description lang="en-US">&lt;p&gt;Remove the employee in question from any safety sensitive jobs.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip788h00323m5y13ckp1nz_ck4ip7x8k00353m5ysev5zhs7</id>
+            <description lang="en-US">&lt;p&gt;Ascertain the nature of the violation and move forward accordingly.&amp;nbsp;&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+              <activity id="http://driver_course_2019_12_31/HkzMvS_vrQq9FLIGhFUlwaZ3EldDSowI" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Administrative Requirements/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://driver_course_2019_12_31/cX0OHaeNmZwqzNtNFUv1YOyK6thltQlG" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Lesson 4 Knowledge Check/quiz</name>
+      <description lang="en-US">&lt;p&gt;Let&amp;#39;s do a quick check for understanding. You must score at least 66% to continue to the next lesson. You will have unlimited attempts to pass the Knowledge Check.&lt;/p&gt;</description>
+    </activity>
+              <activity id="http://driver_course_2019_12_31/cX0OHaeNmZwqzNtNFUv1YOyK6thltQlG/ck4ip1g5b00043m5ygim0gd5u" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;True or False:&amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Every person or entity with access must report truthfully and accurately to the Clearinghouse and are expressly prohibited from reporting information one knows &amp;ndash; or should know &amp;ndash; is false or inaccurate.&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00053m5yi5czpd4i</id>
+            <description lang="en-US">&lt;p&gt;True&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00043m5ygim0gd5u_ck4ip1g5b00063m5ynzjr0v1y</id>
+            <description lang="en-US">&lt;p&gt;False&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://driver_course_2019_12_31/cX0OHaeNmZwqzNtNFUv1YOyK6thltQlG/ck4ip1g5b00073m5yijpku1s7" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;True or False: &amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;If you believe information about you has been erroneously entered into the federal Clearinghouse database, you should submit a petition to FMCSA either electronically (via the Clearinghouse) or by mail.&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c00083m5ymiowxetf</id>
+            <description lang="en-US">&lt;p&gt;True&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4ip1g5b00073m5yijpku1s7_ck4ip1g5c000a3m5yb4w5snr2</id>
+            <description lang="en-US">&lt;p&gt;False&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+          <activity id="http://driver_course_2019_12_31/cX0OHaeNmZwqzNtNFUv1YOyK6thltQlG/ck4jy0wst002z3m5yi7v2v87h" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+        <name lang="en-US">&lt;p&gt;True or False:&amp;nbsp;&lt;/p&gt;&lt;p&gt;Use of information from the Clearinghouse is strictly limited to making determinations as to whether a driver is currently prohibited from performing a safety-sensitive function. Accordingly, no one may divulge information learned about an individual from the Clearinghouse to a person or entity not involved in that specific process.&amp;nbsp;&lt;/p&gt;</name>
+        <description lang="en-US"></description>
+        <interactionType>choice</interactionType>
+        <correctResponsePatterns>
+        <correctResponsePattern>choice_ck4jy0wst002z3m5yi7v2v87h_ck4jy0wsu00303m5yo1h29ly3</correctResponsePattern>
+        </correctResponsePatterns>
+        <choices>
+                  <component>
+            <id>choice_ck4jy0wst002z3m5yi7v2v87h_ck4jy0wsu00303m5yo1h29ly3</id>
+            <description lang="en-US">&lt;p&gt;True&lt;/p&gt;</description>
+          </component>
+                  <component>
+            <id>choice_ck4jy0wst002z3m5yi7v2v87h_ck4jy0wsu00313m5ycblgh3i8</id>
+            <description lang="en-US">&lt;p&gt;False&lt;/p&gt;</description>
+          </component>
+                </choices>
+      </activity>
+              <activity id="http://driver_course_2019_12_31/xwgn-KMfpkxDTotRpm-fD1AJBclDZMne" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Course Completion/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+        </activities>
+</tincan>

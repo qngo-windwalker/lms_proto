@@ -1,0 +1,21 @@
+# field.field.tincan_statement.tincan_statement.field_tincan_object.yml
+# @see https://www.drupal.org/docs/8/api/entity-api/programming-custom-fields-into-your-content-type
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.tincan_statement.field_tincan_object
+  module:
+    - tincan_lrs_fieldtypes
+id: tincan_statement.tincan_statement.field_tincan_object
+field_name: field_tincan_object
+entity_type: tincan_statement
+bundle: tincan_statement
+label: 'Tincan Statement Object'
+description: 'Select the entity that is the Object of the Statement'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: tincan_statement_object

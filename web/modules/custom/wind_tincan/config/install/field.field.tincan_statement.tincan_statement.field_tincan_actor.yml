@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.tincan_statement.field_tincan_actor
+  module:
+    - wind_tincan
+id: tincan_statement.tincan_statement.field_tincan_actor
+field_name: field_tincan_actor
+entity_type: tincan_statement
+bundle: tincan_statement
+label: 'Statement Actor'
+description: 'Select the Agent that is the Actor in the Statement'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

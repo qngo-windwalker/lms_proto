@@ -5,4 +5,4 @@ package: Windwalker
 dependencies:
   - wind_jira
 version: 1.0
-core: 8.x
+core_version_requirement: ^8.8 || ^9

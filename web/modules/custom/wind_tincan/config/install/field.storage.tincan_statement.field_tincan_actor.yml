@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - wind_tincan
+id: tincan_statement.field_tincan_actor
+field_name: field_tincan_actor
+entity_type: tincan_statement
+type: entity_reference
+settings:
+  target_type: tincan_agent
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

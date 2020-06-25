@@ -1,0 +1,11 @@
+my_training_block:
+  js:
+    js/wind_tincan.my_training_block.js: {}
+wind_tincan:
+  js:
+    js/wind_tincan.wind_tincan.js: {}
+admin_user_course_progresses:
+  js:
+    js/wind_tincan.admin_user_course_progresses.js: {}
+  dependencies:
+    - wind/datatable

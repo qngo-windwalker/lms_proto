@@ -1,0 +1,8 @@
+name: Wind TinCan API
+description: This module provides API for CRUD operations for TinCan
+type: module
+package: Windwalker
+dependencies:
+  - tincan_lrs_fieldtypes
+version: 1.0
+core_version_requirement: ^8.8 || ^9

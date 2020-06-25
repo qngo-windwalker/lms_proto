@@ -1,0 +1,274 @@
+<?php
+
+use Drupal\wind_tincan\Entity\TincanStatement;
+use Drupal\Component\Serialization\Json;
+
+/**
+ * Helper function to decode json and log the resulting error message
+ *
+ * @param string $json
+ *   The JSON string
+ * @param string $context
+ *   A string providing context for the logged message
+ *
+ * @return Boolean
+ *   FALSE if there's a error, otherwise TRUE
+ */
+function _wind_tincan_json_validation($json, $context) {
+  $array = Json::decode($json);
+  $json_result = json_last_error();
+  switch ($json_result) {
+    case JSON_ERROR_NONE:
+      return TRUE;
+      break;
+    case JSON_ERROR_DEPTH:
+      watchdog('lrs-json-validation','Maximum stack depth exceeded. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+      break;
+    case JSON_ERROR_STATE_MISMATCH:
+      watchdog('lrs-json-validation','Underflow or the modes mismatch. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+      break;
+    case JSON_ERROR_CTRL_CHAR:
+      watchdog('lrs-json-validation','Unexpected control character found. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+      break;
+    case JSON_ERROR_SYNTAX:
+      watchdog('lrs-json-validation','Syntax error, malformed JSON. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+      break;
+    case JSON_ERROR_UTF8:
+      watchdog('lrs-json-validation','Malformed UTF-8 characters, possibly incorrectly encoded. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+      break;
+    default:
+      watchdog('lrs-json-validation','Unknown error. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+      break;
+  }
+}
+
+/**
+ * Get Tincan Agent account_name format
+ * ex: 'username|emailAddress'
+ * @param $user
+ *
+ * @return string
+ */
+function _wind_tincan_get_user_tincan_agent_account_name($user){
+  return $user->getAccountName() . '|' . $user->getEmail();
+}
+
+/**
+ * @param $user
+ *
+ * @return bool|integer tincan_agent id
+ */
+function _wind_tincan_get_user_tincan_agent_id($user) {
+  $agentAccountName = _wind_tincan_get_user_tincan_agent_account_name($user);
+  $agentQuery = \Drupal::entityQuery('tincan_agent');
+  $agentQuery->condition('object_type', 'Agent');
+  $agentQuery->condition('account_name', $agentAccountName);
+  $result = $agentQuery->execute();
+  if ($result) {
+    return end($result);
+  }
+  return FALSE;
+}
+
+function _wind_tincan_get_agent_id_by_tincan_agent_account_name($tincan_agent_account_name) {
+  $agentQuery = \Drupal::entityQuery('tincan_agent');
+  $agentQuery->condition('object_type', 'Agent');
+  $agentQuery->condition('account_name', $tincan_agent_account_name);
+  $result = $agentQuery->execute();
+  if ($result) {
+    return end($result);
+  }
+  return FALSE;
+}
+
+/**
+ * @param $course_folder
+ *
+ * @return string
+ */
+function _wind_tincan_gen_course_link($course_folder) {
+  $currentUser = \Drupal::currentUser();
+  $schemaAndHost = _wind_tincan_get_scheme_and_http_host();
+
+  //Ex: {"name":["quan ngo"],"account":[{"accountServiceHomePage":"http://cloud.scorm.com","accountName":"0QTP625WM3|quan.ngo@windwalker.com"}],"objectType":"Agent"}
+  $actor = [
+    'name' => array($currentUser->getAccountName()),
+    'account' => array(
+      array(
+        "accountName" => _wind_tincan_get_user_tincan_agent_account_name($currentUser),
+        'accountServiceHomePage' => $schemaAndHost . '/user/' . $currentUser->id(),
+      )
+    ),
+    'objectType' => 'Agent'
+  ];
+  $actorJson = Json::encode($actor);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = $module_handler->getModule('wind_tincan')->getPath();
+  $link = $module_path . '/course/' . $course_folder . '?';
+  $link .= 'endpoint=' . $schemaAndHost . '/course/tcapi';
+  $link .= '&actor=' . urlencode($actorJson);
+  return $link;
+}
+
+/**
+ * @param $user
+ * Todo: Add missing courses
+ * @return array
+ */
+function _wind_tincan_get_all_courses_definition() {
+  return [
+    "CDL Driver" => [
+      'title' => 'Driver eLearning Course',
+      'folder' => 'clearinghouse-navigator-driver-e-learning-course-tincan-ivZ9tWJV',
+      'tincan_course_id' => 'http://driver_course_2019_12_31',
+    ],
+    "C/TPA" => [
+      'title' => 'Third Party Administrator eLearning Course',
+      'folder' => 'clearinghouse-navigator-third-party-administrator-e-learning-course-tincan-01Of7xA2',
+      'tincan_course_id' => 'http://TPA_course_2019_12_31',
+    ],
+    "Employer" => [
+      'title' => 'Employer eLearning Course',
+      'folder' => 'clearinghouse-navigator-employer-e-learning-course-tincan-jhR7fFFx',
+      'tincan_course_id' => 'http://employer_course_2019_12_31',
+    ],
+    "Medical Review Officer" => [
+      'title' => 'MRO eLearning Course',
+      'folder' => 'clearinghouse-navigator-mro-e-learning-course-tincan-tJe7gms0',
+      'tincan_course_id' => 'http://mro_course_2019_12_31',
+    ],
+//    "Medical Review Officer Assistant" => [
+//    ],
+    "Owner/Operator" => [
+      'title' => 'Owner-Operator Course',
+      'folder' => 'clearinghouse-navigator-owner-operator-course-tincan-hKLmLbMr',
+      'tincan_course_id' => 'http://OwnOp_course_2019_12_31',
+    ],
+//    "State Licensing Authority" => [
+//    ],
+    "Substance Abuse Professional" => [
+      'title' => 'Substance Abuse Professional eLearning Course',
+      'folder' => 'clearinghouse-navigator-substance-abuse-professional-e-learning-course-tincan-YR2M123-',
+      'tincan_course_id' => 'http://sap_course_2019_12_31',
+    ],
+  ];
+}
+
+/**
+ * Return array of course paid by the user
+ * @param $user
+ *
+ * @return array
+ */
+function _wind_tincan_get_user_all_assigned_course_data($user){
+  $courses = array();
+  $avail_courses = _wind_tincan_get_all_courses_definition();
+  // get ?test=true in the URL
+  $isTestActive = \Drupal::request()->get('test');
+  // Add testing courses if user has permission and parameter test is true
+  if($isTestActive == 'true' && wind_does_user_has_sudo($user)){
+    $courses[] = ['title' => 'Test Course', 'folder' => 'test_course', 'tincan_course_id' => 'test_abc123'];
+    $courses[] = ['title' => 'Le Rouge', 'folder' =>  'le-rouge-tincan-4SaXPWmj', 'tincan_course_id' => 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'];
+  }
+
+  $use_clearinghouse_role = _wind_tincan_get_user_paid_role($user->id());
+  if($use_clearinghouse_role && isset($avail_courses[$use_clearinghouse_role])){
+    $courses[] = $avail_courses[$use_clearinghouse_role];
+  }
+
+  // We have a problem if this is the case
+  if (empty($courses)) {
+    return [];
+  }
+
+  foreach ($courses as $index => &$course) {
+    $progress = _wind_tincan_add_tincan_course_data($user, $course['tincan_course_id']);
+    $course += $progress;
+  }
+
+  return $courses;
+}
+
+/**
+ * @param $user
+ * @param string $TC_COURSE_ID Can be found in the tc-config.js file located in the root of tincan course folder.
+ *
+ * @return string
+ */
+function _wind_tincan_add_tincan_course_data($user, string $TC_COURSE_ID) {
+  $agentID = _wind_tincan_get_user_tincan_agent_id($user);
+  if (!$agentID) {
+    return [
+      'progress' => 'Not Started'
+    ];
+  }
+
+  $query = \Drupal::entityQuery('tincan_statement');
+  $query->condition('field_tincan_actor', $agentID);
+  $query->condition('field_tincan_object.id', $TC_COURSE_ID);
+  $query->condition('field_tincan_object.type', 'Activity');
+  $query->condition('json', 'completion', 'CONTAINS');
+  // Sort latest to oldest
+  $query->sort('timestamp' , 'DESC');
+  $result = $query->execute();
+  if (!$result) {
+    $query = \Drupal::entityQuery('tincan_statement');
+    $query->condition('field_tincan_actor', $agentID);
+    $query->condition('field_tincan_object.id', $TC_COURSE_ID);
+    $query->condition('json', 'experienced', 'CONTAINS');
+    $result = $query->execute();
+    if ($result) {
+      return [
+        'progress' => 'InComplete'
+      ];
+    } else {
+      return [
+        'progress' => 'Not Started'
+      ];
+    }
+  }
+  $statements = TincanStatement::loadMultiple($result);
+  foreach ($statements as $statement ){
+    $json_array = Json::decode($statement->get('json')->value);
+    if( isset($json_array['result']) && isset($json_array['result']['completion']) ){
+      return [
+        'progress' => $json_array['result']['completion'] ? 'Completed' : 'Incomplete',
+        'statement' => $statement
+      ];
+    }
+  }
+
+  return [
+    'progress' => 'InComplete'
+  ];
+}
+
+/**
+ * The the paid user license role
+ * @param $uid
+ *
+ * @return String
+ */
+function _wind_tincan_get_user_paid_role($uid) {
+  $query = \Drupal::database()->select('node_field_data', 'n');
+  $query->leftJoin('node__field_enrolled_user', 'e', 'e.entity_id = n.nid');
+  $query->leftJoin('node__field_clearinghouse_role', 's', 's.entity_id = n.nid');
+  $query->leftJoin('node__field_paid', 'p', 'p.entity_id = n.nid');
+  $query->condition('field_enrolled_user_target_id', $uid, '=');
+  $query->condition('type', 'license', '=');
+  $query->condition('field_paid_value', 1, '=');
+  $query->fields('s', ['field_clearinghouse_role_value']);
+  $result = $query->execute();
+
+  while($row = $result->fetchAssoc()) {
+    return $row['field_clearinghouse_role_value'];
+  }
+
+  return '';
+}

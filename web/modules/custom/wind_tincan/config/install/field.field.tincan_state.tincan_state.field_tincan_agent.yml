@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.tincan_state.field_tincan_agent
+  module:
+    - wind_tincan
+id: tincan_state.tincan_state.field_tincan_agent
+field_name: field_tincan_agent
+entity_type: tincan_state
+bundle: tincan_state
+label: 'State Agent'
+description: 'Select the Agent of the State entity'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
