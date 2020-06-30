@@ -1,0 +1,10 @@
+/**
+ * Messages.
+ * Override core/themes/classy/css/components/messages.css
+ */
+.messages {
+  margin: 0px 0 10px 8px; /* LTR */
+}
+[dir="rtl"] .messages {
+  margin: 0px 8px 10px 0;
+}

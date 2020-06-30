@@ -50,22 +50,16 @@
 
 <div id="main" class="flex-column container">
     {{ page.help }}
-
     <div class="{{ content_wrapper_classes }}">
         <div id="main-content" class="row">
             {% if page.top %}
-                <div class="col-12">
-                    {{ page.top }}
+              <div id="page-title">
+                <div class="col-md-12">
+                  {{ page.top }}
                 </div>
+              </div>
             {% endif %}
-            {% if page.sidebar_first %}
-            <div class="col-lg-4 mb-4 mb-lg-0" id="sidebar-first">
-                {{ page.sidebar_first }}
-            </div>
-            <div class="col-lg-8 p-static" id="content">
-                {% else %}
                 <div class="col-lg-12 p-static" id="content">
-                    {% endif %}
                     <div class="message-wrapper">
                         {{ page.status_messages }}
                     </div>
@@ -76,6 +70,5 @@
             </div>
         </div>
     </div>
-
     {% include directory ~ '/templates/layout/footer.html.twig' %}
 </div>

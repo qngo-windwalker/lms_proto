@@ -16,8 +16,5 @@ regions:
   menu: 'Menu'
   status_messages: 'Status messages'
   top: 'Top'
-  sidebar_first: 'Sidebar first'
   content: 'Content'
-  footer_left: 'Footer left'
   footer: 'Footer'
-  footer_right: 'Footer right'

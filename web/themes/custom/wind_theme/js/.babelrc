@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "transform-html-import-to-string",
+    "@babel/plugin-transform-runtime"
+  ],
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ]
+}

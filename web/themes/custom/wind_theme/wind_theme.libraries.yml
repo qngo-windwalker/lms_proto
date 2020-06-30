@@ -1,13 +1,15 @@
 global-css:
   css:
-      theme:
-          components/bootstrap/css/bootstrap.css: {}
-          css/wind_theme.css: {}
-
+    theme:
+      'https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css':
+        type: external
+        minified: true
+        attributes:
+          crossorigin: anonymous
+          integrity: "sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      css/wind_theme.css: {}
 global-js:
   js:
-    components/bootstrap/js/bootstrap.bundle.js: {}
-    js/dist/wind_theme.bundle.main.js: {}
+    js/dist/wind_theme.main.bundle.js: {}
   dependencies:
-  - core/drupal
-  - core/jquery
+    - core/drupal

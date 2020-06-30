@@ -1,0 +1,124 @@
+.learning-path-steps-block {
+  background-color: #f6f6f6;
+  padding: 32px 10px 32px;
+}
+
+.learning-path-steps-summary-state-passed,
+.learning-path-steps-summary-state-pending {
+  background-position: center;
+  background-size: 100%;
+  display: inline-block;
+  float: left;
+  height: 53px;
+  vertical-align: middle;
+  width: 53px;
+}
+
+.learning-path-steps-summary-state-passed {
+  background-image: url('../img/learning_path/state_passed_big.png');
+}
+
+.learning-path-steps-summary-state-pending {
+  background-image: url('../img/learning_path/state_pending_big.png');
+}
+
+.learning-path-steps-summary-title,
+.learning-path-steps-summary-score,
+.learning-path-steps-summary-progress {
+  color: #595858;
+  font-size: 16px;
+  margin: 0 0 0 70px;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.learning-path-steps-summary-score,
+.learning-path-steps-summary-progress {
+  font-size: 15px;
+}
+
+.learning-path-steps-summary-title {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.learning-path-steps-title {
+  clear: both;
+  color: #706f6f;
+  margin-top: 40px;
+  font-weight: normal;
+  text-transform: unset;
+  font-size: 20px;
+}
+
+.learning-path-steps-table {
+  border-spacing: 0 6px;
+  margin: 0;
+  width: 100%;
+}
+
+.learning-path-steps-table th {
+  background-color: transparent;
+  color: #b2b1b1;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: normal;
+  text-transform: unset;
+}
+
+.learning-path-steps-table tr:nth-child(2n) td:not([class*="ui-datepicker"]),
+.learning-path-steps-table tr:nth-child(2n+1) td:not([class*="ui-datepicker"]) {
+  background-color: #fff;
+  padding: 10px 15px;
+}
+
+.learning-path-steps-table td:nth-child(1) {
+  color: #595858;
+  font-size: 16px;
+}
+
+.learning-path-steps-table td:nth-child(2) {
+  color: #b2b1b1;
+  font-size: 16px;
+  text-align: right;
+}
+
+.learning-path-steps-table td:nth-child(3) {
+  color: #888787;
+  font-size: 14px;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+.learning-path-steps-score {
+  color: #f9a295;
+}
+
+.learning-path-steps-score::after {
+  color: #b2b1b1;
+  content: '%';
+}
+
+.learning-path-steps-step-passed,
+.learning-path-steps-step-failed,
+.learning-path-steps-step-pending {
+  background-position: center;
+  background-size: 100%;
+  display: inline-block;
+  height: 34px;
+  margin-right: 15px;
+  vertical-align: middle;
+  width: 34px;
+}
+
+.learning-path-steps-step-passed {
+  background-image: url('../img/learning_path/state_passed_big.png');
+}
+
+.learning-path-steps-step-failed {
+  background-image: url('../img/learning_path/state_failed_big.png');
+}
+
+.learning-path-steps-step-pending {
+  background-image: url('../img/learning_path/state_not_started_big.png');
+}
