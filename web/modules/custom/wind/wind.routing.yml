@@ -37,3 +37,19 @@ wind.course:
     _title: 'Windwalker'
   requirements:
     _permission: 'access content'
+
+wind.report:
+  path: 'report'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindReportPageController::content'
+    _title: 'Report'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _permission: 'access content'
+wind.datatable.user-progress:
+  path: 'datatable/user-progress'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindDatatableController::user_progress'
+    _title: 'Windwalker'
+  requirements:
+    _permission: 'access content'

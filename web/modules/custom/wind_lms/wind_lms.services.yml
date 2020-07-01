@@ -1,0 +1,5 @@
+services:
+  wind_lms.path_processor:
+    class: Drupal\wind_lms\PathProcessor\WindLMSPathProcessor
+    tags:
+      - { name: path_processor_inbound, priority: 250 }

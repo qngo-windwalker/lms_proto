@@ -1,12 +1,20 @@
 <?
 
 namespace Drupal\wind_lms;
+use Drupal\group\Entity\Group;
+use Drupal\opigno_group_manager\OpignoGroupContext;
+
+use Drupal\opigno_group_manager\Entity\OpignoGroupManagedContent;
+use Drupal\opigno_module\Entity\OpignoModule;
+use Drupal\opigno_module\Entity\OpignoActivity;
+use Drupal\opigno_group_manager\OpignoGroupContentTypesManager;
 
 class WindLMSSCORMAPI {
 
-  function getSCORMContent() {
+  function getSCORMContent(\Drupal\user\Entity\User $user) {
     /** @var \Drupal\group\GroupMembershipLoader $grp_membership_service */
     $grp_membership_service = \Drupal::service('group.membership_loader');
+    $uid = $user->id();
     $grps = $grp_membership_service->loadByUser($user);
     foreach ($grps as $grp) {
       $group = $grp->getGroup();

@@ -7,15 +7,9 @@
 namespace Drupal\wind_lms\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\group\Entity\Group;
-use Drupal\opigno_group_manager\OpignoGroupContext;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
-
-use Drupal\opigno_group_manager\Entity\OpignoGroupManagedContent;
-use Drupal\opigno_module\Entity\OpignoModule;
-use Drupal\opigno_module\Entity\OpignoActivity;
-use Drupal\opigno_group_manager\OpignoGroupContentTypesManager;
+use Symfony\Component\HttpFoundation\Response;
 
 class WindLMSDashboardController extends ControllerBase {
 
@@ -79,37 +73,31 @@ class WindLMSDashboardController extends ControllerBase {
         ]),
       ],
     ];
+
+    $build = array(
+      'page' => array(
+        '#theme' => 'wind_lms_dashboard',
+        '#content' => $content,
+        '#attached' => [
+          'library' => [
+            'wind_lms/dashboard',
+          ],
+        ],
+      ),
+    );
+    $html = \Drupal::service('renderer')->renderRoot($build);
+    $response = new Response();
+    $response->setContent($html);
+//    return $response;
     $steps = [];
     return [
       '#type' => 'container',
       '#attributes' => [
-        'class' => ['lp_steps_block'],
-      ],
-      $summary,
-      [
-        '#type' => 'html_tag',
-        '#tag' => 'h3',
-        '#value' => '$title',
-        '#attributes' => [
-          'class' => ['lp_steps_block_title'],
-        ],
-      ],
-      [
-        '#type' => 'table',
-        '#header' => [
-          t('Name'),
-          //          t('Score'),
-          t('State'),
-        ],
-        '#rows' => $steps,
-        '#attributes' => [
-          'class' => ['lp_steps_block_table'],
-        ],
+        'id' => 'react-dashboard-container',
       ],
       '#attached' => [
         'library' => [
-          'opigno_learning_path/steps_block',
-          'wind/learner_dashboard',
+          'wind_lms/dashboard',
         ],
       ],
     ];

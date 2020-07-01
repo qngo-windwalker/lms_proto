@@ -14,7 +14,9 @@ input.form-email{ display: block;}
 label{margin-top: 10px;}
 /*label.form-required::after{ content: ' *'; color: red;}*/
 
-#site-header{margin-bottom: 25px; padding-top: 20px; background: #1a1a1a; color: white;}
+#site-header{padding: 20px 0; background: #1a1a1a; color: white;}
+  #site-logo{display: inline-block;}
+  #site-header-left-nav {display: inline-block;}
 .page-course-activity #site-header{margin-bottom: 0px; }
 #block-wind-theme-branding a{display: block; padding: 0px 20px 20px; }
 .alert {

@@ -3,6 +3,15 @@
 use Drupal\block\Entity\Block;
 
 /**
+ * Implements hook_install().
+ */
+function wind_lms_install() {
+
+  // Set page.front (aka <front>) to /node instead of /user/login.
+  \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/dashboard')->save();
+}
+
+/**
  * Disable a block with checking.
  * @param $id string : block id.
  */

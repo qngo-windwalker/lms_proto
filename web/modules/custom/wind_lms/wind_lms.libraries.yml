@@ -8,3 +8,6 @@ datatable_users:
     js/wind_lms.users.js: {}
   dependencies:
     - wind/datatable
+dashboard:
+  js:
+    js/dist/wind_lms.dashboard.bundle.js: {}

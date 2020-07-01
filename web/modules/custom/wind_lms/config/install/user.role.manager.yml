@@ -1,0 +1,12 @@
+uuid: 7a617a65-ee2a-49b5-8e99-4bc11f55ff3f
+langcode: en
+status: true
+dependencies: {  }
+id: manager
+label: 'Manager'
+weight: 4
+is_admin: null
+permissions:
+  - 'manage group members in any group'
+  - 'message all groups'
+  - 'message anyone regardless of groups'
