@@ -22,3 +22,7 @@
 
 # Ignore .env files as they are personal
 /.env
+
+# Ignore Dependency directories
+/web/modules/custom/**/node_modules
+/web/themes/custom/**/node_modules
