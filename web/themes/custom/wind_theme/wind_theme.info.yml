@@ -10,11 +10,6 @@ libraries:
   - wind_theme/global-js
 
 regions:
-  help: 'Help'
-  header_top_right: 'Header top right'
-  branding: 'Branding'
-  menu: 'Menu'
-  status_messages: 'Status messages'
   top: 'Top'
   content: 'Content'
   footer: 'Footer'

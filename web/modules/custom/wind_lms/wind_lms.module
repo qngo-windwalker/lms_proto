@@ -12,6 +12,23 @@ use Drupal\opigno_group_manager\Entity\OpignoGroupManagedContent;
 use Drupal\opigno_module\Entity\OpignoActivity;
 use Drupal\opigno_group_manager\OpignoGroupContentTypesManager;
 
+/**
+ * Implements hook_theme().
+ * @param $exiting
+ * @param $type
+ * @param $theme
+ * @param $path
+ * @return array
+ */
+function wind_lms_theme($existing, $type, $theme, $path){
+  return array(
+    'wind_lms_dashboard' => array(
+      'variables' => array('content' => NULL),
+      'template' => 'wind-lms-dashboard'
+    )
+  );
+}
+
 function wind_lms_create_group_learning_path($title) {
   $group = \Drupal\group\Entity\Group::create([
       'type' => 'learning_path',

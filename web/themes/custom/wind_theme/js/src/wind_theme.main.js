@@ -2,6 +2,6 @@
 
 import React, {Component} from 'react';
 import ReactDOM from "react-dom";
-import UserMenu from './components/userMenu';
+import SiteTopHeader from './components/siteTopHeader';
 
-ReactDOM.render(<UserMenu />, document.getElementById('header-top-right'));
+ReactDOM.render(<SiteTopHeader />, document.getElementById('site-header'));

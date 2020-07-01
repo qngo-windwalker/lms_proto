@@ -1,5 +1,5 @@
 <?php
-
+use Drupal\block\Entity\Block;
 /**
  * Implements hook_install().
  */
@@ -9,13 +9,17 @@ function wind_install() {
 
   // Enable Windwalker custom theme
   \Drupal::service('theme_installer')->install(['wind_theme']);
+  \Drupal::service('theme_handler')->setDefault('wind_theme');
 
   // Uses 'Seven' theme for admin UI.
   $config = \Drupal::service('config.factory')->getEditable('system.theme');
   $config->set('admin', 'seven')->save();
 
-  // Set page.front (aka <front>) to /node instead of /user/login.
-//  \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/wind-home')->save();
+  _wind_disable_block('wind_theme_main_menu');
+  _wind_disable_block('wind_theme_footer');
+  _wind_disable_block('wind_theme_account_menu');
+  _wind_disable_block('wind_theme_breadcrumbs');
+  _wind_disable_block('wind_theme_branding');
 }
 
 /**
@@ -25,3 +29,26 @@ function wind_install() {
 //function wind_update_9001(){
 //  // @see https://www.drupal.com/docs/8/api/update-api/updating-configuration-in-drupal-8
 //}
+
+/**
+ * Disable a block with checking.
+ * @param $id string : block id.
+ */
+function _wind_delete_block($id) {
+  /** @var \Drupal\block\Entity\Block $block */
+  $block = Block::load($id);
+  if ($block) {
+    if($block->delete()){
+      $block->save();
+    }
+  }
+}
+
+function _wind_disable_block($id) {
+  /** @var \Drupal\block\Entity\Block $block */
+  $block = Block::load($id);
+  if ($block) {
+    $block->setRegion('footer');
+    $block->disable()->save();
+  }
+}

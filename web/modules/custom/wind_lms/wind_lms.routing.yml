@@ -1,3 +1,6 @@
+# Note: All subpages under dashboard/* are controlled in ReactJS app
+# @see Drupal/wind_lms/PathProcessor/WindLMSPathProcessor.
+# @see wind_lms.services.yml
 wind_lms.learner_dashboard:
   path: dashboard
   defaults:
@@ -6,8 +9,6 @@ wind_lms.learner_dashboard:
   requirements:
     _user_is_logged_in: 'TRUE'
     _permission: 'access content'
-  options:
-    _custom_theme: 'cn_theme'
 wind_lms.course:
   path: 'course/{group}'
   defaults:
