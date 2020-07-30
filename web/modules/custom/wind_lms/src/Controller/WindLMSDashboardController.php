@@ -19,88 +19,23 @@ class WindLMSDashboardController extends ControllerBase {
    */
   public function getContent() {
     $user = $this->currentUser();
-    $uid = $user->id();
-    $score = 0;
-    $progress = round(100 * .2);
-    $is_passed = false;
-
-    if ($is_passed) {
-      $state_class = 'lp_steps_block_summary_state_passed';
-      $state_title = t('Passed');
-    } else {
-      $state_class = 'lp_steps_block_summary_state_pending';
-      $state_title = t('In progress');
-    }
-    $summary = [
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => ['lp_steps_block_summary'],
-      ],
-      [
-        '#type' => 'html_tag',
-        '#tag' => 'span',
-        '#attributes' => [
-          'class' => [$state_class],
-        ],
-        '#value' => '',
-      ],
-      [
-        '#type' => 'html_tag',
-        '#tag' => 'h3',
-        '#attributes' => [
-          'class' => ['lp_steps_block_summary_title'],
-        ],
-        '#value' => $state_title,
-      ],
-      [
-        '#type' => 'html_tag',
-        '#tag' => 'p',
-        '#attributes' => [
-          'class' => ['lp_steps_block_summary_score'],
-        ],
-        '#value' => t('Average score : @score%', [
-          '@score' => $score,
-        ]),
-      ],
-      [
-        '#type' => 'html_tag',
-        '#tag' => 'p',
-        '#attributes' => [
-          'class' => ['lp_steps_block_summary_progress'],
-        ],
-        '#value' => t('Progress : @progress%', [
-          '@progress' => $progress,
-        ]),
-      ],
-    ];
-
     $build = array(
       'page' => array(
         '#theme' => 'wind_lms_dashboard',
-        '#content' => $content,
         '#attached' => [
           'library' => [
             'wind_lms/dashboard',
           ],
+          'drupalSettings' => [
+            'myvar' => 'allo'
+          ]
         ],
       ),
     );
     $html = \Drupal::service('renderer')->renderRoot($build);
     $response = new Response();
     $response->setContent($html);
-//    return $response;
-    $steps = [];
-    return [
-      '#type' => 'container',
-      '#attributes' => [
-        'id' => 'react-dashboard-container',
-      ],
-      '#attached' => [
-        'library' => [
-          'wind_lms/dashboard',
-        ],
-      ],
-    ];
+    return $response;
   }
 
   /**

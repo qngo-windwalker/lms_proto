@@ -5,7 +5,7 @@ module.exports = {
 	mode: 'development',
 	devtool: 'inline-source-map',
     // the key 'wind_lms.dashboard' will be used in '[name]' in output
-  	entry: { 'wind_lms.dashboard' : './src/wind_lms.dashboard.js'},
+  	entry: { 'wind_lms.dashboard' : './src/pages/wind_lms.dashboard.js'},
     name: 'test',
   	output: {
     	// path: path.resolve(__dirname, 'dist'),

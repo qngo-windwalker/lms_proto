@@ -7,10 +7,13 @@ use Drupal\group\Entity\Group;
 use Drupal\opigno_group_manager\OpignoGroupContext;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
-
 use Drupal\opigno_group_manager\Entity\OpignoGroupManagedContent;
 use Drupal\opigno_module\Entity\OpignoActivity;
 use Drupal\opigno_group_manager\OpignoGroupContentTypesManager;
+use Drupal\Component\Serialization\Json;
+
+//include_once('./inc/wind_lms.tincan.inc');
+module_load_include('inc', 'wind_lms', 'inc/wind_lms.tincan');
 
 /**
  * Implements hook_theme().
@@ -205,4 +208,93 @@ function wind_lms_current_user_and_target_user_in_groups($currentUser, $target_u
     }
   }
   return $currentUserSameGroups;
+}
+
+/**
+ * @param $user
+ * Todo: Add missing courses
+ * @return array
+ */
+function _wind_lms_course_get_all_courses_definition() {
+  return [
+//    "Test" => [
+//      'title' => 'Test Course',
+//      'folder' => 'course-tincan-hKLmLbMr',
+//      'tincan_course_id' => 'http://course_2019_12_31',
+//    ],
+  ];
+}
+
+/**
+ * Return array of course paid by the user
+ * @param $user
+ *
+ * @return array
+ */
+function _wind_lms_get_user_all_assigned_course_data($user){
+  $courses = array();
+  $avail_courses = _wind_lms_course_get_all_courses_definition();
+  // get ?test=true in the URL
+  $isTestActive = \Drupal::request()->get('test');
+  // Add testing courses if user has permission and parameter test is true
+//  if($isTestActive == 'true' && wind_does_user_has_sudo($user)){
+    $courses[] = ['title' => 'Test Course', 'folder' => 'test_course', 'tincan_course_id' => 'test_abc123'];
+    $courses[] = ['title' => 'Le Rouge', 'folder' =>  'le-rouge-tincan-4SaXPWmj', 'tincan_course_id' => 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'];
+//  }
+
+  // We have a problem if this is the case
+  if (empty($courses)) {
+    return [];
+  }
+
+  foreach ($courses as $index => &$course) {
+    $progress = _wind_lms_course_add_tincan_course_data($user, $course['tincan_course_id']);
+    $course += $progress;
+  }
+
+  return $courses;
+}
+
+
+/**
+ * @param $course_folder
+ *
+ * @return string
+ */
+function _wind_lms_gen_course_link($course_folder) {
+  $currentUser = \Drupal::currentUser();
+  $schemaAndHost = _wind_lms_get_scheme_and_http_host();
+
+  //Ex: {"name":["quan ngo"],"account":[{"accountServiceHomePage":"http://cloud.scorm.com","accountName":"0QTP625WM3|quan.ngo@windwalker.com"}],"objectType":"Agent"}
+  $actor = [
+    'name' => array($currentUser->getAccountName()),
+    'account' => array(
+      array(
+        "accountName" => _wind_lms_get_user_tincan_agent_account_name($currentUser),
+        'accountServiceHomePage' => $schemaAndHost . '/user/' . $currentUser->id(),
+      )
+    ),
+    'objectType' => 'Agent'
+  ];
+  $actorJson = Json::encode($actor);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = $module_handler->getModule('wind_lms')->getPath();
+  $link = $module_path . '/course/' . $course_folder . '?';
+  $link .= 'endpoint=' . $schemaAndHost . '/course/tcapi';
+  $link .= '&actor=' . urlencode($actorJson);
+  return $link;
+}
+/**
+ * @return string
+ */
+function _wind_lms_get_scheme_and_http_host(){
+  // Since we're using forward HTTP to HTTPS ($_SERVER[HTTP_X_FORWARDED_PROTO] = https),
+  // \Drupal::request()->getSchemeAndHttpHost() will return http://... on learn.clearinghousenavigator.com
+  // We have to make sure the URL is HTTPS
+  if ($_SERVER['HTTP_HOST'] == 'learn.clearinghousenavigator.com' && $_SERVER['REQUEST_SCHEME'] == 'http'){
+    $schemaAndHost = 'https://learn.clearinghousenavigator.com';
+  } else {
+    $schemaAndHost = \Drupal::request()->getSchemeAndHttpHost();
+  }
+  return $schemaAndHost;
 }

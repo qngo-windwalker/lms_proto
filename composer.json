@@ -20,6 +20,7 @@
         "drupal/core-project-message": "^9",
         "drupal/core-recommended": "^9",
         "drupal/devel": "^4.0",
+        "drupal/jsonapi_extras": "^3.15",
         "drupal/typed_data": "^1.0@alpha",
         "drush/drush": "^10.3",
         "webonyx/graphql-php": "^14.0"

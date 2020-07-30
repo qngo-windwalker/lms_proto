@@ -18,6 +18,7 @@ export default class SiteTopHeader extends Component{
   }
 
   render(){
+    return null;
     return (
       <>
         <div id="header-top-left" className="col-md-8">

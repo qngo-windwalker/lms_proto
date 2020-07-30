@@ -5,6 +5,7 @@ package: Windwalker
 dependencies:
   - wind
   - wind_tincan
+  - jsonapi_extras
 #  Requires Opigno system
 #  - opigno_module
 

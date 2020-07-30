@@ -20,116 +20,35 @@
 <a href="#main-content" class="visually-hidden focusable">
   Skip to main content
 </a>
-<header id="site-header">
-  <div class="container-fluid">
-    <div class="row">
-      <div id="header-left" class="col-md-6">
-        <div>
-          <div id="block-wind-theme-branding" class="contextual-region">
-
-            <div data-contextual-id="block:block=wind_theme_branding:langcode=en" data-contextual-token="kNqJHF1z7SyaeehldXhQ9dpx5DbmKhMDWMrg4sb11hY" class="contextual" role="form"><button class="trigger visually-hidden focusable" type="button" aria-pressed="false">Open  configuration options</button><ul class="contextual-links" hidden=""><li><a href="/admin/structure/block/manage/wind_theme_branding?destination=/learner-dashboard">Configure block</a></li></ul></div>
-            <a href="/" title="Home" rel="home">
-              <img src="/themes/custom/wind_theme/img/windwalker_logo.jpg" alt="Home">
-            </a>
-          </div>
-
-        </div>
-
-      </div>
-      <div id="header-right" class="col-md-6">
-
-        <div class="user-notifications dropdown">
-          <a href="#" class="d-flex align-items-center" data-toggle="dropdown">
-            <span class="picto"></span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <div class="info d-flex">
-              <div class="flex-1">
-                <div><strong class="text-uppercase">notifications</strong></div>
-              </div>
-              <button class="close-dropdown">close</button>
-            </div>
-            <a id="read-all-notifications" class="mark-as-read" href="#">Mark as all read</a>
-            <div id="notifications-wrapper"></div>
-            <a id="show-all-notifications" class="dropdown-item primary text-center" href="/notifications">
-              <span>See all notifications</span>
-            </a>
-
-          </div>
-        </div>
-        <div class="user-messages dropdown ml-3">
-          <a href="#" class="d-flex align-items-center" data-toggle="dropdown">
-            <span class="picto"></span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <div class="info d-flex">
-              <div class="flex-1">
-                <div><strong class="text-uppercase">messages</strong></div>
-              </div>
-              <button class="close-dropdown">close</button>
-            </div>
-
-            <a class="dropdown-item primary text-center" href="/private_messages">
-              <span>See all messages</span>
-            </a>
-          </div>
-        </div>
-        <a class="text-center" href="http://redsox.wwgtrain.com/user/logout">
-          <span>Logout</span>
-        </a>
-        <div class="user-block ml-3 dropdown">
-          <a href="http://redsox.wwgtrain.com/user/1" class="d-flex align-items-center" data-toggle="dropdown">
-            <span class="picto"></span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <div class="info d-flex">
-              <div class="flex-1">
-                <div><strong class="text-uppercase">admin</strong></div>
-                <div class="user-status text-uppercase">online</div>
-              </div>
-              <button class="close-dropdown">close</button>
-            </div>
-            <a class="dropdown-item primary text-center" href="http://redsox.wwgtrain.com/user/logout">
-              <span>Logout</span>
-            </a>
-          </div>
-        </div>
-
-
-        <button class="navbar-toggler"></button>
-      </div>
-    </div>
-  </div>
+<header id="site-top-header-container" class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 shadow-sm">
+  <!-- ReactJS container @see siteTopHeader.js -->
 </header>
 
-
 <div id="main" class="flex-column container">
-  <div class="">
-    <div id="main-content" class="row">
-      <div id="page-title">
-        <div class="col-md-12">
-          <div>
-            <div id="block-wind-theme-page-title" class="contextual-region">
-              <h1 class="js-quickedit-page-title">Dashboard</h1>
-            </div>
+  <div id="main-content" class="row">
+    <div id="page-title">
+      <div class="col-md-12">
+        <div>
+          <div id="block-wind-theme-page-title" class="contextual-region">
+            <h1 class="js-quickedit-page-title">Dashboard</h1>
           </div>
         </div>
       </div>
-      <div class="col-lg-12 p-static" id="content">
+    </div>
+    <div class="col-lg-12 p-static" id="content">
 
-        <div class="message-wrapper">
-          <div>
-            <div data-drupal-messages-fallback="" class="hidden"></div>
-          </div>
+      <div class="message-wrapper">
+        <div>
+          <div data-drupal-messages-fallback="" class="hidden"></div>
+        </div>
+      </div>
+
+      <div class="content-wrapper">
+
+        <div id="react-container">
+          Loading...
         </div>
 
-        <div class="content-wrapper">
-
-          <div id="app-content">
-            Loading...
-          </div>
-
-        </div>
       </div>
     </div>
   </div>

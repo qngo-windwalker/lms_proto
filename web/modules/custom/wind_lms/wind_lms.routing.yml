@@ -9,103 +9,119 @@ wind_lms.learner_dashboard:
   requirements:
     _user_is_logged_in: 'TRUE'
     _permission: 'access content'
-wind_lms.course:
-  path: 'course/{group}'
-  defaults:
-    _controller: \Drupal\wind_lms\Controller\WindLMSCourseController::getContent
-    _title_callback: \Drupal\wind_lms\Controller\WindLMSCourseController::getTitle
-  requirements:
-    _permission: 'administer site configuration'
-  options:
-    parameters:
-      group:
-        type: entity:group
-wind_lms.course.user:
-  path: 'course/{group}/users'
-  defaults:
-    _controller: \Drupal\wind_lms\Controller\WindLMSCourseUsersController::getContent
-    _title_callback: \Drupal\wind_lms\Controller\WindLMSCourseUsersController::getTitle
-  requirements:
-    _permission: 'administer site configuration'
-  options:
-    parameters:
-      group:
-        type: entity:group
-wind_lms.course.adduser:
-  path: course/{group}/addUser
-  defaults:
-    _form: '\Drupal\wind_lms\Form\WindLMSCourseAddUsersForm'
-    _title: 'Add User'
-  requirements:
-    _permission: 'authenticated'
-  options:
-    parameters:
-      group:
-        type: entity:group
-wind_lms.course.user.add:
-  path: course/{group}/user/{user}/add
-  defaults:
-    _form: \Drupal\wind_lms\Form\WindLMSCourseUserAddForm
-    _title_callback: \Drupal\wind_lms\Form\WindLMSCourseUserAddForm::getTitle
-  requirements:
-    _custom_access: \Drupal\wind_lms\Form\WindLMSCourseUserAddForm::access
-  options:
-    parameters:
-      group:
-        type: entity:group
-      user:
-        type: entity:user
-wind_lms.course.user.remove:
-  path: course/{group}/user/{user}/remove
-  defaults:
-    _form: \Drupal\wind_lms\Form\WindLMSCourseUserRemoveForm
-    _title_callback: \Drupal\wind_lms\Form\WindLMSCourseUserRemoveForm::getTitle
-  requirements:
-    _custom_access: \Drupal\wind_lms\Form\WindLMSCourseUserRemoveForm::access
-  options:
-    parameters:
-      group:
-        type: entity:group
-      user:
-        type: entity:user
-wind_lms.take_course:
-  path: 'course/{wind_course}/take'
-  defaults:
-    _controller: '\Drupal\wind_lms\Controller\WindLMSTakeCourseController::takeCourse'
-    _title: 'Module'
-  requirements:
-    _permission: 'take modules'
-  options:
-    parameters:
-      wind_course:
-        type: entity:opigno_module
-wind_lms.answer_form:
-  path: 'course/{opigno_module}/activity/{opigno_activity}'
-  defaults:
-    _controller: '\Drupal\wind_lms\Controller\WindLMSTakeCourseController::courseActivityForm'
-  requirements:
-    _permission: 'take modules'
-  options:
-    parameters:
-      opigno_module:
-        type: entity:opigno_module
-      opigno_activity:
-        type: entity:opigno_activity
-
-wind_lms.scorm_commit:
-  path: '/course/scorm/{opigno_scorm_id}/{opigno_scorm_sco_id}/commit'
-  defaults:
-    _controller: '\Drupal\wind_lms\Controller\WindLMSCourseScormController::scormCommit'
-    _title: 'Scorm commit'
-  requirements:
-    _access: 'TRUE'
-    opigno_scorm_id: \d+
-    opigno_scorm_sco_id: \d+
-  options:
-    _admin_route: FALSE
+# Old SCORM course URL
+# Need to streamline to /course
+#wind_lms.course:
+#  path: 'course/{group}'
+#  defaults:
+#    _controller: \Drupal\wind_lms\Controller\WindLMSCourseController::getContent
+#    _title_callback: \Drupal\wind_lms\Controller\WindLMSCourseController::getTitle
+#  requirements:
+#    _permission: 'administer site configuration'
+#  options:
+#    parameters:
+#      group:
+#        type: entity:group
+#wind_lms.course.user:
+#  path: 'course/{group}/users'
+#  defaults:
+#    _controller: \Drupal\wind_lms\Controller\WindLMSCourseUsersController::getContent
+#    _title_callback: \Drupal\wind_lms\Controller\WindLMSCourseUsersController::getTitle
+#  requirements:
+#    _permission: 'administer site configuration'
+#  options:
+#    parameters:
+#      group:
+#        type: entity:group
+#wind_lms.course.adduser:
+#  path: course/{group}/addUser
+#  defaults:
+#    _form: '\Drupal\wind_lms\Form\WindLMSCourseAddUsersForm'
+#    _title: 'Add User'
+#  requirements:
+#    _permission: 'authenticated'
+#  options:
+#    parameters:
+#      group:
+#        type: entity:group
+#wind_lms.course.user.add:
+#  path: course/{group}/user/{user}/add
+#  defaults:
+#    _form: \Drupal\wind_lms\Form\WindLMSCourseUserAddForm
+#    _title_callback: \Drupal\wind_lms\Form\WindLMSCourseUserAddForm::getTitle
+#  requirements:
+#    _custom_access: \Drupal\wind_lms\Form\WindLMSCourseUserAddForm::access
+#  options:
+#    parameters:
+#      group:
+#        type: entity:group
+#      user:
+#        type: entity:user
+#wind_lms.course.user.remove:
+#  path: course/{group}/user/{user}/remove
+#  defaults:
+#    _form: \Drupal\wind_lms\Form\WindLMSCourseUserRemoveForm
+#    _title_callback: \Drupal\wind_lms\Form\WindLMSCourseUserRemoveForm::getTitle
+#  requirements:
+#    _custom_access: \Drupal\wind_lms\Form\WindLMSCourseUserRemoveForm::access
+#  options:
+#    parameters:
+#      group:
+#        type: entity:group
+#      user:
+#        type: entity:user
+# SCORM course
+# Need to streamline to /course
+#wind_lms.take_course:
+#  path: 'course/{wind_course}/take'
+#  defaults:
+#    _controller: '\Drupal\wind_lms\Controller\WindLMSTakeCourseController::takeCourse'
+#    _title: 'Module'
+#  requirements:
+#    _permission: 'take modules'
+#  options:
+#    parameters:
+#      wind_course:
+#        type: entity:opigno_module
+#wind_lms.answer_form:
+#  path: 'course/{opigno_module}/activity/{opigno_activity}'
+#  defaults:
+#    _controller: '\Drupal\wind_lms\Controller\WindLMSTakeCourseController::courseActivityForm'
+#  requirements:
+#    _permission: 'take modules'
+#  options:
+#    parameters:
+#      opigno_module:
+#        type: entity:opigno_module
+#      opigno_activity:
+#        type: entity:opigno_activity
+#
+#wind_lms.scorm_commit:
+#  path: '/course/scorm/{opigno_scorm_id}/{opigno_scorm_sco_id}/commit'
+#  defaults:
+#    _controller: '\Drupal\wind_lms\Controller\WindLMSCourseScormController::scormCommit'
+#    _title: 'Scorm commit'
+#  requirements:
+#    _access: 'TRUE'
+#    opigno_scorm_id: \d+
+#    opigno_scorm_sco_id: \d+
+#  options:
+#    _admin_route: FALSE
 #################################################
-## Datatable
+## Json
 #################################################
+wind_lms.currentuser:
+  path: 'wl-json/currentuser'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getCurrentUser'
+  requirements:
+    _role: 'authenticated'
+wind_lms.json.dashboard:
+  path: 'wind-lms/json/dashboard'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getCurrentDashboard'
+  requirements:
+    _role: 'authenticated'
 wind_lms.datatable.client:
   path: 'wl-datatable/client'
   defaults:

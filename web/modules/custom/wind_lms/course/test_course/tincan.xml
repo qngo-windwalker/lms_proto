@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tincan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://projecttincan.com/tincan.xsd">
+  <activities>
+    <activity id="http://test_course" type="http://adlnet.gov/expapi/activities/course">
+      <name lang="en-US">Employee Health and Wellness (Sample Course)</name>
+      <description lang="en-US">&lt;p&gt;We’re committed to creating a work environment that promotes employee health and wellness. This course is the first step in raising awareness and rollout of our new workplace health program, which includes promoting activities or policies that encourage and support healthy behaviors in the workplace.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Developing a thoughtful workplace health program has the potential to transform our organization. We hope it increases employee wellness, work satisfaction, and productivity. In this course, we’ll introduce some wellness concepts to kick off our wellness journey. Let’s get started!&lt;/p&gt;</description>
+    <launch lang="en-US">index.html</launch>
+    </activity>
+      <activity id="http://test_course/JfbzP0_f0oSd4eRDFKXNBMJzYgCs8cwm" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">5 Weeks to a Healthier You/timeline</name>
+      <description lang="en-US">&lt;p&gt;Improving your health is easier than you might think. In this lesson, you&#39;ll learn simple, actionable steps to building a more healthy you. While we cover just five weeks, it&#39;s important to make these tips a habit if you want them to have a lasting impact on your physical and emotional wellbeing.&lt;/p&gt;</description>
+    </activity>
+          <activity id="http://test_course/CkjmXWwghbqq5-d52TrzM7t5rVidiLvr" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Creating Healthy Meals/map</name>
+      <description lang="en-US">&lt;p&gt;Click on the markers to learn the health benefits of each ingredient. You&#39;ll also learn tips for incorporating these foods into your daily diet.&lt;/p&gt;</description>
+    </activity>
+        </activities>
+</tincan>

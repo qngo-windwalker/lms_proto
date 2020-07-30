@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tincan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://projecttincan.com/tincan.xsd">
+  <activities>
+    <activity id="http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise" type="http://adlnet.gov/expapi/activities/course">
+      <name lang="en-US">Le Rouge</name>
+      <description lang="en-US">&lt;p&gt;The color red&lt;/p&gt;</description>
+    <launch lang="en-US">index.html</launch>
+    </activity>
+      <activity id="http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise/l3ggdVAY3qzD_PxccLDobvLnxO7fk2uC" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">The beginning/section</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise/76t3k_VHKtj75J0LN2e7-XLzwrtgdR4q" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Title 0/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise/S9s18zD4pVrew15dvcKERr2yI8V0df6S" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Title 1/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+        </activities>
+</tincan>

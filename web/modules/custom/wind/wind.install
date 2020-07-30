@@ -9,17 +9,20 @@ function wind_install() {
 
   // Enable Windwalker custom theme
   \Drupal::service('theme_installer')->install(['wind_theme']);
-  \Drupal::service('theme_handler')->setDefault('wind_theme');
+  \Drupal::configFactory()->getEditable('system.theme')->set('default', 'wind_theme')->save();
+  \Drupal::service('theme_installer')->uninstall(['bartik']);
 
   // Uses 'Seven' theme for admin UI.
   $config = \Drupal::service('config.factory')->getEditable('system.theme');
   $config->set('admin', 'seven')->save();
 
+  _wind_disable_block('wind_theme_search');
   _wind_disable_block('wind_theme_main_menu');
   _wind_disable_block('wind_theme_footer');
   _wind_disable_block('wind_theme_account_menu');
   _wind_disable_block('wind_theme_breadcrumbs');
   _wind_disable_block('wind_theme_branding');
+  _wind_disable_block('wind_theme_powered');
 }
 
 /**

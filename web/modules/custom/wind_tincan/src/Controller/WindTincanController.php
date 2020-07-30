@@ -46,6 +46,4 @@ class WindTincanController extends ControllerBase{
     $renderedAnchorContent = render($linkContent);
     return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
   }
-
-
 }
