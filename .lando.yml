@@ -1,0 +1,23 @@
+name: lms-proto
+recipe: drupal9
+config:
+  php: '7.3'
+  webroot: ./web
+  xdebug: true
+  via: apache:2.4
+  database: mysql:5.7
+  drush: ^10
+  config:
+    php: php.ini
+tooling:
+  composer:
+    service: appserver
+    description: Run composer commands
+    cmd:
+      - php -dmemory_limit=-1 /usr/local/bin/composer
+      # If above don't work, try the following:
+      # lando php -d memory_limit=-1 /usr/local/bin/composer require drupal/simplesamlphp_auth
+services:
+  appserver:
+    build:
+      - composer install      
