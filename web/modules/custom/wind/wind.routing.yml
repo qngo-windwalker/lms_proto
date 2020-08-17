@@ -1,19 +1,23 @@
-wind.content:
-  path: '/hello'
-  defaults:
-    _controller: '\Drupal\wind\Controller\LandingPageController::content'
-    _title: 'Hello world'
-  requirements:
-    _permission: 'access content'
-
 wind.home:
-  path: 'wind-home'
+  path: 'home'
   defaults:
-    _controller: '\Drupal\wind\Controller\HomePageController::content'
+    _controller: '\Drupal\wind\Controller\WindHomePageController::content'
     _title: 'Welcome to Windwalker LMS!'
   requirements:
     _permission: 'access content'
-
+wind.espanol:
+  path: '/espanol'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindEspanolController::getContent'
+    _title: 'Hello world'
+  requirements:
+    _permission: 'access content'
+wind.json.language:
+  path: 'wind/json/language'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindJsonController::getLanguage'
+  requirements:
+    _role: 'access content'
 wind.dev:
   path: 'wind-dev'
   defaults:
@@ -29,15 +33,6 @@ wind.manager:
     _title: 'Windwalker'
   requirements:
     _permission: 'access content'
-
-wind.course:
-  path: 'course'
-  defaults:
-    _controller: '\Drupal\wind\Controller\WindCoursePageController::content'
-    _title: 'Windwalker'
-  requirements:
-    _permission: 'access content'
-
 wind.report:
   path: 'report'
   defaults:

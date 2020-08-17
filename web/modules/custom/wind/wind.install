@@ -23,6 +23,8 @@ function wind_install() {
   _wind_disable_block('wind_theme_breadcrumbs');
   _wind_disable_block('wind_theme_branding');
   _wind_disable_block('wind_theme_powered');
+
+  _wind_create_home_page();
 }
 
 /**
@@ -54,4 +56,48 @@ function _wind_disable_block($id) {
     $block->setRegion('footer');
     $block->disable()->save();
   }
+}
+
+function _wind_create_home_page(){
+  $node = Node::create([
+    'type' => 'page',
+    'uid' => 1,
+    'revision' => 0,
+    'status' => TRUE,
+    'promote' => 0,
+    'created' => time(),
+    'langcode' => 'en',
+    'title' => 'Welcome',
+  ]);
+
+  $node->set('body', [
+    'value' => '<h1>Welcome to My Page!</h1>',
+    'format' => 'basic_html'
+  ]);
+
+  $node->save();
+
+  $source = '/node/' . $node->get('nid')->value;
+  \Drupal::service('path.alias_storage')->save($source, '/home', 'en');
+  _wind_create_es_home_page();
+}
+
+function _wind_create_es_home_page(){
+  $node = Node::create([
+    'type' => 'page',
+    'uid' => 1,
+    'revision' => 0,
+    'status' => TRUE,
+    'promote' => 0,
+    'created' => time(),
+    'langcode' => 'es',
+    'title' => 'Welcome',
+  ]);
+
+  $node->set('body', [
+    'value' => '<h1>Bienvenido a Windwalker LMS.</h1>',
+    'format' => 'basic_html'
+  ]);
+
+  $node->save();
 }
