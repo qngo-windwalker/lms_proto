@@ -19,22 +19,20 @@ class WindLMSDashboardController extends ControllerBase {
    */
   public function getContent() {
     $user = $this->currentUser();
-    $build = array(
-      'page' => array(
-        '#theme' => 'wind_lms_dashboard',
-        '#attached' => [
-          'library' => [
-            'wind_lms/dashboard',
-          ],
-          'drupalSettings' => [
-            'myvar' => 'allo'
-          ]
+    return [
+      '#type' => 'container',
+      '#attributes' => [
+        'id' => 'react-container',
+      ],
+      '#attached' => [
+        'library' => [
+          'wind_lms/dashboard',
         ],
-      ),
-    );
-    $html = \Drupal::service('renderer')->renderRoot($build);
-    $response = new Response();
-    $response->setContent($html);
+        'drupalSettings' => [
+          'myvar' => 'allo'
+        ]
+      ],
+    ];
     return $response;
   }
 

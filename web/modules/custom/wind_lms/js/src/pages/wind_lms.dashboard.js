@@ -18,7 +18,6 @@ import productsReducer from '../reducers/products-reducer';
 import userReducer from '../reducers/usersReducer';
 import { updateProduct } from  '../actions/productsActions';
 import UserCourseTable from '../components/userCourseTable';
-import SiteTopHeader from '../components/siteTopHeader';
 
 const allReducers = combineReducers({
 	products: productsReducer,
@@ -39,5 +38,4 @@ const store = createStore(
 	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-ReactDOM.render(<SiteTopHeader />, document.getElementById('site-top-header-container'));
 ReactDOM.render(<Provider store={store}><UserCourseTable /></Provider>, document.getElementById('react-container'));

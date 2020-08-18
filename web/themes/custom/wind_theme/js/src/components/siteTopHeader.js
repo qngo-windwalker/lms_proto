@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import UserMenu from './userMenu';
 import HeaderTopLeft from './headerTopLeft';
+import LanguageSwitcher from './languageSwitcher';
 
 export default class SiteTopHeader extends Component{
   constructor(props) {
@@ -18,7 +19,7 @@ export default class SiteTopHeader extends Component{
   }
 
   render(){
-    return null;
+    // Todo: (Low priority) See https://getbootstrap.com/docs/4.5/components/navbar/ for a more clearner markup structure.
     return (
       <>
         <div id="header-top-left" className="col-md-8">
@@ -26,7 +27,12 @@ export default class SiteTopHeader extends Component{
         </div>
 
         <div id="header-top-right" className="col-md-4">
-          <UserMenu />
+          <nav className="navbar navbar-expand-lg">
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item"><LanguageSwitcher /></li>
+              <li className="nav-item"><UserMenu /></li>
+            </ul>
+          </nav>
         </div>
       </>
     );

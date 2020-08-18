@@ -1,5 +1,5 @@
-wind.home:
-  path: 'home'
+wind.front:
+  path: 'front'
   defaults:
     _controller: '\Drupal\wind\Controller\WindHomePageController::content'
     _title: 'Welcome to Windwalker LMS!'
@@ -17,7 +17,7 @@ wind.json.language:
   defaults:
     _controller: '\Drupal\wind\Controller\WindJsonController::getLanguage'
   requirements:
-    _role: 'access content'
+    _permission: 'access content'
 wind.dev:
   path: 'wind-dev'
   defaults:

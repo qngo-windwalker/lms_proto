@@ -75,29 +75,17 @@ function _wind_create_home_page(){
     'format' => 'basic_html'
   ]);
 
+
   $node->save();
 
   $source = '/node/' . $node->get('nid')->value;
   \Drupal::service('path.alias_storage')->save($source, '/home', 'en');
-  _wind_create_es_home_page();
-}
 
-function _wind_create_es_home_page(){
-  $node = Node::create([
-    'type' => 'page',
-    'uid' => 1,
-    'revision' => 0,
-    'status' => TRUE,
-    'promote' => 0,
-    'created' => time(),
-    'langcode' => 'es',
-    'title' => 'Welcome',
-  ]);
-
-  $node->set('body', [
-    'value' => '<h1>Bienvenido a Windwalker LMS.</h1>',
-    'format' => 'basic_html'
-  ]);
-
-  $node->save();
+  $node->addTranslation('es', ['title' => "Bienvenido"])->save();
+  $node_es = $node->addTranslation('es');
+  $node_es->title = 'Mi prueba!';
+  $node_es->body->value = '<p>El cuerpo de mi nodo.</p>';
+  $node_es->body->format = 'full_html';
+  $node_es->save();
+  \Drupal::service('path.alias_storage')->save("/node/" . $node->id(), "/mi/ruta", "es");
 }

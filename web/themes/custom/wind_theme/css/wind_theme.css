@@ -15,7 +15,7 @@ label{margin-top: 10px;}
 h2{color: rgb(117,121,137); }
 /*label.form-required::after{ content: ' *'; color: red;}*/
 
-#site-top-header-container{padding: 20px 0; background: #1a1a1a; color: white;}
+#site-top-header{padding: 20px 0; background: #1a1a1a; color: white;}
   #site-logo{display: inline-block;}
   #site-header-left-nav {display: inline-block;}
 .page-course-activity #site-header{margin-bottom: 0px; }

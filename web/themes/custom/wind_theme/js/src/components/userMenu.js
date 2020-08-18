@@ -29,10 +29,10 @@ export default class UserMenu extends Component{
   render(){
     if (this.state.isLogin) {
       return (
-        <nav className="my-2 my-md-0 mr-md-3 p-2">
+        <>
           <div className="user-block ml-3 dropdown">
-            <a href="/user/1" className="d-flex align-items-center" data-toggle="dropdown" aria-expanded="false">
-              Hi,  &nbsp; <i className="fas fa-user-circle"> </i> <i className="fas fa-sort-down"></i>
+            <a href="/user/1" className="nav-link d-flex align-items-center" data-toggle="dropdown" aria-expanded="false">
+              Hi,  &nbsp; <i className="fas fa-user-circle"> </i> &nbsp; <i className="fas fa-sort-down"> </i>
             </a>
             <div className="dropdown-menu dropdown-menu-right"
                  x-placement="bottom-end"
@@ -47,12 +47,12 @@ export default class UserMenu extends Component{
               </div>
             </div>
           </div>
-        </nav>
+        </>
       );
     }
     return (
       <>
-        <a href="/user">Login</a>
+        <a className="nav-link"  href="/user">Login</a>
       </>
     );
   }
