@@ -18,6 +18,16 @@ export default class UserMenu extends Component{
     this.state = { isLogin: false };
   };
 
+  isEnglishMode() {
+    let pathname = window.location.pathname;
+    // if we are on 'es' spanish mode
+    console.log(pathname.split('/'));
+    if(pathname.split('/')[1] == 'es'){
+      return false;
+    }
+    return true;
+  }
+
   componentDidMount() {
     axios.get(`/user/login_status?_format=json`)
       .then(res => {
@@ -32,7 +42,7 @@ export default class UserMenu extends Component{
         <>
           <div className="user-block ml-3 dropdown">
             <a href="/user/1" className="nav-link d-flex align-items-center" data-toggle="dropdown" aria-expanded="false">
-              Hi,  &nbsp; <i className="fas fa-user-circle"> </i> &nbsp; <i className="fas fa-sort-down"> </i>
+              {this.isEnglishMode() ? 'Hi' : 'Hola'},  &nbsp; <i className="fas fa-user-circle"> </i> &nbsp; <i className="fas fa-sort-down"> </i>
             </a>
             <div className="dropdown-menu dropdown-menu-right"
                  x-placement="bottom-end"

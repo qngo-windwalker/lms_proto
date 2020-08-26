@@ -6,10 +6,26 @@ export default class HeaderTopLeft extends Component{
     super(props);
   };
 
+  getDashboardLink() {
+    let pathname = window.location.pathname;
+    // if we are on 'es' spanish mode
+    if(pathname.split('/')[1] == 'es'){
+      return {
+        href : '/es/dashboard',
+        label : 'Tablero'
+      }
+    }
+    return {
+      href: '/dashboard',
+      label: 'Dashboard'
+    };
+  }
+
   render(){
     let authenticatedOutput;
+    let dashboardLink = this.getDashboardLink();
     if (this.props.data.isLogin) {
-      authenticatedOutput = <><a className="link link-dashboard" href="/dashboard" className="nav-link">Dashboard</a></>;
+      authenticatedOutput = <><a className="link link-dashboard" href={dashboardLink.href} className="nav-link">{dashboardLink.label}</a></>;
     }
     return (
       <>
@@ -22,4 +38,5 @@ export default class HeaderTopLeft extends Component{
       </>
     );
   }
+
 }

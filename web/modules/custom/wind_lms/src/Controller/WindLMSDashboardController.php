@@ -9,10 +9,18 @@ namespace Drupal\wind_lms\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\language\ConfigurableLanguageManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class WindLMSDashboardController extends ControllerBase {
 
+  public function getTitle(){
+    $languageId = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if($languageId == 'es'){
+      return 'Bienvenido a su tablero';
+    }
+    return 'Welcome To Your Dashboard';
+  }
   /**
    * @see \Drupal\opigno_learning_path\Plugin\Block\StepsBlock.
    * @return array

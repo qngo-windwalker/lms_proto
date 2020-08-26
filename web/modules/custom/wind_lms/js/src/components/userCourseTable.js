@@ -64,10 +64,20 @@ class UserCourseTable extends Component{
     window.open(href, "window" + id, params);
   }
 
+  isEnglishMode() {
+    let pathname = window.location.pathname;
+    // if we are on 'es' spanish mode
+    console.log(pathname.split('/'));
+    if(pathname.split('/')[1] == 'es'){
+      return false;
+    }
+    return true;
+  }
+
 	render(){
 		return (
 			<>
-        <h2>My Training</h2>
+        <h2>{this.isEnglishMode() ? 'My Training' : 'Mi Entrenamiento'}</h2>
         <table className="table responsive-enabled" data-striping="1">
           <thead>
           <tr>
@@ -88,7 +98,6 @@ class UserCourseTable extends Component{
 	}
 
   rendertBodyRow(dataObj, key){
-    console.log(dataObj);
     return(
       <tr key={key}>
         <td scope="row" className="text-left" dangerouslySetInnerHTML={{__html: dataObj.data[0]}}></td>

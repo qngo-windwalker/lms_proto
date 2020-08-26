@@ -5,7 +5,7 @@ wind_lms.learner_dashboard:
   path: dashboard
   defaults:
     _controller: \Drupal\wind_lms\Controller\WindLMSDashboardController:getContent
-    _title: 'Welcome To Your Dashboard'
+    _title_callback: \Drupal\wind_lms\Controller\WindLMSDashboardController:getTitle
   requirements:
     _user_is_logged_in: 'TRUE'
     _permission: 'access content'
