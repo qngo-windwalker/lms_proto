@@ -25,7 +25,12 @@ wind.dev:
     _title: 'Wind Dev'
   requirements:
     _permission: 'access content'
-
+wind.json.status:
+  path: 'wind/json/status'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindJsonStatusController::getContent'
+  requirements:
+    _permission: 'access content'
 wind.manager:
   path: 'manager'
   defaults:
