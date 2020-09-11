@@ -142,3 +142,35 @@ To prevent this you can add this code to specify the PHP version you want to use
     "platform": {"php": "5.5.9"}
 },
 ```
+### Build Docker image
+```
+docker build --tag lms-docker-img:[Git commit hash] .
+```
+Git commit hash to provide traceability. Git commit hash should be from the master branch.
+
+### Run Docker image
+-name so docker won't give random name
+-p : port - map port 8181 on local machine to port 80 inside the container
+-d : run detach
+```
+docker run -p 8181:80 --name ww-lms-container -d  lms-docker-img:[Git commit hash]
+```
+Example: docker run -dit --name ww-lms-container -p 0.0.0.0:443:443 -p 0.0.0.0:80:80 windwalkergroup/drupal-lms /bin/bash
+Go to http://localhost:8181/ on your browser
+
+check status, run 
+```
+docker ps -a 
+```
+Check if mysql is listen of port 3306
+```
+netstat -an
+```
+database host: 127.0.0.1
+
+### Push Docker image to Docker Hub
+```
+docker push windwalkergroup/lms
+```
+How to get started with Docker:
+https://www.youtube.com/watch?time_continue=318&v=iqqDU2crIEQ&feature=emb_logo
