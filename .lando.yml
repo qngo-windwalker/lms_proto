@@ -2,7 +2,7 @@ name: lms-proto
 recipe: drupal9
 config:
   php: '7.3'
-  webroot: ./web
+  webroot: web
   xdebug: true
   via: apache:2.4
   database: mysql:5.7
@@ -19,5 +19,7 @@ tooling:
       # lando php -d memory_limit=-1 /usr/local/bin/composer require drupal/simplesamlphp_auth
 services:
   appserver:
+    run:
+      - "cd $LANDO_MOUNT && composer install"
     build:
-      - composer install      
+      - composer install
