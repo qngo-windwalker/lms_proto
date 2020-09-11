@@ -1,0 +1,41 @@
+version: '3.3'
+
+services:
+
+# https://www.digitalocean.com/community/tutorials/how-to-install-drupal-with-docker-compose
+  mariadb:
+    container_name: mariadb
+    image: mariadb:10.3
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: "abc"
+      MYSQL_USER: 'drupaluser'
+      MYSQL_PASSWORD: 'abcd'
+      MYSQL_DATABASE: 'drupal'
+    volumes:
+      - db-data:/var/lib/mysql
+    # Restart whenever any changes are made      
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - internal
+
+  webdrupal:
+    dockerfile: Dockerfile
+    container_name: webdrupal
+    restart: unless-stopped
+    networks:
+      - internal
+      - external
+    volumes:
+      - drupal-data:/var/www/html
+    depends_on:
+      - mariadb
+    ports:
+      - 8181:80
+
+
+  volumes:
+    drupal-data:
+    db-data:
