@@ -15,9 +15,12 @@ use Drupal\Core\Controller\ControllerBase;
 class WindJsonStatusController extends ControllerBase {
 
   public function getContent() {
-    return new JsonResponse([
+    $response = new JsonResponse([
       'code' => 200,
       'status' => 'Running'
     ]);
+
+    $response->headers->set('Access-Control-Allow-Origin', 'http://site-manager.lndo.site');
+    return $response;
   }
 }

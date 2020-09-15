@@ -53,3 +53,9 @@ wind.datatable.user-progress:
     _title: 'Windwalker'
   requirements:
     _permission: 'access content'
+wind.handoff:
+  path: 'wind/handoff'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindHandoffController::getContent'
+  requirements:
+    _permission: 'access content'
