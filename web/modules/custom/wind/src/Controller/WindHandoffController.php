@@ -5,6 +5,7 @@ namespace Drupal\wind\Controller;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Component\Utility\Html;
 
 class WindHandoffController extends ControllerBase {
 
@@ -19,15 +20,16 @@ class WindHandoffController extends ControllerBase {
       // Sanitize string
       $webTitle = Html::escape($webTitle);
       $config = \Drupal::service('config.factory')->getEditable('system.site');
-      $config->set('name', $webTitle); 
+      $config->set('name', $webTitle);
       $config->save();
     }
 
     drupal_flush_all_caches();
-   
+
     $response = new JsonResponse([
       'code' => 200,
       'status' => 'Completed',
+      'REMOTE_ADDR' => $_SERVER['REMOTE_ADDR'],
     ]);
 
     $response->headers->set('Access-Control-Allow-Origin', '*');
