@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tincan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://projecttincan.com/tincan.xsd">
+  <activities>
+    <activity id="http://Harassment Prevention English" type="http://adlnet.gov/expapi/activities/course">
+      <name lang="en-US">State of Illinois Sexual Harassment Prevention Training</name>
+      <description lang="en-US">Sexual harassment is prohibited in Illinois. Learn what you can do to ensure it does not occur in your place of work.&amp;nbsp;</description>
+      <launch lang="en-US">index.html</launch>
+    </activity>
+      <activity id="http://Harassment Prevention English/xmOS4RI2mwZZxBNPT--np7cfN8iDvttV" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Introduction/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention English/7_kWnJpYj4V0ck7PVQFufXe0uV0rcEtg" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Sexual Harassment in Online Environments/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention English/_tuMdJ0Iv5RnFzf3GppQ5NLALoT9zJ2u" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">What is sexual harassment? /blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention English/huLeTcyNAx2wo2W9uL8xGkA-hnp0eEHL" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Gender Identity, Sexual Orientation, and Third Parties (Bystanders)/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention English/Go5aypi2AChEKx6iI01Hc9cTZdMhVEcF" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Reporting Sexual Harassment/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention English/5szSL7SoaYRbrmObEPDp5zJWFUH-C9Px" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Is my employer responsible for sexual harassment? /blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention English/D8sjjUbUxRxn548e1jM6vo-fn8lxPVqw" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Course Wrap-Up/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+        </activities>
+</tincan>

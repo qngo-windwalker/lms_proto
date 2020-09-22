@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tincan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://projecttincan.com/tincan.xsd">
+  <activities>
+    <activity id="http://Harassment Prevention Spanish" type="http://adlnet.gov/expapi/activities/course">
+      <name lang="en-US">Gobierno del Estado de Illinois: Curso de Capacitación para la Prevención del Acoso Sexual</name>
+      <description lang="en-US">El acoso sexual est&amp;aacute; prohibido en Illinois. Aprenda lo que puede hacer para asegurarse que no ocurrir&amp;aacute; en su lugar de empleo.</description>
+      <launch lang="en-US">index.html</launch>
+    </activity>
+      <activity id="http://Harassment Prevention Spanish/mEcyJ1uj3ExbkKQzLH1xV_EsGz1E5Cep" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US"> Introducción/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention Spanish/couXGoXBggtGp-XEn-ITRNIZVvr5PQCD" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">¿Qué es el Acoso Sexual?/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention Spanish/hk7E8n0-Ed8gEoOeaIqk8yt7LVX92T99" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Identidad de Género, Orientación Sexual y Terceras Personas/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention Spanish/S98omfvSciPBdSelFPkBVoRTa6Tz-BmH" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Denunciando el Acoso Sexual – Varias Opciones/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention Spanish/Jmjd8ZWy47N315vsO7wvcJmnSEJWszd2" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">¿Mi Empleador es Responsable por el Acoso Sexual?/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://Harassment Prevention Spanish/HxKDW2VFFqTj-PlE5-MEaFrVQDjSLKyy" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Conclusión/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+        </activities>
+</tincan>
