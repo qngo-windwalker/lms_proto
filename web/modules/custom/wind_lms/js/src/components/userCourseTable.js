@@ -1,12 +1,4 @@
 import React, {Component} from 'react';
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  HashRouter,
-  withRouter,
-  Link
-} from "react-router-dom";
 import { connect } from 'react-redux'
 import { updateProduct } from  '../actions/productsActions';
 import { updateUser } from  '../actions/userActions';
@@ -20,9 +12,11 @@ class UserCourseTable extends Component{
   };
 
   componentDidMount() {
-    axios.get(`/wind-lms/json/dashboard`)
+    let url = new URL(window.location.href);
+    let testParam = url.searchParams.get('test') ? 'test=true' : '';
+    let langParam = this.isEnglishMode() ? 'en' : 'es';
+    axios.get(`/wind-lms/json/dashboard?lang=${langParam}&${testParam}`)
       .then(res => {
-        console.log(res.data);
         this.parseJson(res.data);
         this.addPopupClickEvent();
       });
@@ -67,7 +61,6 @@ class UserCourseTable extends Component{
   isEnglishMode() {
     let pathname = window.location.pathname;
     // if we are on 'es' spanish mode
-    console.log(pathname.split('/'));
     if(pathname.split('/')[1] == 'es'){
       return false;
     }
@@ -81,9 +74,9 @@ class UserCourseTable extends Component{
         <table className="table responsive-enabled" data-striping="1">
           <thead>
           <tr>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Certificate</th>
+            <th>{this.isEnglishMode() ? 'Name' : 'Nombre'}</th>
+            <th>{this.isEnglishMode() ? 'Status' : 'Estado'}</th>
+            <th>{this.isEnglishMode() ? 'Certificate' : 'Certificado'}</th>
           </tr>
           </thead>
           <tbody>

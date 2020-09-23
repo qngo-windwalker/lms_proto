@@ -18,7 +18,6 @@ class WindHomePageController {
         'type' => 'page',
         'status' => 1,
       ]);
-//      dump($nids);
 //    $block = Block::load('seven_login');
 //    $render = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
 //    dsm($render);

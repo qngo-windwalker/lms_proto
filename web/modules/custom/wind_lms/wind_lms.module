@@ -231,16 +231,30 @@ function _wind_lms_course_get_all_courses_definition() {
  *
  * @return array
  */
-function _wind_lms_get_user_all_assigned_course_data($user){
+function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
   $courses = array();
   $avail_courses = _wind_lms_course_get_all_courses_definition();
   // get ?test=true in the URL
   $isTestActive = \Drupal::request()->get('test');
   // Add testing courses if user has permission and parameter test is true
-//  if($isTestActive == 'true' && wind_does_user_has_sudo($user)){
+  if($isTestActive == 'true'){
     $courses[] = ['title' => 'Test Course', 'folder' => 'test_course', 'tincan_course_id' => 'test_abc123'];
     $courses[] = ['title' => 'Le Rouge', 'folder' =>  'le-rouge-tincan-4SaXPWmj', 'tincan_course_id' => 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'];
-//  }
+  }
+
+  if ($language == 'es'){
+    $courses[] = [
+      'title' => 'Gobierno del Estado de Illinois: Curso de Capacitación para la Prevención del Acoso Sexual',
+      'folder' =>  'gobierno-del-estado-de-illinois-curso-de-capacitacion-para-la-prevencion-del-acoso-sexual',
+      'tincan_course_id' => 'http://Harassment Prevention Spanish'
+    ];
+  } else {
+    $courses[] = [
+      'title' => 'State of Illinois Sexual Harassment Prevention Training',
+      'folder' =>  'state-of-illinois-sexual-harassment-prevention-training',
+      'tincan_course_id' => 'http://Harassment Prevention English'
+    ];
+  }
 
   // We have a problem if this is the case
   if (empty($courses)) {

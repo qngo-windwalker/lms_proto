@@ -46,17 +46,17 @@ class WindLMSDashboardController extends ControllerBase {
 
   /**
    * @param $step Array(
-   * [cid] => 1
-   * [id] => 1
-   * [name] => Employee Health Module
-   * [typology] => Module
-   * [time spent] => 79967
-   * [completed on] => 1536171883
-   * [best score] => 0
-   * [required score] => 0
-   * [attempts] => 2
-   * [activities] => 1
-   * [mandatory] => 1
+   *  [cid] => 1
+   *  [id] => 1
+   *  [name] => Employee Health Module
+   *  [typology] => Module
+   *  [time spent] => 79967
+   *  [completed on] => 1536171883
+   *  [best score] => 0
+   *  [required score] => 0
+   *  [attempts] => 2
+   *  [activities] => 1
+   *  [mandatory] => 1
    * )
    *  [cid] : group Content ID
    *
@@ -209,7 +209,6 @@ class WindLMSDashboardController extends ControllerBase {
             $data = !empty($result->serialized) ? unserialize($result->value) : $result->value;
           }
 
-
           // Get SCORM API version.
           $metadata = unserialize($scorm->metadata);
           if (strpos($metadata['schemaversion'], '1.2') !== FALSE) {
@@ -223,11 +222,8 @@ class WindLMSDashboardController extends ControllerBase {
 //          dsm($tree);
 
         }
-
       }
     }
-
-
   }
 
   /**
@@ -256,7 +252,6 @@ class WindLMSDashboardController extends ControllerBase {
 
       $tree[] = $sco;
     }
-
     return $tree;
   }
 

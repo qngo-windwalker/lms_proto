@@ -3,6 +3,7 @@
 namespace Drupal\wind\Controller;
 
 class WindManagerPageController{
+
   public function content(){
 
     return array(

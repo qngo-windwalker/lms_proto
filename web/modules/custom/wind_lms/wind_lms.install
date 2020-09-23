@@ -7,8 +7,6 @@ use Drupal\block\Entity\Block;
  */
 function wind_lms_install() {
 
-  // Set page.front (aka <front>) to /node instead of /user/login.
-  \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/dashboard')->save();
 }
 
 /**

@@ -28,6 +28,9 @@ function wind_install() {
   _wind_disable_block('wind_theme_powered');
 
   _wind_create_home_page();
+
+  // Set page.front (aka <front>) to /node instead of /user/login.
+  \Drupal::configFactory()->getEditable('system.site')->set('page.front', '/home')->save();
 }
 
 /**
@@ -78,15 +81,14 @@ function _wind_create_home_page(){
     'format' => 'basic_html'
   ]);
 
-
   $node->save();
 
   $source = '/node/' . $node->get('nid')->value;
-  \Drupal::service('path.alias_storage')->save($source, '/home', 'en');
+  // Todo: code below is not working. Find out why.
+//  \Drupal::service('path.alias_storage')->save($source, '/home', 'en');
 
-  $node->addTranslation('es', ['title' => "Bienvenido"])->save();
   $node_es = $node->addTranslation('es');
-  $node_es->title = 'Mi prueba!';
+  $node_es->title = 'Bienvenido!';
   $node_es->body->value = '<p>El cuerpo de mi nodo.</p>';
   $node_es->body->format = 'full_html';
   $node_es->save();

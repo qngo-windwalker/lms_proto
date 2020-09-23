@@ -24,9 +24,8 @@ class WindLMSJsonController extends ControllerBase {
 
   public function getCurrentDashboard(){
     $user = $this->currentUser();
-
     $rows = array();
-    $coursesData = _wind_lms_get_user_all_assigned_course_data($user);
+    $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
     foreach ($coursesData as $courseData) {
       $rows[] = $this->buildCourseRow($courseData);
     }
@@ -76,7 +75,7 @@ class WindLMSJsonController extends ControllerBase {
     }
     $module_handler = \Drupal::service('module_handler');
     $module_path = $module_handler->getModule('wind_lms')->getPath();
-    $linkContent = '<img width="26" src="' . $module_path . '/img/certificate_icon.png">';
+    $linkContent = '<img width="26" src="/' . $module_path . '/img/certificate_icon.png">';
     $renderedAnchorContent = render($linkContent);
     $url = Url::fromUserInput('/certificate/' . $courseData['statement']->get('statement_id')->value, ['attributes' => ['target' => '_blank']]);
     return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
