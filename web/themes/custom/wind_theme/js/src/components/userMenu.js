@@ -21,7 +21,6 @@ export default class UserMenu extends Component{
   isEnglishMode() {
     let pathname = window.location.pathname;
     // if we are on 'es' spanish mode
-    console.log(pathname.split('/'));
     if(pathname.split('/')[1] == 'es'){
       return false;
     }

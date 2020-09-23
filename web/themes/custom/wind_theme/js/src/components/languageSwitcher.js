@@ -20,16 +20,25 @@ export default class LanguageSwitcher extends Component{
   };
 
   componentDidMount() {
-    axios.get(`/wind/json/language`)
-      .then(res => {
-        console.log(res.data);
+    let pathname = window.location.pathname;
+    let split = pathname.split('/');
+    if(split[1] == 'es'){
+      this.setState({
+        languageLabel : 'English',
+        href : pathname.replace('/es/', '/')
       });
+    } else {
+      this.setState({
+        languageLabel : 'Español',
+        href : '/es' + pathname
+      });
+    }
   }
 
   render(){
     return (
       <>
-        <a href={this.esHref} className="nav-link language-toggle" lang="es" data-pt-name="hd_espanol">Español</a>
+        <a href={this.state.href} className="nav-link language-toggle" lang="es" data-pt-name="hd_espanol">{this.state.languageLabel}</a>
       </>
     );
   }
