@@ -13,6 +13,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * @param $account
  */
 function wind_user_login($account) {
+  // In case of login is being called thru API or CURL
+  if(isset($_GET['_format']) && $_GET['_format'] == 'json' ){
+    return;
+  }
   $response = new RedirectResponse('/dashboard');
   $response->send();
 }
