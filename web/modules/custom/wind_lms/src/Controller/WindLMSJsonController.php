@@ -37,6 +37,33 @@ class WindLMSJsonController extends ControllerBase {
     ]);
   }
 
+  public function getUserVRCourse($user){
+    // Get node vr_learning_object that has entity referece to $user.
+    $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+    $query->condition('type', 'vr_learning_object');
+    $query->condition('field_user', $user->id());
+    $result = $query->execute();
+    $vr = null;
+    if($result){
+      // We only expect 1 VR course linked to each user right now.
+      $nid = array_shift($result);
+      $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+      $vr = array(
+        'title' => $node->label(),
+        'nid' => $nid,
+        'uuid' => $node->uuid(),
+        'type' => $node->getType(),
+        'field_completion_percentage' => $node->get('field_completion_percentage')->getString()
+      );
+    }
+
+    return new JsonResponse([
+      'uid' => $user->id(),
+      'name' => $user->getAccountName(),
+      'vr_learning_object' => $vr,
+    ]);
+  }
+
   protected function buildCourseRow($courseData) {
     $title = $courseData['title'];
     $course_folder = $courseData['folder'];

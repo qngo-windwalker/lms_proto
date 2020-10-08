@@ -124,6 +124,16 @@ wind_lms.currentuser:
     _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getCurrentUser'
   requirements:
     _role: 'authenticated'
+wind_lms.json.user:
+  path: 'wind-lms/json/user/{user}/vr-course'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getUserVRCourse'
+  requirements:
+    _role: 'authenticated'
+  options:
+    parameters:
+      user:
+        type: entity:user
 wind_lms.json.dashboard:
   path: 'wind-lms/json/dashboard'
   defaults:
