@@ -37,7 +37,13 @@ class WindLMSJsonController extends ControllerBase {
     ]);
   }
 
-  public function getUserVRCourse($user){
+  public function getUserVRCourse(User $user){
+    // Current user is what's in the sesssion, argument $user is what we are inquiring.
+    if(!$this->currentUser()->isAuthenticated()){
+      return new JsonResponse([
+        'message' => 'Not logged in.',
+      ]);
+    }
     // Get node vr_learning_object that has entity referece to $user.
     $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
     $query->condition('type', 'vr_learning_object');

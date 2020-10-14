@@ -129,7 +129,8 @@ wind_lms.json.user:
   defaults:
     _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getUserVRCourse'
   requirements:
-    _role: 'authenticated'
+    # The controller will check permission.
+    _permission: 'access content'
   options:
     parameters:
       user:
