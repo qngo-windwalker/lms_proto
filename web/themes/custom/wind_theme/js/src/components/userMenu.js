@@ -15,8 +15,17 @@ import axios from 'axios';
 export default class UserMenu extends Component{
   constructor(props) {
     super(props);
-    this.state = { isLogin: false };
+    this.handleUserMenuClick = this.handleUserMenuClick.bind(this);
+    this.state = {
+      isLoggedIn: false,
+      isUserMenuActive: false
+    };
   };
+
+  handleUserMenuClick(e) {
+    e.preventDefault();
+    this.setState({isUserMenuActive: this.state.isUserMenuActive ? false : true});
+  }
 
   isEnglishMode() {
     let pathname = window.location.pathname;
@@ -31,29 +40,24 @@ export default class UserMenu extends Component{
     axios.get(`/user/login_status?_format=json`)
       .then(res => {
         // const posts = res.data.data.children.map(obj => obj.data);
-        this.setState({ isLogin : res.data == 1 ? true : false });
+        this.setState({ isLoggedIn : res.data == 1 ? true : false });
       });
   }
 
   render(){
-    if (this.state.isLogin) {
+    if (this.state.isLoggedIn) {
       return (
         <>
-          <div className="user-block ml-3 dropdown">
-            <a href="/user/1" className="nav-link d-flex align-items-center" data-toggle="dropdown" aria-expanded="false">
+          <div className={`user-block ml-3 dropdown ${this.state.isUserMenuActive && 'show'}`}>
+            <a href="/user/1" className="nav-link d-flex align-items-center" data-toggle="dropdown" aria-expanded="false" onClick={this.handleUserMenuClick}>
               {this.isEnglishMode() ? 'Hi' : 'Hola'},  &nbsp; <i className="fas fa-user-circle"> </i> &nbsp; <i className="fas fa-sort-down"> </i>
             </a>
-            <div className="dropdown-menu dropdown-menu-right"
+            <div className={`dropdown-menu dropdown-menu-right ${this.state.isUserMenuActive && 'show'}`}
                  x-placement="bottom-end"
                  // style={{marginRight: spacing + 'em'}}
-                 style={{position: 'absolute', transform: 'translate3d(122px, 36px, 0px', top: '0px', left: '0px', willChange: 'transform'}}>
-              <div className="info list-group list-group-flush">
-                <p className="list-group-item"><strong className="text-uppercase">admin</strong></p>
-                <a className="list-group-item" href="user/1"><span>User profile</span></a>
-                <a className="list-group-item" href="/user/1/edit"><span>Settings</span></a>
-                <hr />
-                <a className="list-group-item list-group-item-action" href="/user/logout"><span>Logout</span></a>
-              </div>
+                 style={{position: 'absolute', transform: 'translate3d(0px, 36px, 0px', top: '0px', left: '0px', willChange: 'transform'}}>
+              <a className="dropdown-item" href="/user/1"><span>My Account</span></a>
+              <a className="dropdown-item" href="/user/logout"><span>Logout</span></a>
             </div>
           </div>
         </>
