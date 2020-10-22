@@ -18,11 +18,10 @@ wind.json.language:
     _controller: '\Drupal\wind\Controller\WindJsonController::getLanguage'
   requirements:
     _permission: 'access content'
-wind.dev:
-  path: 'wind-dev'
+wind.json.current-user:
+  path: 'wind/json/current-user'
   defaults:
-    _controller: '\Drupal\wind\Controller\WindDevPageController::content'
-    _title: 'Wind Dev'
+    _controller: '\Drupal\wind\Controller\WindJsonController::getCurrentUser'
   requirements:
     _permission: 'access content'
 wind.json.status:

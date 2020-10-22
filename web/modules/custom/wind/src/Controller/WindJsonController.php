@@ -39,4 +39,15 @@ class WindJsonController extends ControllerBase {
     }
     return new JsonResponse(['data' => $build]);
   }
+
+  public function getCurrentUser() {
+    $user = $this->currentUser();
+    $userAccount = $user->getAccount();
+    return new JsonResponse([
+      'uid' => $userAccount->id(),
+      'name' => $userAccount->getAccountName(),
+      'mail' => $userAccount->getEmail(),
+      'roles' => $userAccount->getRoles(),
+    ]);
+  }
 }
