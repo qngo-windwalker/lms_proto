@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
-import { connect } from 'react-redux'
-import { updateProduct } from  '../actions/productsActions';
-import { updateUser } from  '../actions/userActions';
 import axios from "axios";
 
-class UserCourseTable extends Component{
+export default class UserCourseTable extends Component{
 	constructor(props) {
     super(props);
     this.state = { tableRow: [] };
@@ -113,23 +110,3 @@ class UserCourseTable extends Component{
     });
   }
 }
-
-// The parentheses is to automatically return this object
-const mapStateToProps = state => ({
-	products: state.products,
-	user: state.user
-});
-
-// const mapStateToProps = state => {
-// 	return state;
-// };
-
-// To allow automatically dispatch Redux Action to the Redux Store
-const mapActionsToProps = {
-	onUpdateProduct : updateProduct,
-	onUpdateUser : updateUser
-};
-
-// Connect Redux to App
-// Which allows <App /> to have 'state' this.props
-export default connect(mapStateToProps, mapActionsToProps)(UserCourseTable);
