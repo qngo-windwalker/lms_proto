@@ -23,7 +23,7 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
         continue;
       }
       $user = User::load($uid);
-      $licenseNode = $this->getUserLicense($uid);
+//      $licenseNode = $this->getUserLicense($uid);
       $coursesData = _wind_tincan_get_user_all_assigned_course_data($user);
       $collection[] = [
         'uid' => $uid,
@@ -33,15 +33,15 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
         'fullName' => $user->get('field_first_name')->value . ' ' . $user->get('field_last_name')->value,
         'created' => $user->get('created')->value,
         'login' => $user->get('login')->value,
-        'field_service_desk_account_id' => $user->get('field_service_desk_account_id')->value,
-        'jiraServiceDeskCustomerLink' => $this->getJiraServiceDeskCustomerLink($user->get('field_service_desk_account_id')->value),
-        'licenseLink' => $licenseNode ? $this->getLicenseLink($licenseNode) : '',
-        'field_paid' => $licenseNode ? $licenseNode->get('field_paid')->value : '',
-        'field_subscription_type' => $licenseNode ? $licenseNode->get('field_subscription_type')->value : '',
-        'field_clearinghouse_role' => $licenseNode ? $licenseNode->get('field_clearinghouse_role')->value : '',
-        'field_payment_date' => $licenseNode ? $licenseNode->get('field_payment_date')->value : '',
-        'field_payment_amount' => $licenseNode ? $licenseNode->get('field_payment_amount')->value : '',
-        'field_enroll_date' => $licenseNode ? $licenseNode->get('field_enroll_date')->value : '',
+//        'field_service_desk_account_id' => $user->get('field_service_desk_account_id')->value,
+//        'jiraServiceDeskCustomerLink' => $this->getJiraServiceDeskCustomerLink($user->get('field_service_desk_account_id')->value),
+//        'licenseLink' => $licenseNode ? $this->getLicenseLink($licenseNode) : '',
+//        'field_paid' => $licenseNode ? $licenseNode->get('field_paid')->value : '',
+//        'field_subscription_type' => $licenseNode ? $licenseNode->get('field_subscription_type')->value : '',
+//        'field_clearinghouse_role' => $licenseNode ? $licenseNode->get('field_clearinghouse_role')->value : '',
+//        'field_payment_date' => $licenseNode ? $licenseNode->get('field_payment_date')->value : '',
+//        'field_payment_amount' => $licenseNode ? $licenseNode->get('field_payment_amount')->value : '',
+//        'field_enroll_date' => $licenseNode ? $licenseNode->get('field_enroll_date')->value : '',
         'courseTitle' => $this->getCourseDataValue($coursesData, 'title'),
         'courseTincanId' => $this->getCourseDataValue($coursesData, 'tincan_course_id'),
         'courseProgress' => $this->getCourseDataValue($coursesData, 'progress'),

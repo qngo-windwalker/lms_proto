@@ -70,6 +70,12 @@ class WindLMSJsonController extends ControllerBase {
     ]);
   }
 
+  public function getAllUsersProgress() {
+    return new JsonResponse([
+
+    ]);
+  }
+
   protected function buildCourseRow($courseData) {
     $title = $courseData['title'];
     $course_folder = $courseData['folder'];

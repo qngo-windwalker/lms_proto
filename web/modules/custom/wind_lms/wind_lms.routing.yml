@@ -124,6 +124,12 @@ wind_lms.currentuser:
     _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getCurrentUser'
   requirements:
     _role: 'authenticated'
+wind_lms.json.all_users_progress:
+  path: 'wl-json/all-users-progress'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getAllUsersProgress'
+  requirements:
+    _role: 'authenticated'
 wind_lms.json.user:
   path: 'wind-lms/json/user/{user}/vr-course'
   defaults:

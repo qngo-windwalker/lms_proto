@@ -1,5 +1,5 @@
-
 'use strict';
+
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -8,16 +8,45 @@ import {
   HashRouter,
   Link
 } from "react-router-dom";
-
+import axios from 'axios';
+import UserCourseTable from './userCourseTable';
+import AllUserProgressTable from './allUserProgressTable';
 
 export default class DashboardPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { liked: false };
+    this.state = { currentUser : null };
+  }
+
+  componentDidMount() {
+    axios.get(`/wind/json/current-user`)
+      .then(res => {
+        // const posts = res.data.data.children.map(obj => obj.data);
+        this.setState({
+          currentUser : res.data
+        });
+      });
   }
 
   render() {
-    return 'DashboardPanel Page';
+    return(
+      <>
+        <UserCourseTable />
+        {this.getAllUsersProgressTable()}
+      </>
+    );
+  }
+
+  getAllUsersProgressTable() {
+    if(!this.state.currentUser){
+      return null;
+    }
+
+    if(this.state.currentUser.roles.includes('administrator') || this.state.currentUser.roles.includes('manager')) {
+      return <AllUserProgressTable />;
+    }
+
+    return null;
   }
 }
 

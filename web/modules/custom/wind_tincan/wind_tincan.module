@@ -177,10 +177,10 @@ function _wind_tincan_get_user_all_assigned_course_data($user){
     $courses[] = ['title' => 'Le Rouge', 'folder' =>  'le-rouge-tincan-4SaXPWmj', 'tincan_course_id' => 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'];
   }
 
-  $use_clearinghouse_role = _wind_tincan_get_user_paid_role($user->id());
-  if($use_clearinghouse_role && isset($avail_courses[$use_clearinghouse_role])){
-    $courses[] = $avail_courses[$use_clearinghouse_role];
-  }
+//  $use_clearinghouse_role = _wind_tincan_get_user_paid_role($user->id());
+//  if($use_clearinghouse_role && isset($avail_courses[$use_clearinghouse_role])){
+//    $courses[] = $avail_courses[$use_clearinghouse_role];
+//  }
 
   // We have a problem if this is the case
   if (empty($courses)) {

@@ -10,7 +10,29 @@ import {
   withRouter,
   Link
 } from "react-router-dom";
+import DashboardPanel from '../components/dashboardPanel';
 
-import UserCourseTable from '../components/userCourseTable';
+export default class Dashboard extends React.Component {
 
-ReactDOM.render(<UserCourseTable />, document.getElementById('react-container'));
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <>
+        <HashRouter>
+          <Switch>
+            <HashRouter exact path="/">
+              <DashboardPanel/>
+            </HashRouter>
+
+          </Switch>
+        </HashRouter>
+      </>
+    );
+  }
+}
+
+ReactDOM.render(<Dashboard/>, document.getElementById('react-container'));
