@@ -10,14 +10,14 @@ import {
 } from "react-router-dom";
 
 
-export default class DashboardPage extends React.Component {
+export default class DashboardPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = { liked: false };
   }
 
   render() {
-    return 'Dashboard Page';
+    return 'DashboardPanel Page';
   }
 }
 
