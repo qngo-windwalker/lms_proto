@@ -1,7 +1,6 @@
 @import "../../../../core/themes/classy/css/components/messages.css";
 @import "../../../../core/modules/system/css/components/hidden.module.css";
 @import "message.css";
-@import "step_block.css";
 
 /********************************
   Site wide styles
@@ -33,11 +32,11 @@ h2{color: rgb(117,121,137); }
 
 /*#block-wind-theme-content,*/
 #main{ margin-top: 100px; margin-bottom: 85px; box-shadow: 0px 0px 0px 20px rgba(0, 0, 0, 0.3); border-radius: 3px; background: #fff;}
-#page-title{width: 100%; margin-bottom: 20px; padding: 20px 0px 10px; color: white; background: #000;}
+#page-title{width: 100%; margin-bottom: 20px; padding: 20px 0px 15px; color: white; background: #000;}
 
 /* Common Drupal submit button. */
 #seven-login-wrapper #edit-submit,
-#edit-submit{ color: white; background: #077c94; border: none; }
+#edit-submit{ color: white; background: #077c94; border: none; border-radius: 3px; }
 #edit-submit:hover { background: #044b59;}
 #edit-submit:focus { outline: #044b59;}
 
@@ -52,11 +51,11 @@ h2{color: rgb(117,121,137); }
   Page specific styles
 ********************************/
 /*** Front page ***/
-body.path-frontpage #page-title{padding-left: 25px; padding-right: 25px;}
-body.path-frontpage #main{width: 500px;}
-/*body.path-frontpage #block-wind-theme-content,*/
-/*body.path-frontpage #main{background: transparent;}*/
-body.path-frontpage #block-wind-theme-page-title h1{text-align: center;}
+body.page-frontpage #page-title{padding-left: 25px; padding-right: 25px;}
+body.page-frontpage #main{width: 500px;}
+/*body.page-frontpage #block-wind-theme-content,*/
+/*body.page-frontpage #main{background: transparent;}*/
+body.page-frontpage #block-wind-theme-page-title h1{text-align: center;}
 #seven-login-wrapper input{width: 100%; margin-bottom: 20px; border: 1px solid #ccc; border-radius: unset;}
 #seven-login-wrapper .col-md-6{width: 100%; max-width: 100%; flex: 0 0 100%; }
 #block-seven-login{margin-bottom: 80px; padding: 53px; }
@@ -65,13 +64,13 @@ body.path-frontpage #block-wind-theme-page-title h1{text-align: center;}
 #block-seven-login ul li:last-child{text-align: right;}
 
 /* [site]/user/login, [site]/user/register, [site]/user/password  */
-/*body.path-user input{ margin-bottom: 15px;}*/
-body.path-user .description{ margin-bottom: 20px; color: #8e8e8e;}
-body.path-user .password-strength { margin-bottom: 20px;}
+/*body.page-user input{ margin-bottom: 15px;}*/
+body.page-user-login .description{ margin-bottom: 20px; color: #8e8e8e;}
+body.page-user-login .password-strength { margin-bottom: 20px;}
 /* Hide the redundant links below the title. */
-body.path-user.page-user-login #block-wind-theme-local-tasks,
-body.path-user.page-user-password #block-wind-theme-local-tasks,
-body.path-user.page-user-register #block-wind-theme-local-tasks{ display: none;}
+body.page-user.page-user-login #block-wind-theme-local-tasks,
+body.page-user.page-user-password #block-wind-theme-local-tasks,
+body.page-user.page-user-register #block-wind-theme-local-tasks{ display: none;}
 
 /*** [site]/manager ***/
 /* Datatable */
@@ -82,16 +81,16 @@ body.path-user.page-user-register #block-wind-theme-local-tasks{ display: none;}
 .lp_steps_block_table td:nth-child(2) {text-align: left;} /* Overrides Opigno */
 
 /*** [site]/report ***/
-body.path-report #content{min-height: 500px;} /* Solves page bounching when performing searches on datatable. */
-body.path-report #content input{margin-left: 15px;}
-body.path-report #learner-status-tbl_filter{float: right;}
+body.page-report #content{min-height: 500px;} /* Solves page bounching when performing searches on datatable. */
+body.page-report #content input{margin-left: 15px;}
+body.page-report #learner-status-tbl_filter{float: right;}
 
 /*** [site]/course/{#}/activity/{#} ***/
-body.path-course #site-header {margin-bottom: 0;}
+body.page-course #site-header {margin-bottom: 0;}
 #main.scorm-container{width: 100%; max-width: 100%; border: 0; margin: 0; padding: 0; box-shadow: none; border-radius: unset;}
 #main.scorm-container #page-title{display: none;}
 /* Hides the Author date field since we're unable to do it from the admin/config/.. field manage . EX: "Wed, 09/05/2018 - 16:01" */
-body.path-course .content-wrapper .created,
+body.page-course .content-wrapper .created,
 body.page-course-activity .content-wrapper .created{display: none;}
 
 /*** [site]/module/{#}/answer/{#} ***/
