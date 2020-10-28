@@ -24,7 +24,8 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
       }
       $user = User::load($uid);
 //      $licenseNode = $this->getUserLicense($uid);
-      $coursesData = _wind_tincan_get_user_all_assigned_course_data($user);
+//      $coursesData = _wind_tincan_get_user_all_assigned_course_data($user);
+      $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
       $collection[] = [
         'uid' => $uid,
         'username' => $this->getUserNameLink($user),
@@ -45,7 +46,7 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
         'courseTitle' => $this->getCourseDataValue($coursesData, 'title'),
         'courseTincanId' => $this->getCourseDataValue($coursesData, 'tincan_course_id'),
         'courseProgress' => $this->getCourseDataValue($coursesData, 'progress'),
-        'stored_date' => $this->getCourseDataValue($coursesData, 'stored_date'),
+//        'stored_date' => $this->getCourseDataValue($coursesData, 'stored_date'),
       ];
     }
     return new JsonResponse(['data' => $collection]);

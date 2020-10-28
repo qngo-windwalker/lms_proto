@@ -26,7 +26,6 @@ class WindLMSDashboardController extends ControllerBase {
    * @return array
    */
   public function getContent() {
-    $user = $this->currentUser();
     return [
       '#type' => 'container',
       '#attributes' => [
@@ -37,7 +36,7 @@ class WindLMSDashboardController extends ControllerBase {
           'wind_lms/dashboard',
         ],
         'drupalSettings' => [
-          'myvar' => 'allo'
+          'myvar' => 'todo. find out why it is not working.'
         ]
       ],
     ];
@@ -235,7 +234,6 @@ class WindLMSDashboardController extends ControllerBase {
    */
   protected function opignoScormPlayerScormTree($scorm, $parent_identifier = 0) {
     $tree = [];
-
     $result = db_select('opigno_scorm_package_scos', 'sco')
       ->fields('sco', array('id'))
       ->condition('sco.scorm_id', $scorm->id)

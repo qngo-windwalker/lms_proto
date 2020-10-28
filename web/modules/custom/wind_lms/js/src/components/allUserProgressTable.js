@@ -67,9 +67,9 @@ export default class AllUserProgressTable extends Component{
   render(){
     return (
       <>
-        <h2>{this.isEnglishMode() ? 'Users Progress' : 'Progreso De Los Usuarios'}</h2>
-        <table className="table responsive-enabled" data-striping="1">
-          <thead>
+        <h3 className="mb-3">{this.isEnglishMode() ? 'Users Progress' : 'Progreso De Los Usuarios'}</h3>
+        <table className="table responsive-enabled mb-5" data-striping="1">
+          <thead  className="thead-light">
           <tr>
             <th>{this.isEnglishMode() ? 'Username' : ''}</th>
             <th>{this.isEnglishMode() ? 'Email' : ''}</th>
@@ -97,7 +97,7 @@ export default class AllUserProgressTable extends Component{
         <td scope="row" className="text-left" dangerouslySetInnerHTML={{__html: dataObj.username}}></td>
         <td>{dataObj.mail}</td>
         <td>{dataObj.status}</td>
-        <td>{dataObj.created}</td>
+        <td>{this.unixTimestampToTime(dataObj.created)}</td>
         <td>{dataObj.courseTitle}</td>
         <td dangerouslySetInnerHTML={{__html: dataObj.courseProgress}}></td>
       </tr>
@@ -116,5 +116,24 @@ export default class AllUserProgressTable extends Component{
     this.setState({
       tableRow : collection
     });
+  }
+
+  /**
+   * @see https://stackoverflow.com/a/847196
+   * @param unix_timestamp
+   * @returns {string}
+   */
+  unixTimestampToTime(unix_timestamp){
+    let a = new Date(unix_timestamp * 1000);
+    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    let year = a.getFullYear();
+    let month = months[a.getMonth()];
+    let date = a.getDate();
+    let hour = a.getHours();
+    let min = a.getMinutes();
+    let sec = a.getSeconds();
+    let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+    let ddmmyy = date + ' ' + month + ' ' + year ;
+    return ddmmyy;
   }
 }

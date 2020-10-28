@@ -67,9 +67,9 @@ export default class UserCourseTable extends Component{
 	render(){
 		return (
 			<>
-        <h2>{this.isEnglishMode() ? 'My Training' : 'Mi Entrenamiento'}</h2>
-        <table className="table responsive-enabled" data-striping="1">
-          <thead>
+        <h3 className="mb-3">{this.isEnglishMode() ? 'My Training' : 'Mi Entrenamiento'}</h3>
+        <table className="table responsive-enabled mb-5" data-striping="1">
+          <thead className="thead-light">
           <tr>
             <th>{this.isEnglishMode() ? 'Name' : 'Nombre'}</th>
             <th>{this.isEnglishMode() ? 'Status' : 'Estado'}</th>
