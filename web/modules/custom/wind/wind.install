@@ -26,6 +26,7 @@ function wind_install() {
   _wind_disable_block('wind_theme_breadcrumbs');
   _wind_disable_block('wind_theme_branding');
   _wind_disable_block('wind_theme_powered');
+  _wind_disable_block('wind_theme_tools');
 
   _wind_create_home_page();
 
@@ -74,6 +75,7 @@ function _wind_create_home_page(){
     'created' => time(),
     'langcode' => 'en',
     'title' => 'Welcome',
+    'path' => '/home'
   ]);
 
   $node->set('body', [

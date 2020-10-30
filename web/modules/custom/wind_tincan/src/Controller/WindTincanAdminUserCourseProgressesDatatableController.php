@@ -36,17 +36,17 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
         'login' => $user->get('login')->value,
 //        'field_service_desk_account_id' => $user->get('field_service_desk_account_id')->value,
 //        'jiraServiceDeskCustomerLink' => $this->getJiraServiceDeskCustomerLink($user->get('field_service_desk_account_id')->value),
-//        'licenseLink' => $licenseNode ? $this->getLicenseLink($licenseNode) : '',
-//        'field_paid' => $licenseNode ? $licenseNode->get('field_paid')->value : '',
+        'licenseLink' => '',
+        'field_paid' => '',
 //        'field_subscription_type' => $licenseNode ? $licenseNode->get('field_subscription_type')->value : '',
-//        'field_clearinghouse_role' => $licenseNode ? $licenseNode->get('field_clearinghouse_role')->value : '',
+        'field_clearinghouse_role' =>  '',
 //        'field_payment_date' => $licenseNode ? $licenseNode->get('field_payment_date')->value : '',
 //        'field_payment_amount' => $licenseNode ? $licenseNode->get('field_payment_amount')->value : '',
-//        'field_enroll_date' => $licenseNode ? $licenseNode->get('field_enroll_date')->value : '',
+        'field_enroll_date' => '',
         'courseTitle' => $this->getCourseDataValue($coursesData, 'title'),
         'courseTincanId' => $this->getCourseDataValue($coursesData, 'tincan_course_id'),
         'courseProgress' => $this->getCourseDataValue($coursesData, 'progress'),
-//        'stored_date' => $this->getCourseDataValue($coursesData, 'stored_date'),
+        'stored_date' => ''
       ];
     }
     return new JsonResponse(['data' => $collection]);

@@ -3,11 +3,11 @@
 
   'use strict';
 
-  Drupal.ChNavCourseAdminUserProgresses = Drupal.ChNavCourseAdminUserProgresses || {};
-  Drupal.ChNavCourseAdminUserProgresses.initialized = false;
+  Drupal.WindTincanAdminUserProgresses = Drupal.WindTincanAdminUserProgresses || {};
+  Drupal.WindTincanAdminUserProgresses.initialized = false;
 
-  Drupal.ChNavCourseAdminUserProgresses.init = function(Drupal, settings){
-    Drupal.ChNavCourseAdminUserProgresses.$table = $(settings.ch_nav.datatableElementId).DataTable({
+  Drupal.WindTincanAdminUserProgresses.init = function(Drupal, settings){
+    Drupal.WindTincanAdminUserProgresses.$table = $(settings.ch_nav.datatableElementId).DataTable({
       ajax : {
         url : settings.ch_nav.datatableURL,
       },
@@ -57,9 +57,9 @@
   Drupal.behaviors.ChNavAdminUserLicenses = {
     // Todo: Find out why attach() is calling 3 times by Drupal.
     attach: function (context, settings) {
-      if (!Drupal.ChNavCourseAdminUserProgresses.initialized) {
-        Drupal.ChNavCourseAdminUserProgresses.init(Drupal, settings);
-        Drupal.ChNavCourseAdminUserProgresses.initialized = true;
+      if (!Drupal.WindTincanAdminUserProgresses.initialized) {
+        Drupal.WindTincanAdminUserProgresses.init(Drupal, settings);
+        Drupal.WindTincanAdminUserProgresses.initialized = true;
       }
     }
   };

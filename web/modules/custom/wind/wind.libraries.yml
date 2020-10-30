@@ -1,0 +1,9 @@
+datatable:
+  js:
+    js/node_modules/datatables.net/js/jquery.dataTables.js: {}
+  css:
+    theme:
+      js/node_modules/datatables.net/css/buttons.dataTables.min.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

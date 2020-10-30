@@ -7,6 +7,10 @@ use Drupal\Core\Controller\ControllerBase;
 class WindTincanAdminUserCourseProgressesController extends ControllerBase{
 
   public function getContent() {
+
+//    \Drupal::configFactory()->get('system.performance')->set('js.preprocess', FALSE);
+    $a = \Drupal::configFactory()->getEditable('system.performance')->set('js.preprocess', 1);
+
     $table = $this->getDataTableRenderable('user-course-progresses-tbl', "/wind-tincan-course/course-progress-datatable/");
     $markup = '';
     $markup .= render($table);
