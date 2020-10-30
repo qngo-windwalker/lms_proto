@@ -50,4 +50,30 @@ class WindJsonController extends ControllerBase {
       'roles' => $userAccount->getRoles(),
     ]);
   }
+
+  public function getSiteInfo(){
+    $themeName = \Drupal::service('theme.manager')->getActiveTheme()->getName();
+    // If true (1), use the logo supplied by the theme
+    $logoUseDefault  = theme_get_setting('logo.use_default', $themeName);
+    $themeLogoPath = theme_get_setting('logo.path', $themeName);
+
+    $externalURL = '';
+    if ($wrapper = \Drupal::service('stream_wrapper_manager')->getViaUri($themeLogoPath)) {
+      $externalURL = $wrapper->getExternalUrl();
+    }
+    $user = $this->currentUser();
+    $userAccount = $user->getAccount();
+    return new JsonResponse([
+      'currentUser' => array(
+        'uid' => $userAccount->id(),
+        'name' => $userAccount->getAccountName(),
+        'mail' => $userAccount->getEmail(),
+        'roles' => $userAccount->getRoles(),
+      ),
+      'site' => array(
+        'logoUseDefault' => $logoUseDefault,
+        'logoPath' => $externalURL,
+      )
+    ]);
+  }
 }

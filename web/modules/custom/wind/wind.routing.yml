@@ -24,6 +24,12 @@ wind.json.current-user:
     _controller: '\Drupal\wind\Controller\WindJsonController::getCurrentUser'
   requirements:
     _permission: 'access content'
+wind.json.site-info:
+  path: 'wind/json/site-info'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindJsonController::getSiteInfo'
+  requirements:
+    _permission: 'access content'
 wind.json.status:
   path: 'wind/json/status'
   defaults:
