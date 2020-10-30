@@ -92,5 +92,6 @@ function _wind_create_home_page(){
   $node_es->body->value = '<p>El cuerpo de mi nodo.</p>';
   $node_es->body->format = 'full_html';
   $node_es->save();
-  \Drupal::service('path.alias_storage')->save("/node/" . $node->id(), "/mi/ruta", "es");
+  // Todo: code below is not working. Find out why.
+//  \Drupal::service('path.alias_storage')->save("/node/" . $node->id(), "/mi/ruta", "es");
 }
