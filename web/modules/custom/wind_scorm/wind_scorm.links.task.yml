@@ -1,0 +1,4 @@
+wind_scorm.content.scorm_package:
+  title: 'SCORM Package'
+  route_name: wind_scorm.admin.content.scorm_package
+  base_route: system.admin_content

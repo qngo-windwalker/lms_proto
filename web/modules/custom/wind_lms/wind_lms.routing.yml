@@ -91,30 +91,7 @@ wind_lms.course:
 #    parameters:
 #      wind_course:
 #        type: entity:opigno_module
-#wind_lms.answer_form:
-#  path: 'course/{opigno_module}/activity/{opigno_activity}'
-#  defaults:
-#    _controller: '\Drupal\wind_lms\Controller\WindLMSTakeCourseController::courseActivityForm'
-#  requirements:
-#    _permission: 'take modules'
-#  options:
-#    parameters:
-#      opigno_module:
-#        type: entity:opigno_module
-#      opigno_activity:
-#        type: entity:opigno_activity
-#
-#wind_lms.scorm_commit:
-#  path: '/course/scorm/{opigno_scorm_id}/{opigno_scorm_sco_id}/commit'
-#  defaults:
-#    _controller: '\Drupal\wind_lms\Controller\WindLMSCourseScormController::scormCommit'
-#    _title: 'Scorm commit'
-#  requirements:
-#    _access: 'TRUE'
-#    opigno_scorm_id: \d+
-#    opigno_scorm_sco_id: \d+
-#  options:
-#    _admin_route: FALSE
+
 #################################################
 ## Json
 #################################################

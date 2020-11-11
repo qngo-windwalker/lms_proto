@@ -19,7 +19,6 @@ class OpignoScormController extends ControllerBase {
   public function scormIntegrateSco($opigno_scorm_sco) {
     $scorm_service = \Drupal::service('opigno_scorm.scorm');
     $sco = $scorm_service->scormLoadSco($opigno_scorm_sco);
-    $sco = wind_scorm_getTestSCO();
     // Does the SCO have a launch property ?
     if (!empty($sco->launch)) {
       $query = [];
@@ -42,7 +41,6 @@ class OpignoScormController extends ControllerBase {
       // Get the SCO location on the filesystem.
       $sco_location = "{$scorm->extracted_dir}/$launch";
       $sco_path = file_create_url($sco_location);
-      $sco_path = wind_scorm_getSCOTestPath();
 
       // Where there any parameters ? If so, prepare them for Drupal.
       if (!empty($parameters)) {

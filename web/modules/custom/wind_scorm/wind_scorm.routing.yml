@@ -18,43 +18,34 @@ wind_scorm.take_course:
   options:
     parameters:
       id: \d+
-wind_scorm.answer_form:
-  path: 'scorm-course/{opigno_module}/activity/{opigno_activity}'
+wind_scorm.scorm_package:
+  path: '/scorm-package'
   defaults:
-    _controller: '\Drupal\wind_scorm\Controller\WindScormTakeCourseController::courseActivityForm'
-  requirements:
-    _permission: 'take modules'
-  options:
-    parameters:
-      opigno_module:
-        type: entity:opigno_module
-      opigno_activity:
-        type: entity:opigno_activity
-wind_scorm.scorm_commit:
-  path: '/scorm-course/scorm/{opigno_scorm_id}/{opigno_scorm_sco_id}/commit'
-  defaults:
-    _controller: '\Drupal\wind_scorm\Controller\WindScormCourseScormController::scormCommit'
-    _title: 'Scorm commit'
+    _controller: '\Drupal\wind_scorm\Controller\WindScormPackageController::getContent'
+    _title: 'SCORM Package'
   requirements:
     _role: 'authenticated'
-    opigno_scorm_id: \d+
-    opigno_scorm_sco_id: \d+
-  options:
-    _admin_route: FALSE
-wind_scorm.scorm_sco:
-  path: '/wind-scorm/player/sco/{wind_scorm_sco}'
+wind_scorm.admin.content.scorm_package:
+  path: '/admin/content/scorm-package'
   defaults:
-    _controller: '\Drupal\wind_scorm\Controller\WindScormController::scormIntegrateSco'
-    _title: 'Integrate sco'
+    _controller: '\Drupal\wind_scorm\Controller\WindScormAdminContentPackageController::getContent'
+    _title: 'SCORM Package'
   requirements:
-    _access: 'TRUE'
-    wind_scorm_sco: \d+
-  options:
-    _admin_route: FALSE
-wind_scorm.scorm_add:
+    _permission: 'administer users'
+wind_scorm.scorm_package.add:
   path: '/scorm-package/add'
   defaults:
     _controller: '\Drupal\wind_scorm\Controller\WindScormPackageAddController::getContent'
     _title: 'Add New SCORM Package'
   requirements:
     _role: 'authenticated'
+wind_scorm.scorm_package.id:
+  path: '/scorm-package/{id}'
+  defaults:
+    _controller: '\Drupal\wind_scorm\Controller\WindScormPackageController::getContentById'
+    _title_callback: '\Drupal\wind_scorm\Controller\WindScormPackageController::getTitleById'
+  requirements:
+    _role: 'authenticated'
+  options:
+    parameters:
+      id: \d+
