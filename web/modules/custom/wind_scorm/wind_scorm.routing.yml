@@ -1,0 +1,60 @@
+wind_scorm.scorm_launcher:
+  path: '/scorm-launcher/{id}'
+  defaults:
+    _controller: '\Drupal\wind_scorm\Controller\WindScormLauncherController::getContent'
+    _title: 'Integrate sco'
+  requirements:
+    _role: 'authenticated'
+    id: \d+
+  options:
+    _admin_route: FALSE
+wind_scorm.take_course:
+  path: 'scorm-course/{id}/take'
+  defaults:
+    _controller: '\Drupal\wind_scorm\Controller\WindScormTakeCourseController::takeCourse'
+    _title: 'Module'
+  requirements:
+    _role: 'authenticated'
+  options:
+    parameters:
+      id: \d+
+wind_scorm.answer_form:
+  path: 'scorm-course/{opigno_module}/activity/{opigno_activity}'
+  defaults:
+    _controller: '\Drupal\wind_scorm\Controller\WindScormTakeCourseController::courseActivityForm'
+  requirements:
+    _permission: 'take modules'
+  options:
+    parameters:
+      opigno_module:
+        type: entity:opigno_module
+      opigno_activity:
+        type: entity:opigno_activity
+wind_scorm.scorm_commit:
+  path: '/scorm-course/scorm/{opigno_scorm_id}/{opigno_scorm_sco_id}/commit'
+  defaults:
+    _controller: '\Drupal\wind_scorm\Controller\WindScormCourseScormController::scormCommit'
+    _title: 'Scorm commit'
+  requirements:
+    _role: 'authenticated'
+    opigno_scorm_id: \d+
+    opigno_scorm_sco_id: \d+
+  options:
+    _admin_route: FALSE
+wind_scorm.scorm_sco:
+  path: '/wind-scorm/player/sco/{wind_scorm_sco}'
+  defaults:
+    _controller: '\Drupal\wind_scorm\Controller\WindScormController::scormIntegrateSco'
+    _title: 'Integrate sco'
+  requirements:
+    _access: 'TRUE'
+    wind_scorm_sco: \d+
+  options:
+    _admin_route: FALSE
+wind_scorm.scorm_add:
+  path: '/scorm-package/add'
+  defaults:
+    _controller: '\Drupal\wind_scorm\Controller\WindScormPackageAddController::getContent'
+    _title: 'Add New SCORM Package'
+  requirements:
+    _role: 'authenticated'

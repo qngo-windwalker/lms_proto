@@ -1,0 +1,10 @@
+name: Opigno SCORM
+type: module
+description: It implements the SCORM feature in Opigno, allowing to load and play SCORM packages within Opigno trainings.
+core_version_requirement: ^8.8 || ^9
+package: Opigno
+
+# Information added by Drupal.org packaging script on 2020-08-12
+version: '8.x-1.8'
+project: 'opigno_scorm'
+datestamp: 1597249295

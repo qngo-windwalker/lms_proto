@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function wind_scorm_theme() {
+  return [
+    'wind_scorm__player' => [
+      'variables' => ['scorm_id' => NULL, 'tree' => [], 'start_sco' => NULL],
+      'template' => 'wind-scorm--player',
+    ],
+  ];
+}
+
+
+function wind_scorm_getTestSCO() {
+  $sco = new \stdClass();
+  $sco->id = "1";
+  $sco->scorm_id = "1";
+  $sco->organization = "DOI";
+  $sco->identifier = "item_1";
+  $sco->parent_identifier = "DOI";
+  $sco->launch = "app_assets/index.html";
+  $sco->type = "webcontent";
+  $sco->scorm_type = "sco";
+  $sco->title = "Course Introduction";
+  $sco->weight = "0";
+  $sco->attributes = array(
+    'control_mode_choice' => '1',
+    'control_mode_flow' => '0',
+    'control_mode_choice_exit' => '1',
+    'control_mode_forward_only' => '0',
+    'objectives' => [
+      array(
+        'primary' => TRUE,
+        'secondary' => FALSE,
+        'id' => 'PRIMARYOBJ',
+        'satisfied_by_measure' => FALSE,
+        'min_normalized_measure' => '.08',
+      ),
+      array(
+        'primary' => FALSE,
+        'secondary' => TRUE,
+        'id' => 'm01',
+      )
+    ]
+  );
+  return $sco;
+}
+
+function wind_scorm_getTestScorm(){
+  $scorm = new \stdClass();
+  $scorm->id = '1';
+  $scorm->fid = '1';
+  $scorm->extracted_dir = 'public://opigno_scorm_extracted/scorm_42';
+  $scorm->manifest_file = 'public://opigno_scorm_extracted/scorm_42/imsmanifest.xml';
+  $scorm->manifest_id = 'com.scorm.windwalker.runtime.minimumcalls.20043rd';
+  $scorm->metadata = 'a:2:{s:6:"schema";s:9:"ADL SCORM";s:13:"schemaversion";s:16:"2004 3rd Edition";}';
+
+  return $scorm;
+}
+
+function wind_scorm_getSCOTestPath(){
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = $module_handler->getModule('wind_scorm')->getPath();
+  //    return $GLOBALS['base_url'] .  '/' . $module_path . '/courses/test-1/app_assets/index.html';
+  return $GLOBALS['base_url'] .  '/' . $module_path . '/courses/RuntimeBasicCalls_SCORM20043rdEdition/shared/launchpage.html';
+}

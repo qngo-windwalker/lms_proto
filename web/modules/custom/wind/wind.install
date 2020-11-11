@@ -85,15 +85,9 @@ function _wind_create_home_page(){
 
   $node->save();
 
-  $source = '/node/' . $node->get('nid')->value;
-  // Todo: code below is not working. Find out why.
-//  \Drupal::service('path.alias_storage')->save($source, '/home', 'en');
-
   $node_es = $node->addTranslation('es');
   $node_es->title = 'Bienvenido!';
   $node_es->body->value = '<p>El cuerpo de mi nodo.</p>';
   $node_es->body->format = 'full_html';
   $node_es->save();
-  // Todo: code below is not working. Find out why.
-//  \Drupal::service('path.alias_storage')->save("/node/" . $node->id(), "/mi/ruta", "es");
 }

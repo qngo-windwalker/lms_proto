@@ -103,3 +103,11 @@ body.page-opigno_module-inner-modules update-activity .ic-drag-handle-black-24px
 #header-top{padding: 20px; background: #1a1a1a;}
 
 #seven-login-wrapper input{width: 100%; margin-bottom: 20px;}
+
+/*** [site]/scorm-course/take/{#} ***/
+body.route-wind_scorm-take_course #site-header {margin-bottom: 0;}
+body.route-wind_scorm-take_course #main{width: 100%; max-width: 100%; border: 0; margin: 0; padding: 0; box-shadow: none; border-radius: unset;}
+body.route-wind_scorm-take_course .scorm-ui-player-iframe-wrapper iframe{width: 100%; min-height: 800px; height: 100%; border: 0;}
+body.route-wind_scorm-take_course #page-title{display: none;}
+body.route-wind_scorm-take_course #content{padding-bottom: 0;}
+body.route-wind_scorm-take_course footer{display: none;}

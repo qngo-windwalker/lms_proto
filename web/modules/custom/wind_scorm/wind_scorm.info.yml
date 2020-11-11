@@ -1,0 +1,6 @@
+name: Wind SCORM
+description: SCORM integration for Drupal
+type: module
+package: Windwalker
+version: 1.0
+core_version_requirement: ^8.8 || ^9

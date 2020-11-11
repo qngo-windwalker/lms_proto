@@ -49,25 +49,22 @@
 {% include directory ~ '/templates/layout/header.html.twig' %}
 
 <div id="main" class="flex-column container">
-    <div class="{{ content_wrapper_classes }}">
-        <div id="main-content" class="row">
-            {% if page.top %}
-              <div id="page-title">
-                <div class="col-md-12">
-                  {{ page.top }}
-                </div>
+      <div id="main-content" class="row">
+          {% if page.top %}
+          <div id="page-title">
+              <div class="col-md-12">
+                {{ page.top }}
               </div>
-            {% endif %}
-                <div class="col-lg-12 p-static" id="content">
-                    <div class="message-wrapper">
-                        {{ page.status_messages }}
-                    </div>
-                    <div class="content-wrapper">
-                        {{ page.content }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% include directory ~ '/templates/layout/footer.html.twig' %}
+          </div>
+          {% endif %}
+          <div class="col-lg-12 p-static" id="content">
+              <div class="message-wrapper">
+                  {{ page.status_messages }}
+              </div>
+              <div class="content-wrapper">
+                  {{ page.content }}
+              </div>
+          </div>
+      </div>
 </div>
+{% include directory ~ '/templates/layout/footer.html.twig' %}

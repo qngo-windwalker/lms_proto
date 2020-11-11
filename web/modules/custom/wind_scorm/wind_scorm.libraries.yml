@@ -1,0 +1,3 @@
+scorm_player:
+  js:
+    js/wind_scorm.scorm_player.js: {}

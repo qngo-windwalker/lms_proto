@@ -298,17 +298,14 @@ function _wind_lms_gen_course_link($course_folder) {
   $link .= '&actor=' . urlencode($actorJson);
   return $link;
 }
+
 /**
  * @return string
  */
 function _wind_lms_get_scheme_and_http_host(){
   // Since we're using forward HTTP to HTTPS ($_SERVER[HTTP_X_FORWARDED_PROTO] = https),
-  // \Drupal::request()->getSchemeAndHttpHost() will return http://... on learn.clearinghousenavigator.com
+  // \Drupal::request()->getSchemeAndHttpHost() will return http://... on www.xxx.com
   // We have to make sure the URL is HTTPS
-  if ($_SERVER['HTTP_HOST'] == 'learn.clearinghousenavigator.com' && $_SERVER['REQUEST_SCHEME'] == 'http'){
-    $schemaAndHost = 'https://learn.clearinghousenavigator.com';
-  } else {
-    $schemaAndHost = \Drupal::request()->getSchemeAndHttpHost();
-  }
+  $schemaAndHost = \Drupal::request()->getSchemeAndHttpHost();
   return $schemaAndHost;
 }

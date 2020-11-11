@@ -22,7 +22,7 @@ function wind_theme_preprocess_html(&$variables){
       $variables['attributes']['class'][] = 'page-' . $name;
       list($section, ) = explode('/', $alias, 2);
       if (!empty($section)) {
-        $variables['attributes']['class'][] = 'section-' . $section;
+        $variables['attributes']['class'][] = 'path-' . $section;
       }
     }
   } else {
@@ -35,14 +35,18 @@ function wind_theme_preprocess_html(&$variables){
     $variables['attributes']['class'][] = 'user-logged-in';
   }
 
+  $routeName = \Drupal::routeMatch()->getRouteName();
+  // Add class name to body element using route name in [module].routing.yml
+  $variables['attributes']['class'][] = 'route-' . str_replace('.', '-', $routeName);
+
   if (isset($variables['node_type']) && $variables['node_type']) {
     $variables['attributes']['class'][] = 'page-node-' . $variables['node_type'];
-  } elseif (\Drupal::routeMatch()->getRouteName() == 'opigno_learning_path.manager.index') {
+  } elseif ($routeName == 'opigno_learning_path.manager.index') {
     $variables['attributes']['class'][] = 'page-node-learning_path';
   }
 
-  if (\Drupal::routeMatch()->getRouteName() == 'opigno_module.manager.get_item_form'
-    || \Drupal::routeMatch()->getRouteName() == 'opigno_group_manager.manager.get_item_form'
+  if ($routeName == 'opigno_module.manager.get_item_form'
+    || $routeName == 'opigno_group_manager.manager.get_item_form'
   ) {
     $variables['attributes']['class'][] = 'lp-iframe';
   }
