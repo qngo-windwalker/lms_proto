@@ -96,5 +96,4 @@ class OpignoScormController extends ControllerBase {
       return new JsonResponse(['error' => 1, 'message' => 'no data received']);
     }
   }
-
 }

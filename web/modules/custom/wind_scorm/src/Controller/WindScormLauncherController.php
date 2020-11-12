@@ -31,6 +31,15 @@ class WindScormLauncherController extends ControllerBase{
     ];
   }
 
+  public function getTitle($id) {
+    $element = wind_scorm_get_player_rendable_array_by_scorm_id($id);
+    if(!$element){
+      return 'Error: Unable to locate SCROM Package.';
+    }
+
+    return $element['#start_sco']->title;
+  }
+
   private function relaunchLink(){
     $module_handler = \Drupal::service('module_handler');
     $course_folder = $module_path = $module_handler->getModule('wind_scorm')->getPath() . '/courses/test-1';
@@ -46,19 +55,31 @@ class WindScormLauncherController extends ControllerBase{
       ]
     );
     $link =  Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
-    return '<p>Click ' . $link . ' to relaunch the course.';
+    return '<p class="mt-5">Click the link below to relaunch the course.</p>' . $link;
   }
 
   private function getReturnLink() {
-    $url = Url::fromUserInput(
-      '/dashboard',
-      [
-        'attributes' => [
-          'class' => ''
+    if(isset($_GET['dest'])){
+      $linkContent = '<i class="fas fa-arrow-circle-left"></i> Return to Previous Page';
+      $url = Url::fromUserInput(
+        $_GET['dest'],
+        [
+          'attributes' => [
+            'class' => ''
+          ]
         ]
-      ]
-    );
-    $linkContent = '<i class="fas fa-arrow-circle-left"></i> Return to Dashboard';
+      );
+    } else {
+      $linkContent = '<i class="fas fa-arrow-circle-left"></i> Return to Dashboard';
+      $url = Url::fromUserInput(
+        '/dashboard',
+        [
+          'attributes' => [
+            'class' => ''
+          ]
+        ]
+      );
+    }
     $renderedAnchorContent = render($linkContent);
     return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
   }

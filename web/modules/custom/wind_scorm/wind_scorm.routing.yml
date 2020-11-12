@@ -2,7 +2,7 @@ wind_scorm.scorm_launcher:
   path: '/scorm-launcher/{id}'
   defaults:
     _controller: '\Drupal\wind_scorm\Controller\WindScormLauncherController::getContent'
-    _title: 'Integrate sco'
+    _title_callback: '\Drupal\wind_scorm\Controller\WindScormLauncherController::getTitle'
   requirements:
     _role: 'authenticated'
     id: \d+

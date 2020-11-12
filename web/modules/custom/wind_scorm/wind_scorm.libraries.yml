@@ -1,3 +1,6 @@
 scorm_player:
   js:
     js/wind_scorm.scorm_player.js: {}
+course_popup:
+  js:
+    js/wind_scorm.course_popup.js: {}

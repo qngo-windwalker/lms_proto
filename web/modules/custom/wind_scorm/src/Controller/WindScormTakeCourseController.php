@@ -21,15 +21,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class WindScormTakeCourseController extends ControllerBase {
 
-  public function takeCourse(Request $request) {
-    $file = $this->getSCORMFile();
-    if (!$file) {
-      return;
-    }
-
+  public function takeCourse($id) {
     /** @var \Drupal\opigno_scorm\OpignoScorm $scorm_service */
     $scorm_service = \Drupal::service('opigno_scorm.scorm');
-    $scorm = $scorm_service->scormLoadByFileEntity($file);
+    $scorm = $scorm_service->scormLoadById($id);
 
     /** @var \Drupal\opigno_scorm\OpignoScormPlayer $scorm_player */
     $scorm_player = \Drupal::service('opigno_scorm.scorm_player');

@@ -108,25 +108,17 @@ class WindScormPackageController extends ControllerBase{
       'info' => array(
         '#markup' => $markup
       ),
-      'user_table' => $this->getUserTable($scorm->id)
+      'user_table' => $this->getUserTable($scorm->id),
+      'launch_link' => wind_scorm_get_lanuch_link_renable_array($scorm->id)
     ];
   }
 
   public function getTitleById($id){
-    $result = \Drupal::database()->select('opigno_scorm_packages', 'o')
-      ->fields('o', [])
-      ->condition('id', $id)
-      ->execute()
-      ->fetchAll();
-
-    if(!$result){
+    $element = wind_scorm_get_player_rendable_array_by_scorm_id($id);
+    if(!$element){
       return 'Error: Unable to locate SCROM Package.';
     }
 
-    $scorm = $result[0];
-    /** @var \Drupal\opigno_scorm\OpignoScormPlayer $scorm_player */
-    $scorm_player = \Drupal::service('opigno_scorm.scorm_player');
-    $element = $scorm_player->toRendarableArray($scorm);
     return $element['#start_sco']->title;
   }
 
