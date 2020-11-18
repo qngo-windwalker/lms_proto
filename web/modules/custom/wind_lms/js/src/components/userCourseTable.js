@@ -52,7 +52,15 @@ export default class UserCourseTable extends Component{
     var params = ['toolbar=no', 'scrollbars=no', 'location=no', 'statusbar=no', 'menubar=no', 'directories=no', 'titlebar=no', 'toolbar=no', 'resizable=1', 'height=' + screenHeight, 'width=1024'
       //            'fullscreen=yes' // only works in IE, but here for completeness
     ].join(',');
-    window.open(href, "window" + id, params);
+
+    let popupWin = window.open(href, "window" + id, params);
+    // Reload the page when user closes the course to view newly course progess
+    let timer = setInterval(function() {
+      if(popupWin.closed) {
+        clearInterval(timer);
+        location.reload();
+      }
+    }, 700);
   }
 
   isEnglishMode() {

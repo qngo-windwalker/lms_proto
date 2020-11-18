@@ -7,9 +7,9 @@
   Drupal.WindTincanAdminUserProgresses.initialized = false;
 
   Drupal.WindTincanAdminUserProgresses.init = function(Drupal, settings){
-    Drupal.WindTincanAdminUserProgresses.$table = $(settings.ch_nav.datatableElementId).DataTable({
+    Drupal.WindTincanAdminUserProgresses.$table = $(settings.windTincan.datatableElementId).DataTable({
       ajax : {
-        url : settings.ch_nav.datatableURL,
+        url : settings.windTincan.datatableURL,
       },
       initComplete: function(settings, json){
         // Add some magic.
@@ -28,8 +28,19 @@
         { data: 'stored_date'},
       ],
       rowId : 'rowUid',
-      // dom: 'Bfrtip',
-      // buttons: ['csv', 'pdf', 'print'],
+      // Dom positioning: https://datatables.net/examples/basic_init/dom.html
+      // f - Filtering input
+      // t - The Table!
+      // p - Pagination
+      dom: 'Bfrtip',
+      // @see https://datatables.net/extensions/buttons/examples/initialisation/export.html
+      buttons: [
+        {
+          extend: 'excelHtml5',
+          autoFilter: true,
+          sheetName: 'Exported data'
+        }
+      ],
       /**
        * @see Row grouping: https://datatables.net/release-datatables/examples/advanced_init/row_grouping.html
        * @param settings

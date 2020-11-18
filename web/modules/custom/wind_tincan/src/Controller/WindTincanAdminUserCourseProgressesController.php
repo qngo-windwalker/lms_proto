@@ -47,7 +47,7 @@ class WindTincanAdminUserCourseProgressesController extends ControllerBase{
           'wind_tincan/admin_user_course_progresses'
         ),
         'drupalSettings' => array(
-          'ch_nav' => array(
+          'windTincan' => array(
             'datatableURL' => $datatableURL,
             'datatableElementId' => '#' . $tableElemntId
           )
