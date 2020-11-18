@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\Core\Access\AccessResult;
 
 class WindTincanAdminUserCourseProgressesDatatableController extends ControllerBase{
   public function getContent() {
