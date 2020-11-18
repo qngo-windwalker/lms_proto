@@ -254,6 +254,11 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
       'folder' =>  'state-of-illinois-sexual-harassment-prevention-training',
       'tincan_course_id' => 'http://Harassment Prevention English'
     ];
+    $courses[] = [
+      'title' => 'Employee Health and Wellness: Pandemic at Work',
+      'folder' =>  'employee-health-and-wellness-pandemic-at-work-tincan-NaiQeBVx',
+      'tincan_course_id' => 'http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise'
+    ];
   }
 
   // We have a problem if this is the case
@@ -268,7 +273,6 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
 
   return $courses;
 }
-
 
 /**
  * @param $course_folder

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tincan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://projecttincan.com/tincan.xsd">
+  <activities>
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise" type="http://adlnet.gov/expapi/activities/course">
+      <name lang="en-US">Employee Health and Wellness: Pandemic at Work</name>
+      <description lang="en-US">Each day, in the US, thousands are contracting and dying from COVID-19. As an employee who performs essential functions, and must continue to work outside your home, you are on the frontlines of the pandemic.&amp;nbsp;&amp;nbsp;Because of your exposure to the general public, you must understand how to protect yourself, those around you, and implement practices to reduce the spread of the virus. This 30-minute web-based training will give you tools you can apply immediately to protect yourself and others. It will cover things such as effective handwashing, correct use of Personal Protective Equipment (also known as PPE), and how to distance yourself from others when in a public setting correctly.</description>
+      <launch lang="en-US">index.html</launch>
+    </activity>
+      <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/DE9KEUvcUF5bYNxiwDqSP07lTiGHwsd1" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Introduction/section</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/hS2W36GDg2b1fkzeboi9pF4JAE13FzLA" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Creating a Culture of Wellness/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/Hbzlf1DhdU9sYPjeBAHvuHpOrLU0K8I9" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">How Viruses Spread /blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/FqYKxJ2UzqlDqh4_-Ft1imJXELiv8ZO-" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Preventing the spread of viruses/section</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/ljDOJHTsDMHNw5tpRWY9_JAffqUZv09d" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Handwashing/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/EbordlqnMiGtY5ZYWsAJeU4p_cOfJdtp" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Personal Protective Equipment/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/R0TBJQqsrZKNBSkQ5-_N0ywAL0_NgUX6" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Social Distancing and General Precautions /blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/u_VFa75IIQ5UxjliYMEwv6CjVzXsX1hI" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Cleaning and Disinfecting/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/PS4-8Je07eXz68iL681OOeJ-4HpaEbBH" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Monitoring Your Health/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/gqs8o5l_-AVkFj4io5MFFmMSgzV3EZOX" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Conclusion/section</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/q3wzZxPyj6totHTp8stdvbwWCXMeevQG" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Summary/blocks</name>
+      <description lang="en-US"></description>
+    </activity>
+          <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz" type="http://adlnet.gov/expapi/activities/module">
+      <name lang="en-US">Pandemic at Work Quiz/quiz</name>
+      <description lang="en-US">Take this short quiz to check your knowledge!</description>
+    </activity>
+            
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz/cjyovbks400043b5yxqy0i9s9" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+      <name lang="en-US">What is Social Distancing?</name>
+      <description lang="en-US"></description>
+      <interactionType>choice</interactionType>
+      <correctResponsePatterns>
+            <correctResponsePattern>choice_cjyovbks400043b5yxqy0i9s9_cjyovbks400053b5yi8r78s8l</correctResponsePattern>
+            </correctResponsePatterns>
+            <choices>
+            <component>
+        <id>choice_cjyovbks400043b5yxqy0i9s9_cjyovbks400053b5yi8r78s8l</id>
+        <description lang="en-US">The practice of maintaining a greater than usual physical distance from other people or of avoiding direct contact with people or objects in public places during the outbreak of a contagious disease to minimize exposure and reduce the transmission of infection.&amp;nbsp;</description>
+      </component>
+            <component>
+        <id>choice_cjyovbks400043b5yxqy0i9s9_cjyovbks400063b5ynrepy1rp</id>
+        <description lang="en-US">The practice of working with others to maintain a greater than usual physical distances between groups of people who are not related or do not work in the same office during the outbreak of a contagious disease to minimize exposure and reduce the transmission of infection.</description>
+      </component>
+            <component>
+        <id>choice_cjyovbks400043b5yxqy0i9s9_cjyovtgis00353b5yuf6kcai5</id>
+        <description lang="en-US">The practice of maintaining emotional and psychological distance during the outbreak of a contagious disease to minimize exposure and reduce the transmission of infection.&amp;nbsp;</description>
+      </component>
+            </choices>
+          </activity>
+        
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz/cjyuj8m43003r3b63gynv3jaa" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+      <name lang="en-US">True or False:&amp;nbsp;&lt;br&gt;Viruses only spread through person to person contact.&amp;nbsp;</name>
+      <description lang="en-US"></description>
+      <interactionType>choice</interactionType>
+      <correctResponsePatterns>
+            <correctResponsePattern>choice_cjyuj8m43003r3b63gynv3jaa_cjyuj8m44003u3b63ktz3murb</correctResponsePattern>
+            </correctResponsePatterns>
+            <choices>
+            <component>
+        <id>choice_cjyuj8m43003r3b63gynv3jaa_cjyuj8m44003s3b63fv5mmriv</id>
+        <description lang="en-US">True&amp;nbsp;</description>
+      </component>
+            <component>
+        <id>choice_cjyuj8m43003r3b63gynv3jaa_cjyuj8m44003u3b63ktz3murb</id>
+        <description lang="en-US">False</description>
+      </component>
+            </choices>
+          </activity>
+        
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz/cjyuj4ba4003d3b63w44c6smj" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+      <name lang="en-US">Without proper hand washing, you can spread a virus whenever you: (Check all that apply)</name>
+      <description lang="en-US"></description>
+      <interactionType>choice</interactionType>
+      <correctResponsePatterns>
+            <correctResponsePattern>choice_cjyuj4ba4003d3b63w44c6smj_cjyuj4ba4003e3b63jn55h2h4</correctResponsePattern>
+            </correctResponsePatterns>
+            <choices>
+            <component>
+        <id>choice_cjyuj4ba4003d3b63w44c6smj_cjyuj4ba4003e3b63jn55h2h4</id>
+        <description lang="en-US">Touch your eyes, nose, and mouth with unwashed hands</description>
+      </component>
+            <component>
+        <id>choice_cjyuj4ba4003d3b63w44c6smj_cjyuj4ba4003f3b63252lcyhx</id>
+        <description lang="en-US">Prepare or eat food and drinks with unwashed hands</description>
+      </component>
+            <component>
+        <id>choice_cjyuj4ba4003d3b63w44c6smj_cjyujctks00403b63wpbsgp3v</id>
+        <description lang="en-US">Touch a contaminated surface or objects</description>
+      </component>
+            <component>
+        <id>choice_cjyuj4ba4003d3b63w44c6smj_cjyujcy7v00413b63uo6ppj9g</id>
+        <description lang="en-US">Blow your nose, cough, or sneeze into hands and then touch other people&amp;rsquo;s hands or everyday objects</description>
+      </component>
+            </choices>
+          </activity>
+        
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz/cjyovu1nk00373b5yrf272awm" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+      <name lang="en-US">True or False:&amp;nbsp;&lt;br&gt;During a pandemic, you should also wash your hands after you have been in a public place and touched an item or surface that may be frequently touched by other people, such as door handles, tables, gas pumps, shopping carts, or electronic cashier registers/screens, etc. and before touching your eyes, nose, or mouth.</name>
+      <description lang="en-US"></description>
+      <interactionType>choice</interactionType>
+      <correctResponsePatterns>
+            <correctResponsePattern>choice_cjyovu1nk00373b5yrf272awm_cjyovu1nk00383b5ytde7ewxk</correctResponsePattern>
+            </correctResponsePatterns>
+            <choices>
+            <component>
+        <id>choice_cjyovu1nk00373b5yrf272awm_cjyovu1nk00383b5ytde7ewxk</id>
+        <description lang="en-US">True</description>
+      </component>
+            <component>
+        <id>choice_cjyovu1nk00373b5yrf272awm_cjyovu1nk00393b5yt6j5bb4b</id>
+        <description lang="en-US">False</description>
+      </component>
+            </choices>
+          </activity>
+        
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz/cjyuiqln7002y3b63nhvzkbf2" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+      <name lang="en-US">Cloth face covers may be recommended during a pandemic, if you do wear a cloth face cover, it should: (Check all that apply)</name>
+      <description lang="en-US"></description>
+      <interactionType>choice</interactionType>
+      <correctResponsePatterns>
+            <correctResponsePattern>choice_cjyuiqln7002y3b63nhvzkbf2_cjyuiqln700303b63mqqlaw69</correctResponsePattern>
+            <correctResponsePattern>choice_cjyuiqln7002y3b63nhvzkbf2_cjyuirasq00313b630fakvqp8</correctResponsePattern>
+            <correctResponsePattern>choice_cjyuiqln7002y3b63nhvzkbf2_cjyuirhex00323b63gwxeorog</correctResponsePattern>
+            </correctResponsePatterns>
+            <choices>
+            <component>
+        <id>choice_cjyuiqln7002y3b63nhvzkbf2_cjyuiqln7002z3b63dimx648t</id>
+        <description lang="en-US">Cover your mouth but not your nose</description>
+      </component>
+            <component>
+        <id>choice_cjyuiqln7002y3b63nhvzkbf2_cjyuiqln700303b63mqqlaw69</id>
+        <description lang="en-US">Be secured with ties or ear loops</description>
+      </component>
+            <component>
+        <id>choice_cjyuiqln7002y3b63nhvzkbf2_cjyuirasq00313b630fakvqp8</id>
+        <description lang="en-US">Include multiple layers of fabric</description>
+      </component>
+            <component>
+        <id>choice_cjyuiqln7002y3b63nhvzkbf2_cjyuirhex00323b63gwxeorog</id>
+        <description lang="en-US">Allow for breathing without restriction</description>
+      </component>
+            </choices>
+          </activity>
+        
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz/ckagwvdeg002y3m5ydsesc1dt" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+      <name lang="en-US">To practice social distancing, you should: (Select all that apply)</name>
+      <description lang="en-US"></description>
+      <interactionType>choice</interactionType>
+      <correctResponsePatterns>
+            <correctResponsePattern>choice_ckagwvdeg002y3m5ydsesc1dt_ckagwvdeh002z3m5yx85zm2q2</correctResponsePattern>
+            <correctResponsePattern>choice_ckagwvdeg002y3m5ydsesc1dt_ckagwvdeh00303m5y4ccb459q</correctResponsePattern>
+            <correctResponsePattern>choice_ckagwvdeg002y3m5ydsesc1dt_ckagwvdeh00323m5yqmg8tpmk</correctResponsePattern>
+            </correctResponsePatterns>
+            <choices>
+            <component>
+        <id>choice_ckagwvdeg002y3m5ydsesc1dt_ckagwvdeh002z3m5yx85zm2q2</id>
+        <description lang="en-US">Stay at least 6 feet (2 meters) from other people</description>
+      </component>
+            <component>
+        <id>choice_ckagwvdeg002y3m5ydsesc1dt_ckagwvdeh00313m5y63gnn4gc</id>
+        <description lang="en-US">Only visit family members houses</description>
+      </component>
+            <component>
+        <id>choice_ckagwvdeg002y3m5ydsesc1dt_ckagwvdeh00323m5yqmg8tpmk</id>
+        <description lang="en-US">Avoid gathering in groups</description>
+      </component>
+            <component>
+        <id>choice_ckagwvdeg002y3m5ydsesc1dt_ckagwvdeh00303m5y4ccb459q</id>
+        <description lang="en-US">Stay out of crowded places and avoid mass gatherings</description>
+      </component>
+            </choices>
+          </activity>
+        
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz/ckagwx51b00333m5yrd7flt3f" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+      <name lang="en-US">What are some general ways you can protect yourself and others from the spread of viruses?&amp;nbsp;</name>
+      <description lang="en-US"></description>
+      <interactionType>choice</interactionType>
+      <correctResponsePatterns>
+            <correctResponsePattern>choice_ckagwx51b00333m5yrd7flt3f_ckagwx51b00343m5y2dijck66</correctResponsePattern>
+            <correctResponsePattern>choice_ckagwx51b00333m5yrd7flt3f_ckagwx51b00353m5yu6xprg8k</correctResponsePattern>
+            <correctResponsePattern>choice_ckagwx51b00333m5yrd7flt3f_ckagwx51b00373m5y4wtzw69q</correctResponsePattern>
+            <correctResponsePattern>choice_ckagwx51b00333m5yrd7flt3f_ckagwx51b00363m5y2zetad7j</correctResponsePattern>
+            </correctResponsePatterns>
+            <choices>
+            <component>
+        <id>choice_ckagwx51b00333m5yrd7flt3f_ckagwx51b00343m5y2dijck66</id>
+        <description lang="en-US">Cover coughs and sneezes using the inside of your elbow or a tissue.</description>
+      </component>
+            <component>
+        <id>choice_ckagwx51b00333m5yrd7flt3f_ckagwx51b00363m5y2zetad7j</id>
+        <description lang="en-US">Immediately wash your hands after coughing, sneezing and blowing your nose, or use hand sanitizer.&amp;nbsp;</description>
+      </component>
+            <component>
+        <id>choice_ckagwx51b00333m5yrd7flt3f_ckagwx51b00373m5y4wtzw69q</id>
+        <description lang="en-US">Clean and disinfect frequently touched surfaces.</description>
+      </component>
+            <component>
+        <id>choice_ckagwx51b00333m5yrd7flt3f_ckagwx51b00353m5yu6xprg8k</id>
+        <description lang="en-US">Use and frequently wash cloth face coverings.</description>
+      </component>
+            </choices>
+          </activity>
+        
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz/ckagwyivw00383m5y5ntp8wp2" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+      <name lang="en-US">True or False:&lt;br&gt;Cleaning and disinfecting your work area and home office are an essential part of preventing the spread of viruses.</name>
+      <description lang="en-US"></description>
+      <interactionType>choice</interactionType>
+      <correctResponsePatterns>
+            <correctResponsePattern>choice_ckagwyivw00383m5y5ntp8wp2_ckagwyivw00393m5ymbkc5x0i</correctResponsePattern>
+            </correctResponsePatterns>
+            <choices>
+            <component>
+        <id>choice_ckagwyivw00383m5y5ntp8wp2_ckagwyivw00393m5ymbkc5x0i</id>
+        <description lang="en-US">True</description>
+      </component>
+            <component>
+        <id>choice_ckagwyivw00383m5y5ntp8wp2_ckagwyivw003a3m5yv3iq3eqo</id>
+        <description lang="en-US">False</description>
+      </component>
+            </choices>
+          </activity>
+        
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz/ckagwzvxl003b3m5yediojgx1" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+      <name lang="en-US">You should attempt to isolate yourself from others if you experience the following symptoms: (Check all that apply)&amp;nbsp;</name>
+      <description lang="en-US"></description>
+      <interactionType>choice</interactionType>
+      <correctResponsePatterns>
+            <correctResponsePattern>choice_ckagwzvxl003b3m5yediojgx1_ckagwzvxl003c3m5yzpq3hy1w</correctResponsePattern>
+            <correctResponsePattern>choice_ckagwzvxl003b3m5yediojgx1_ckagwzvxl003d3m5yvvqrkon1</correctResponsePattern>
+            <correctResponsePattern>choice_ckagwzvxl003b3m5yediojgx1_ckagx0t9p003g3m5ypinp19eo</correctResponsePattern>
+            <correctResponsePattern>choice_ckagwzvxl003b3m5yediojgx1_ckagwzvxl003f3m5y6t6difyi</correctResponsePattern>
+            <correctResponsePattern>choice_ckagwzvxl003b3m5yediojgx1_ckagwzvxl003e3m5yga6frzkq</correctResponsePattern>
+            </correctResponsePatterns>
+            <choices>
+            <component>
+        <id>choice_ckagwzvxl003b3m5yediojgx1_ckagwzvxl003c3m5yzpq3hy1w</id>
+        <description lang="en-US">Cough&amp;nbsp;</description>
+      </component>
+            <component>
+        <id>choice_ckagwzvxl003b3m5yediojgx1_ckagwzvxl003e3m5yga6frzkq</id>
+        <description lang="en-US">Fever</description>
+      </component>
+            <component>
+        <id>choice_ckagwzvxl003b3m5yediojgx1_ckagwzvxl003f3m5y6t6difyi</id>
+        <description lang="en-US">Aches and Pains</description>
+      </component>
+            <component>
+        <id>choice_ckagwzvxl003b3m5yediojgx1_ckagwzvxl003d3m5yvvqrkon1</id>
+        <description lang="en-US">Nausea</description>
+      </component>
+            <component>
+        <id>choice_ckagwzvxl003b3m5yediojgx1_ckagx0t9p003g3m5ypinp19eo</id>
+        <description lang="en-US">Vomiting&amp;nbsp;</description>
+      </component>
+            </choices>
+          </activity>
+        
+    <activity id="http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise/62O5wZuL6f2GAOshCc8fkL3IYUMRcZsz/ckagx1muy003h3m5ym7q5wjli" type="http://adlnet.gov/expapi/activities/cmi.interaction">
+      <name lang="en-US">True or False:&lt;br&gt;A cough or sneeze can travel with a force of up to 100 feet per second.</name>
+      <description lang="en-US"></description>
+      <interactionType>choice</interactionType>
+      <correctResponsePatterns>
+            <correctResponsePattern>choice_ckagx1muy003h3m5ym7q5wjli_ckagx1muy003i3m5yzfu2iiui</correctResponsePattern>
+            </correctResponsePatterns>
+            <choices>
+            <component>
+        <id>choice_ckagx1muy003h3m5ym7q5wjli_ckagx1muy003i3m5yzfu2iiui</id>
+        <description lang="en-US">True</description>
+      </component>
+            <component>
+        <id>choice_ckagx1muy003h3m5ym7q5wjli_ckagx1muy003j3m5ys6ik7dk5</id>
+        <description lang="en-US">False&amp;nbsp;</description>
+      </component>
+            </choices>
+          </activity>
+            </activities>
+</tincan>
