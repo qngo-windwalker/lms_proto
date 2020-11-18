@@ -36,7 +36,7 @@ h2{color: rgb(117,121,137); }
 
 /* Common Drupal submit button. */
 #seven-login-wrapper #edit-submit,
-#edit-submit{ color: white; background: #077c94; border: none; border-radius: 3px; }
+#edit-submit{ padding: .6rem .7rem; color: white; background: #077c94; border: none; border-radius: 3px; }
 #edit-submit:hover { background: #044b59;}
 #edit-submit:focus { outline: #044b59;}
 
@@ -52,16 +52,13 @@ h2{color: rgb(117,121,137); }
 ********************************/
 /*** Front page ***/
 body.page-frontpage #page-title{padding-left: 25px; padding-right: 25px;}
-body.page-frontpage #main{width: 500px;}
+body.page-front.user-not-logged-in #main{width: 700px; margin: 100px auto;}
 /*body.page-frontpage #block-wind-theme-content,*/
 /*body.page-frontpage #main{background: transparent;}*/
-body.page-frontpage #block-wind-theme-page-title h1{text-align: center;}
-#seven-login-wrapper input{width: 100%; margin-bottom: 20px; border: 1px solid #ccc; border-radius: unset;}
-#seven-login-wrapper .col-md-6{width: 100%; max-width: 100%; flex: 0 0 100%; }
-#block-seven-login{margin-bottom: 80px; padding: 53px; }
-#block-seven-login ul{list-style: none; display: flex; padding: 0;}
-#block-seven-login ul li{width: 50%;}
-#block-seven-login ul li:last-child{text-align: right;}
+body.page-front #block-wind-theme-page-title h1{text-align: center;}
+body.page-front.user-not-logged-in .form-wrapper.user-login input{width: 100%; margin-bottom: 20px; border: 1px solid #ccc; border-radius: unset;}
+body.page-front.user-not-logged-in .form-wrapper.user-login .col-md-6{width: 100%; max-width: 100%; flex: 0 0 100%; }
+body.page-front.user-not-logged-in .form-wrapper.user-login{margin-bottom: 80px; padding: 53px; }
 
 /* [site]/user/login, [site]/user/register, [site]/user/password  */
 /*body.page-user input{ margin-bottom: 15px;}*/
