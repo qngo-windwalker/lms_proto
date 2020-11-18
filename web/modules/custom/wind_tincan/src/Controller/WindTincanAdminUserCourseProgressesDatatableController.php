@@ -52,6 +52,32 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
     return new JsonResponse(['data' => $collection]);
   }
 
+  /**
+   * Check the access to this form.
+   */
+  public function getAccess() {
+    $user = \Drupal::currentUser();
+
+    $userRoles = $user->getRoles();
+    if (in_array('administrator', $userRoles)) {
+      AccessResult::allowed();
+    }
+
+    if (in_array('admin', $userRoles)) {
+      AccessResult::allowed();
+    }
+
+    if (in_array('manager', $userRoles)) {
+      AccessResult::allowed();
+    }
+
+    if (wind_does_user_has_sudo($user)){
+      return AccessResult::allowed();
+    }
+
+    return  AccessResult::forbidden();
+  }
+
   function getCourseDataValue($coursesData, $key){
     $end = end($coursesData);
     switch ($key) {

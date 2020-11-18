@@ -64,4 +64,4 @@ wind_tincan.user.course_progress_datatable:
     _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminUserCourseProgressesDatatableController::getContent'
     _title: 'User Course Progresses'
   requirements:
-    _permission: 'administer users'
+    _custom_access: '\Drupal\wind_tincan\Controller\WindTincanAdminUserCourseProgressesDatatableController::getAccess'

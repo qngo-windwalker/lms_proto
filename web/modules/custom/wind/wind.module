@@ -20,3 +20,20 @@ function wind_user_login($account) {
   $response = new RedirectResponse('/dashboard');
   $response->send();
 }
+
+function wind_does_user_has_sudo($user) {
+  if ($user->id() == 1) {
+    return true;
+  }
+
+  $userRoles = $user->getRoles();
+  if (in_array('administrator', $userRoles)) {
+    return true;
+  }
+
+  if ($user->hasPermission('administer group') || $user->hasPermission('administer site configuration')) {
+    return true;
+  }
+
+  return false;
+}
