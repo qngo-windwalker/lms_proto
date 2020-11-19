@@ -24,11 +24,7 @@ export default class AllUserProgressTable extends Component{
     let url = new URL(window.location.href);
     let testParam = url.searchParams.get('test') ? 'test=true' : '';
     let langParam = this.isEnglishMode() ? 'en' : 'es';
-    axios.get(`/wind-tincan-course/course-progress-datatable/?lang=${langParam}&${testParam}`)
-      .then(res => {
-        this.initDataTable(res.data);
-        // this.addPopupClickEvent();
-      });
+    this.initDataTable(`/wind-tincan-course/course-progress-datatable/?lang=${langParam}&${testParam}`);
   }
 
   componentDidUpdate(){
@@ -53,7 +49,6 @@ export default class AllUserProgressTable extends Component{
     );
   }
 
-
   /**
    * @see https://stackoverflow.com/a/847196
    * @param unix_timestamp
@@ -73,7 +68,7 @@ export default class AllUserProgressTable extends Component{
     return ddmmyy;
   }
 
-  initDataTable(data) {
+  initDataTable(url) {
     let self = this;
     let columns = [
       {
@@ -107,15 +102,12 @@ export default class AllUserProgressTable extends Component{
         data: 'courseProgress'
       }
     ];
-    let url = new URL(window.location.href);
-    let testParam = url.searchParams.get('test') ? 'test=true' : '';
-    let langParam = this.isEnglishMode() ? 'en' : 'es';
     $(this.refs.main).DataTable({
       ajax : {
-        url : `/wind-tincan-course/course-progress-datatable/?lang=${langParam}&${testParam}`,
+        url : url,
       },
       rowId : 'rowUid',
-      data: data,
+      // data: data,
       columns: columns,
       // columnDefs: [ {
       //   "targets": 3,

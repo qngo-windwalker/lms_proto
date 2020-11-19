@@ -61,15 +61,15 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
 
     $userRoles = $user->getRoles();
     if (in_array('administrator', $userRoles)) {
-      AccessResult::allowed();
+      return AccessResult::allowed();
     }
 
     if (in_array('admin', $userRoles)) {
-      AccessResult::allowed();
+      return AccessResult::allowed();
     }
 
     if (in_array('manager', $userRoles)) {
-      AccessResult::allowed();
+      return AccessResult::allowed();
     }
 
     if (wind_does_user_has_sudo($user)){
