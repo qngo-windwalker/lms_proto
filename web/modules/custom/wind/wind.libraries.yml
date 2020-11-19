@@ -4,17 +4,13 @@ datatable:
     https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js: {type: external, minified: true}
     https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js: {type: external, minified: true}
     https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js: {type: external, minified: true}
-  css:
-    theme:
-      js/node_modules/datatables.net/css/buttons.dataTables.min.css: {}
-      css/dataTables.css: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
     - wind/datatable_css
-
+# separate CSS files from JS datatable above so it can be used in area where you don't need the JS files
 datatable_css:
   css:
     theme:
-      js/node_modules/datatables.net/css/buttons.dataTables.min.css: {}
+      https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css: {type: external}
       css/dataTables.css: {}
