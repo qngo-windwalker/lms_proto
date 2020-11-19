@@ -27,28 +27,30 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
 //      $licenseNode = $this->getUserLicense($uid);
 //      $coursesData = _wind_tincan_get_user_all_assigned_course_data($user);
       $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
-      $collection[] = [
-        'uid' => $uid,
-        'username' => $this->getUserNameLink($user),
-        'status' => $user->get('status')->value == 0 ? 'Inactive' : 'Active',
-        'mail' => $user->get('mail')->value,
-        'fullName' => $user->get('field_first_name')->value . ' ' . $user->get('field_last_name')->value,
-        'created' => $user->get('created')->value,
-        'login' => $user->get('login')->value,
-//        'field_service_desk_account_id' => $user->get('field_service_desk_account_id')->value,
-//        'jiraServiceDeskCustomerLink' => $this->getJiraServiceDeskCustomerLink($user->get('field_service_desk_account_id')->value),
-        'licenseLink' => '',
-        'field_paid' => '',
-//        'field_subscription_type' => $licenseNode ? $licenseNode->get('field_subscription_type')->value : '',
-        'field_clearinghouse_role' =>  '',
-//        'field_payment_date' => $licenseNode ? $licenseNode->get('field_payment_date')->value : '',
-//        'field_payment_amount' => $licenseNode ? $licenseNode->get('field_payment_amount')->value : '',
-        'field_enroll_date' => '',
-        'courseTitle' => $this->getCourseDataValue($coursesData, 'title'),
-        'courseTincanId' => $this->getCourseDataValue($coursesData, 'tincan_course_id'),
-        'courseProgress' => $this->getCourseDataValue($coursesData, 'progress'),
-        'stored_date' => ''
-      ];
+      foreach ($coursesData as $course){
+        $collection[] = [
+          'uid' => $uid,
+          'username' => $this->getUserNameLink($user),
+          'status' => $user->get('status')->value == 0 ? 'Inactive' : 'Active',
+          'mail' => $user->get('mail')->value,
+          'fullName' => $user->get('field_first_name')->value . ' ' . $user->get('field_last_name')->value,
+          'created' => $user->get('created')->value,
+          'login' => $user->get('login')->value,
+  //        'field_service_desk_account_id' => $user->get('field_service_desk_account_id')->value,
+  //        'jiraServiceDeskCustomerLink' => $this->getJiraServiceDeskCustomerLink($user->get('field_service_desk_account_id')->value),
+          'licenseLink' => '',
+          'field_paid' => '',
+  //        'field_subscription_type' => $licenseNode ? $licenseNode->get('field_subscription_type')->value : '',
+          'field_clearinghouse_role' =>  '',
+  //        'field_payment_date' => $licenseNode ? $licenseNode->get('field_payment_date')->value : '',
+  //        'field_payment_amount' => $licenseNode ? $licenseNode->get('field_payment_amount')->value : '',
+          'field_enroll_date' => '',
+          'courseTitle' => $this->getCourseDataValue($course, 'title'),
+          'courseTincanId' => $this->getCourseDataValue($course, 'tincan_course_id'),
+          'courseProgress' => $this->getCourseDataValue($course, 'progress'),
+          'stored_date' => ''
+        ];
+      }
     }
     return new JsonResponse(['data' => $collection]);
   }
@@ -79,11 +81,11 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
     return  AccessResult::forbidden();
   }
 
-  function getCourseDataValue($coursesData, $key){
+  function getCourseDataValue($course, $key){
     $end = end($coursesData);
     switch ($key) {
       case 'stored_date' :
-        $statement = $end['statement'];
+        $statement = $course['statement'];
         if (!$statement) {
           return '';
         }
@@ -91,7 +93,7 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
         return $this->formatTime($stored_date);
         break;
       default:
-        return isset($end[$key]) ? $end[$key] : '';
+        return isset($course[$key]) ? $course[$key] : '';
     }
     return '';
   }
