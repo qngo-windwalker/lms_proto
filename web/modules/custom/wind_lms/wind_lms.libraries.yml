@@ -11,3 +11,5 @@ datatable_users:
 dashboard:
   js:
     js/dist/wind_lms.dashboard.bundle.js: {}
+  dependencies:
+    - wind/datatable_css

@@ -1,11 +1,23 @@
 import React, {Component} from 'react';
 import axios from "axios";
+const $ = require('jquery');
+$.DataTable = require('datatables.net');
+// Needed for DataTable export buttons
+require( 'datatables.net-buttons' )();
+require( 'datatables.net-buttons/js/buttons.colVis.js' )();
+// Note: modules/jszip.min works, but the NPM version jszip does NOT work.
+require("../modules/jszip.min");
+require("pdfmake");
+require("../modules/vfs_fonts");
+//Print view button
+require( 'datatables.net-buttons/js/buttons.print.js' )();
+// Export to Excel button
+require( 'datatables.net-buttons/js/buttons.html5.js' )();
 
 export default class AllUserProgressTable extends Component{
   constructor(props) {
     super(props);
     this.state = { tableRow: [] };
-    this.courseClickHandler = this.courseClickHandler.bind(this);
   };
 
   componentDidMount() {
@@ -14,45 +26,13 @@ export default class AllUserProgressTable extends Component{
     let langParam = this.isEnglishMode() ? 'en' : 'es';
     axios.get(`/wind-tincan-course/course-progress-datatable/?lang=${langParam}&${testParam}`)
       .then(res => {
-        this.parseJson(res.data);
-        this.addPopupClickEvent();
+        this.initDataTable(res.data);
+        // this.addPopupClickEvent();
       });
   }
 
   componentDidUpdate(){
-    this.addPopupClickEvent();
-  }
-
-  addPopupClickEvent(){
-    const buttons = document.querySelectorAll('a.wind-scorm-popup-link');
-    for (const button of buttons) {
-      // Javascript doesn't have hasEventListener function.
-      // Add and attribute to make sure we only attach click handler 1 time.
-      if(!button.hasAttribute('data-listener-attached')){
-        // Add click event handler to modules from search result.
-        button.addEventListener('click', (e) => this.courseClickHandler(e));
-        button.setAttribute('data-listener-attached', 'click');
-      }
-    }
-  }
-
-  courseClickHandler(e){
-    let elem = e.currentTarget;
-    e.preventDefault();
-    if(elem.hasAttribute('data-coure-href')){
-      let href = elem.getAttribute('data-coure-href');
-      this.popup(href);
-    }
-  }
-
-  popup(href){
-    var day = new Date();
-    var id = day.getTime();
-    var screenHeight = screen.height >= 768 ? 700 : screen.height;
-    var params = ['toolbar=no', 'scrollbars=no', 'location=no', 'statusbar=no', 'menubar=no', 'directories=no', 'titlebar=no', 'toolbar=no', 'resizable=1', 'height=' + screenHeight, 'width=1024'
-      //            'fullscreen=yes' // only works in IE, but here for completeness
-    ].join(',');
-    window.open(href, "window" + id, params);
+    // this.addPopupClickEvent();
   }
 
   isEnglishMode() {
@@ -67,56 +47,12 @@ export default class AllUserProgressTable extends Component{
   render(){
     return (
       <>
-        <h3 className="mb-3">{this.isEnglishMode() ? 'Users Progress' : 'Progreso De Los Usuarios'}</h3>
-        <table className="table responsive-enabled mb-5" data-striping="1">
-          <thead  className="thead-light">
-          <tr>
-            <th>{this.isEnglishMode() ? 'Username' : ''}</th>
-            <th>{this.isEnglishMode() ? 'Email' : ''}</th>
-            <th>{this.isEnglishMode() ? 'Status' : 'Estado'}</th>
-            <th>{this.isEnglishMode() ? 'Enroll Date' : ''}</th>
-            <th>{this.isEnglishMode() ? 'Course' : 'Progreso'}</th>
-            <th>{this.isEnglishMode() ? 'Progress' : 'Progreso'}</th>
-          </tr>
-          </thead>
-          <tbody>
-          {this.state.tableRow.map((obj, index) => {
-            return obj.Comp;
-            // return this.rendertBodyRow(obj.name, obj.rateFormatted, obj.hours, obj.priceCalculatedFormatted, index);
-          })}
-          </tbody>
-        </table>
+        <h3 className="mb-3">{this.isEnglishMode() ? 'User Progress' : 'Progreso De Los Usuarios'}</h3>
+        <table id="user-progress-tbl" ref="main" className="table table-user-progress responsive-enabled mb-5" data-striping="1" />
       </>
     );
   }
 
-  rendertBodyRow(dataObj, key){
-    console.log(dataObj);
-    return(
-      <tr key={key}>
-        <td scope="row" className="text-left" dangerouslySetInnerHTML={{__html: dataObj.username}}></td>
-        <td>{dataObj.mail}</td>
-        <td>{dataObj.status}</td>
-        <td>{this.unixTimestampToTime(dataObj.created)}</td>
-        <td>{dataObj.courseTitle}</td>
-        <td dangerouslySetInnerHTML={{__html: dataObj.courseProgress}}></td>
-      </tr>
-    );
-  }
-
-  parseJson(data) {
-    let collection = [];
-    let dataObj = data.data;
-    for(let i = 0; i < dataObj.length; i++){
-      let Comp = this.rendertBodyRow(dataObj[i], i);
-      // If user has not made selected an option to this item, then skip it.
-      collection.push({Comp : Comp});
-    }
-    // const posts = res.data.data.children.map(obj => obj.data);
-    this.setState({
-      tableRow : collection
-    });
-  }
 
   /**
    * @see https://stackoverflow.com/a/847196
@@ -135,5 +71,98 @@ export default class AllUserProgressTable extends Component{
     let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
     let ddmmyy = date + ' ' + month + ' ' + year ;
     return ddmmyy;
+  }
+
+  initDataTable(data) {
+    let self = this;
+    let columns = [
+      {
+        title: 'Username',
+        // width: 120,
+        data: 'username',
+        className : "first-child"
+      },
+      {
+        title: 'Email',
+        data: 'mail'
+      },
+      {
+        title: 'Status',
+        data: 'status'
+      },
+      {
+        title: 'Enroll Date',
+        data: 'created',
+        // @see https://datatables.net/examples/basic_init/data_rendering.html
+        render : function(data, type){
+          return  (type === 'display') ?  self.unixTimestampToTime(data) : data;
+        }
+      },
+      {
+        title: 'Course',
+        data: 'courseTitle'
+      },
+      {
+        title: 'Progress',
+        data: 'courseProgress'
+      }
+    ];
+    let url = new URL(window.location.href);
+    let testParam = url.searchParams.get('test') ? 'test=true' : '';
+    let langParam = this.isEnglishMode() ? 'en' : 'es';
+    $(this.refs.main).DataTable({
+      ajax : {
+        url : `/wind-tincan-course/course-progress-datatable/?lang=${langParam}&${testParam}`,
+      },
+      rowId : 'rowUid',
+      data: data,
+      columns: columns,
+      // columnDefs: [ {
+      //   "targets": 3,
+      //   "data": function ( row, type, val, meta ) {
+      //     console.log(row)
+      //     console.log(type)
+      //     console.log(val)
+      //     return ;
+      //   }
+      // } ],
+      ordering: true,
+      paging : false,
+      // Dom positioning: https://datatables.net/examples/basic_init/dom.html
+      // f - Filtering input
+      // t - The Table!
+      // p - Pagination
+      dom: 'Bfrtip',
+      // @see https://datatables.net/extensions/buttons/examples/initialisation/export.html
+      buttons: [
+        // {
+        //   extend: 'excelHtml5',
+        //   autoFilter: true,
+        //   sheetName: 'User Progress data'
+        // },
+        'excelHtml5',
+        'csvHtml5',
+        'pdfHtml5',
+      ],
+      initComplete: this.onDataTableInitComplete,
+      /**
+       * @see Row grouping:
+       *   https://datatables.net/release-datatables/examples/advanced_init/row_grouping.html
+       * @param settings
+       */
+      drawCallback: function (settings) {
+        // Save it for documentation on how to modify table rows.
+        // var api = this.api();
+        // var rows = api.rows({page: 'current'}).nodes();
+
+        // For every row, add another row underneath it.
+        // rows.each(function(row, i){
+        // });
+      }
+    });
+  }
+  onDataTableInitComplete(settings, json){
+    // Add some magic.
+    $('#user-progress-tbl thead').addClass('thead-light');
   }
 }

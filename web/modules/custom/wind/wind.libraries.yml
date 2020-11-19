@@ -11,3 +11,10 @@ datatable:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - wind/datatable_css
+
+datatable_css:
+  css:
+    theme:
+      js/node_modules/datatables.net/css/buttons.dataTables.min.css: {}
+      css/dataTables.css: {}
