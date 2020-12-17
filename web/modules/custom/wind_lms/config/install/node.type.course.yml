@@ -1,0 +1,17 @@
+uuid: 89bd0a6b-72f8-4782-bc8f-a0ee806eb5bc
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Course
+type: course
+description: 'Create a new training course.'
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: true
