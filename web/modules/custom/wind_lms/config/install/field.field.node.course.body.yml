@@ -1,0 +1,23 @@
+uuid: 984d78d6-7fd3-4828-b470-eb5471ad1efc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.course
+  module:
+    - text
+id: node.course.body
+field_name: body
+entity_type: node
+bundle: course
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

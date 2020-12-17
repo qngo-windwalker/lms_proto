@@ -1,0 +1,27 @@
+uuid: 7f2db68d-7168-4653-8c4b-84d55730cc44
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_package_file
+    - node.type.course
+  module:
+    - file
+id: node.course.field_package_file
+field_name: field_package_file
+entity_type: node
+bundle: course
+label: 'Package File'
+description: 'Upload a SCORM or Tincan Zip file.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: course_files
+  file_extensions: zip
+  max_filesize: ''
+  description_field: false
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

@@ -1,0 +1,20 @@
+uuid: e36d9388-c00c-4a6a-b4b7-f91b003575f7
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - user
+id: node.field_learner
+field_name: field_learner
+entity_type: node
+type: entity_reference
+settings:
+  target_type: user
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
