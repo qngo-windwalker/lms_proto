@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "134543499b9a3b0f8518e12353d4f8cb",
+    "content-hash": "6554ec252ff4033488f0ff52d04412f1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2134,17 +2134,17 @@
         },
         {
             "name": "drupal/devel",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/devel.git",
-                "reference": "4.0.0"
+                "reference": "4.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/devel-4.0.0.zip",
-                "reference": "4.0.0",
-                "shasum": "6c01ef8dd4e926e63b08fe28dea5357c7caa49c9"
+                "url": "https://ftp.drupal.org/files/projects/devel-4.0.1.zip",
+                "reference": "4.0.1",
+                "shasum": "cf2458de1cbac00a88ed26ae3da2cf331e1bc047"
             },
             "require": {
                 "doctrine/common": "^2.7",
@@ -2172,8 +2172,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.0.0",
-                    "datestamp": "1592918495",
+                    "version": "4.0.1",
+                    "datestamp": "1600300079",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2270,18 +2270,80 @@
             }
         },
         {
-            "name": "drupal/jsonapi_extras",
-            "version": "3.15.0",
+            "name": "drupal/graphql",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/jsonapi_extras.git",
-                "reference": "8.x-3.15"
+                "url": "https://git.drupalcode.org/project/graphql.git",
+                "reference": "8.x-4.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jsonapi_extras-8.x-3.15.zip",
-                "reference": "8.x-3.15",
-                "shasum": "595c4a8f6597bb55f5c196e57cbcb204a5ee63aa"
+                "url": "https://ftp.drupal.org/files/projects/graphql-8.x-4.0.zip",
+                "reference": "8.x-4.0",
+                "shasum": "639dd29fb6005ba2b15a389f03a6596308c9f14e"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/typed_data": "*",
+                "php": ">=7.2",
+                "webonyx/graphql-php": "^14.3.0"
+            },
+            "require-dev": {
+                "drupal/node-node": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-4.0",
+                    "datestamp": "1607692423",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "fubhy",
+                    "homepage": "https://www.drupal.org/user/761344"
+                },
+                {
+                    "name": "joaogarin",
+                    "homepage": "https://www.drupal.org/user/612814"
+                },
+                {
+                    "name": "klausi",
+                    "homepage": "https://www.drupal.org/user/262198"
+                },
+                {
+                    "name": "pmelab",
+                    "homepage": "https://www.drupal.org/user/555322"
+                }
+            ],
+            "description": "Exposes your Drupal data model through a GraphQL schema.",
+            "homepage": "http://drupal.org/project/graphql",
+            "support": {
+                "source": "https://git.drupalcode.org/project/graphql"
+            }
+        },
+        {
+            "name": "drupal/jsonapi_extras",
+            "version": "3.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/jsonapi_extras.git",
+                "reference": "8.x-3.16"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/jsonapi_extras-8.x-3.16.zip",
+                "reference": "8.x-3.16",
+                "shasum": "7f8bfc6ea44a0a1af2370ea8079aa4ffa91a1f32"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
@@ -2294,8 +2356,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.15",
-                    "datestamp": "1594927280",
+                    "version": "8.x-3.16",
+                    "datestamp": "1599132031",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2378,6 +2440,50 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/typed_data",
                 "issues": "https://www.drupal.org/project/issues/typed_data"
+            }
+        },
+        {
+            "name": "drupal/userswitch",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/userswitch.git",
+                "reference": "8.x-1.9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/userswitch-8.x-1.9.zip",
+                "reference": "8.x-1.9",
+                "shasum": "5beee28d19d5892a3c51fb68b275bf145a5f459b"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.9",
+                    "datestamp": "1588498833",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "manish34jain",
+                    "homepage": "https://www.drupal.org/user/2336646"
+                }
+            ],
+            "description": "Switch user account.",
+            "homepage": "https://www.drupal.org/project/userswitch",
+            "support": {
+                "source": "https://git.drupalcode.org/project/userswitch"
             }
         },
         {
@@ -6197,16 +6303,16 @@
         },
         {
             "name": "webonyx/graphql-php",
-            "version": "v14.0.0",
+            "version": "v14.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "45d84562433613c6ee41e2421c95409d2b2664d6"
+                "reference": "aab3d49181467db064b41429cde117a7589625fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/45d84562433613c6ee41e2421c95409d2b2664d6",
-                "reference": "45d84562433613c6ee41e2421c95409d2b2664d6",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/aab3d49181467db064b41429cde117a7589625fc",
+                "reference": "aab3d49181467db064b41429cde117a7589625fc",
                 "shasum": ""
             },
             "require": {
@@ -6218,10 +6324,10 @@
                 "amphp/amp": "^2.3",
                 "doctrine/coding-standard": "^6.0",
                 "nyholm/psr7": "^1.2",
-                "phpbench/phpbench": "^0.14",
+                "phpbench/phpbench": "^0.16.10",
                 "phpstan/extension-installer": "^1.0",
-                "phpstan/phpstan": "0.12.18",
-                "phpstan/phpstan-phpunit": "0.12.6",
+                "phpstan/phpstan": "0.12.32",
+                "phpstan/phpstan-phpunit": "0.12.11",
                 "phpstan/phpstan-strict-rules": "0.12.2",
                 "phpunit/phpunit": "^7.2|^8.5",
                 "psr/http-message": "^1.0",
@@ -6249,7 +6355,7 @@
                 "api",
                 "graphql"
             ],
-            "time": "2020-06-21T12:53:32+00:00"
+            "time": "2020-12-03T16:05:21+00:00"
         }
     ],
     "packages-dev": [],
