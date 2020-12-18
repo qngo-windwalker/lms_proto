@@ -1,0 +1,45 @@
+uuid: 3ea672c8-afc8-4bca-b010-83853c027591
+langcode: en
+status: true
+dependencies: {  }
+id: company_admin
+label: 'Company Admin'
+weight: 5
+is_admin: null
+permissions:
+  - 'access administration pages'
+  - 'access content'
+  - 'access content overview'
+  - 'access site in maintenance mode'
+  - 'access taxonomy overview'
+  - 'access toolbar'
+  - 'access tour'
+  - 'access user profiles'
+  - 'administer account settings'
+  - 'administer nodes'
+  - 'administer taxonomy'
+  - 'administer users'
+  - 'change own username'
+  - 'create article content'
+  - 'create course content'
+  - 'create page content'
+  - 'create terms in tags'
+  - 'delete any article content'
+  - 'delete any course content'
+  - 'delete any page content'
+  - 'delete article revisions'
+  - 'delete course revisions'
+  - 'delete own article content'
+  - 'delete own course content'
+  - 'delete own page content'
+  - 'delete page revisions'
+  - 'delete terms in tags'
+  - 'edit any article content'
+  - 'edit any course content'
+  - 'edit any page content'
+  - 'edit own article content'
+  - 'edit own course content'
+  - 'edit own page content'
+  - 'edit terms in tags'
+  - 'view own unpublished content'
+  - 'view the administration theme'

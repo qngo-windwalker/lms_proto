@@ -1,0 +1,23 @@
+uuid: 7053706a-a2c2-4d65-aa28-0a8d86711f2f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_learner_access
+    - node.type.course
+id: node.course.field_learner_access
+field_name: field_learner_access
+entity_type: node
+bundle: course
+label: 'Accessible To All Leaners'
+description: "If checked, this course is available to all users in the system.<br />\r\nIf <strong>uncheck</strong>, this course is only be available to users in <strong>Learner</strong> field below."
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'Accessible To All'
+  off_label: Custom
+field_type: boolean
