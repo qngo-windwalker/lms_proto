@@ -1,6 +1,8 @@
 @import "../../../../core/themes/classy/css/components/messages.css";
 @import "../../../../core/modules/system/css/components/hidden.module.css";
 @import "message.css";
+/* Import style for Block Tabs menu*/
+@import "block_wind_theme_local_tasks.css";
 
 /********************************
   Site wide styles

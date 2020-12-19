@@ -1,0 +1,15 @@
+/* Tab menu
+ Inspired by Bootstrap
+ @see https://getbootstrap.com/docs/4.5/components/navs/
+ Display on the following pages:
+ [url]/node/#/ page
+ [url]/user/#/edit and Login / Reset you password */
+#block-wind-theme-local-tasks{margin-bottom: 35px;}
+#block-wind-theme-local-tasks ul{display: -ms-flexbox;  display: flex;  -ms-flex-wrap: wrap;  flex-wrap: wrap;  padding-left: 0;  margin-bottom: 0;  list-style: none; border-bottom: 1px solid #dee2e6;}
+#block-wind-theme-local-tasks ul:after{ clear: both;  display: table;  clear: both;  content: "";}
+#block-wind-theme-local-tasks ul li { display: list-item; margin: 0 0 -1px;  }
+#block-wind-theme-local-tasks ul a { display: flex; text-decoration: none; color: #545560;     flex-grow: 1;     font-weight: bold;
+  border: 1px solid transparent;  border-top-left-radius: .25rem;  border-top-right-radius: .25rem;
+  box-sizing: border-box;  min-height: 3rem; padding: 0.75rem  2rem;  font-size: 1rem;  line-height: 1.2rem; transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;}
+#block-wind-theme-local-tasks ul a:hover{ color: #0036b1;  background: #e6ecf8;  border-bottom: 3px solid #e6ecf8;}
+#block-wind-theme-local-tasks ul a.is-active { z-index: 1;  color: #003cc5; background-color: #fff;      border-right: none;  border-bottom: 3px solid #003cc5;  border-left: none;}
