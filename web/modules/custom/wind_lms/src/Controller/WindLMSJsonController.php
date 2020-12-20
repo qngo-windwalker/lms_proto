@@ -22,6 +22,11 @@ class WindLMSJsonController extends ControllerBase {
     ]);
   }
 
+  /**
+   * Render Json for userCourseTable.js ajax
+   * Path: [domain]/wind-lms/json/dashboard
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   */
   public function getCurrentDashboard(){
     $user = $this->currentUser();
     $rows = array();

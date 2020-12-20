@@ -11,6 +11,7 @@ use Drupal\opigno_group_manager\Entity\OpignoGroupManagedContent;
 use Drupal\opigno_module\Entity\OpignoActivity;
 use Drupal\opigno_group_manager\OpignoGroupContentTypesManager;
 use Drupal\Component\Serialization\Json;
+use Drupal\node\NodeInterface;
 
 //include_once('./inc/wind_lms.tincan.inc');
 module_load_include('inc', 'wind_lms', 'inc/wind_lms.tincan');
@@ -30,6 +31,95 @@ function wind_lms_theme($existing, $type, $theme, $path){
       'template' => 'wind-lms-dashboard'
     )
   );
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ *
+ * This tests saving a node on node insert.
+ *
+ * @see \Drupal\node\Tests\NodeSaveTest::testNodeSaveOnInsert()
+ */
+function wind_lms_node_insert(NodeInterface $node) {
+  // Set the node title to the node ID and save.
+  if ($node->getType() != 'course') {
+    return;
+  }
+  $field_package_file = $node->get('field_package_file')->getValue();
+  if(empty($field_package_file)){
+    return;
+  }
+
+  $fids = array_map(function($value){
+    return $value['target_id'];
+  }, $field_package_file);
+
+  $files = \Drupal::entityTypeManager()->getStorage('file')->loadMultiple($fids);
+
+  /* @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
+  $scorm_controller = \Drupal::service('opigno_scorm.scorm');
+
+  foreach ($files as $file){
+    // Create SCORM package from file.
+    $result = $scorm_controller->scormExtract($file);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for node entities.
+ * @param \Drupal\node\NodeInterface $node
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function wind_lms_node_update(NodeInterface $node) {
+  // Set the node title to the node ID and save.
+  if ($node->getType() != 'course') {
+    return;
+  }
+
+  /** @var  NodeInterface $originalNode */
+  $originalNode = $node->original;
+  $originalNodeField_package_file = $originalNode->get('field_package_file')->getValue();
+  $originalFids = array_map(function($value){
+    return $value['target_id'];
+  }, $originalNodeField_package_file);
+
+  $field_package_file = $node->get('field_package_file')->getValue();
+  $fids = array_map(function($value){
+    return $value['target_id'];
+  }, $field_package_file);
+
+  /* @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
+  $scorm_controller = \Drupal::service('opigno_scorm.scorm');
+
+  if(!empty($fids)){
+    $files = \Drupal::entityTypeManager()->getStorage('file')->loadMultiple($fids);
+
+    foreach ($files as $file){
+      $scorm = $scorm_controller->scormLoadByFileEntity($file);
+      // If this scorm already extracted, skip it.
+      if ($scorm) {
+        continue;
+      }
+
+      // Create SCORM package from file.
+      $result = $scorm_controller->scormExtract($file);
+    }
+  }
+
+  // array_diff will return $originalFids values that are not in $fids.
+  $diff = array_diff($originalFids, $fids);
+
+  if (!empty($diff)) {
+    foreach ($diff as $diff_file){
+      // Todo: Remove file to save disc space.
+    }
+  }
+
+}
+function _wind_lms_cleanup_package_files($originalFids, $fids){
+
 }
 
 function wind_lms_create_group_learning_path($title) {
@@ -271,9 +361,35 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
     $course += $progress;
   }
 
+  $nids = _wind_lms_get_all_courses_by_user($user);
+  $nids_2 =_wind_lms_get_all_courses_by_access_to_all_user();
   return $courses;
 }
 
+function _wind_lms_get_all_courses_by_user($user){
+  // https://www.drupal.org/docs/drupal-apis/entity-api/working-with-the-entity-api
+  $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+  $query->condition('type', 'course');
+  $query->condition('field_learner', 'IN', $user->id());
+  $result = $query->execute();
+
+  // If no result, return empty array.
+  if (empty($result)) {
+    return [];
+  }
+}
+
+function _wind_lms_get_all_courses_by_access_to_all_user(){
+  $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+  $query->condition('type', 'course');
+  $query->condition('field_learner_access', '1');
+  $result = $query->execute();
+
+  // If no result, return empty array.
+  if (empty($result)) {
+    return [];
+  }
+}
 /**
  * @param $course_folder
  *
