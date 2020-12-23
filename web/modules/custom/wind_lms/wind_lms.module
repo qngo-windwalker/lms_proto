@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Render\Markup;
 use Drupal\opigno_module\Entity\OpignoModule;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\group\Entity\Group;
@@ -328,26 +329,29 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
   $isTestActive = \Drupal::request()->get('test');
   // Add testing courses if user has permission and parameter test is true
   if($isTestActive == 'true'){
-    $courses[] = ['title' => 'Test Course', 'folder' => 'test_course', 'tincan_course_id' => 'test_abc123'];
-    $courses[] = ['title' => 'Le Rouge', 'folder' =>  'le-rouge-tincan-4SaXPWmj', 'tincan_course_id' => 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'];
+    $courses[] = ['title' => 'Test Course', 'type' => 'tincan', 'folder' => 'test_course', 'tincan_course_id' => 'test_abc123'];
+    $courses[] = ['title' => 'Le Rouge', 'type' => 'tincan', 'folder' =>  'le-rouge-tincan-4SaXPWmj', 'tincan_course_id' => 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'];
   }
 
   if ($language == 'es'){
     $courses[] = [
       'title' => 'Gobierno del Estado de Illinois: Curso de Capacitación para la Prevención del Acoso Sexual',
+      'type' => 'tincan',
       'folder' =>  'gobierno-del-estado-de-illinois-curso-de-capacitacion-para-la-prevencion-del-acoso-sexual',
       'tincan_course_id' => 'http://Harassment Prevention Spanish'
     ];
   } else {
     $courses[] = [
       'title' => 'State of Illinois Sexual Harassment Prevention Training',
+      'type' => 'tincan',
       'folder' =>  'state-of-illinois-sexual-harassment-prevention-training',
       'tincan_course_id' => 'http://Harassment Prevention English'
     ];
     $courses[] = [
       'title' => 'Employee Health and Wellness: Pandemic at Work',
+      'type' => 'tincan',
       'folder' =>  'employee-health-and-wellness-pandemic-at-work-tincan-NaiQeBVx',
-      'tincan_course_id' => 'http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise'
+      'tincan_course_id' => 'http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise',
     ];
   }
 
@@ -359,29 +363,34 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
   foreach ($courses as $index => &$course) {
     $progress = _wind_lms_course_add_tincan_course_data($user, $course['tincan_course_id']);
     $course += $progress;
+    $course['activity_link'] = _wind_lsm_build_tincan_course_Link($course['title'], $course['folder']);
   }
 
-  $nids = _wind_lms_get_all_courses_by_user($user);
-  $nids_2 =_wind_lms_get_all_courses_by_access_to_all_user();
-  return $courses;
+  $scorm_course_nids = _wind_lms_get_all_courses_by_user($user);
+  $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_get_all_courses_by_access_to_all_user());
+  $scorm_courses = _wind_lms_load_all_courses($scorm_course_nids);
+  return array_merge($courses, $scorm_courses);
 }
 
 function _wind_lms_get_all_courses_by_user($user){
   // https://www.drupal.org/docs/drupal-apis/entity-api/working-with-the-entity-api
   $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
   $query->condition('type', 'course');
-  $query->condition('field_learner', 'IN', $user->id());
+  $query->condition('status', 1);
+  $query->condition('field_learner', $user->id(), 'IN');
   $result = $query->execute();
 
   // If no result, return empty array.
   if (empty($result)) {
     return [];
   }
+  return $result;
 }
 
 function _wind_lms_get_all_courses_by_access_to_all_user(){
   $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
   $query->condition('type', 'course');
+  $query->condition('status', 1);
   $query->condition('field_learner_access', '1');
   $result = $query->execute();
 
@@ -389,7 +398,65 @@ function _wind_lms_get_all_courses_by_access_to_all_user(){
   if (empty($result)) {
     return [];
   }
+  return $result;
 }
+
+function _wind_lms_load_all_courses($nids){
+  $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids);
+  $courses = [];
+  foreach ($nodes as $nid => $node){
+    $field_package_file = $node->get('field_package_file')->getValue();
+    if (empty($field_package_file)) {
+      continue;
+    }
+
+    foreach ($field_package_file as $value) {
+      if(!$value['target_id']){
+        continue;
+      }
+
+      $scormFile = _wind_scorm_load_by_fid($value['target_id']);
+      if(!$scormFile){
+        continue;
+      }
+
+      $courses[] = [
+        'title' => $node->getTitle(),
+        'type' => 'scorm',
+        'scorm_package' => $scormFile,
+        'progress' => 'N/A',
+        'activity_link' => wind_scorm_get_lanuch_link_renable_array($scormFile->id)
+      ];
+    }
+  }
+
+  return $courses;
+}
+
+function _wind_scorm_load_by_fid($fid){
+//  $db = \Drupal\Core\Database\Database::getConnection();
+  $db = \Drupal::database();
+  $query = $db->select('opigno_scorm_packages', 'o');
+  $query->fields('o', []);
+  $query->condition('fid', $fid);
+  return $query->execute()->fetchObject();
+}
+
+function _wind_lsm_build_tincan_course_Link($title, $course_folder) {
+  $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . "<span> {$title}</span>";
+  $renderedAnchorContent = render($linkContent);
+  $url = Url::fromUserInput(
+    '/course/' . $course_folder,
+    [
+      'attributes' => [
+        'data-coure-href' => _wind_lms_gen_course_link($course_folder),
+        'class' => array('wind-scorm-popup-link', 'd-flex')
+      ]
+    ]
+  );
+  return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
+}
+
 /**
  * @param $course_folder
  *

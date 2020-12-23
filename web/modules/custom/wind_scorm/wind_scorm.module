@@ -68,18 +68,8 @@ function wind_scorm_getSCOTestPath(){
 }
 
 function wind_scorm_get_lanuch_link_renable_array($scorm_id) {
-  $label = 'test';
-  $url = Url::fromRoute(
-    'wind_scorm.scorm_launcher',
-    array('id' => $scorm_id),
-    array(
-      'query' => ['dest' =>  \Drupal::service('path.current')->getPath()],
-      'attributes' => array(
-        'class' => 'wind-scorm-popup-link',
-        'data-coure-href' => '/scorm-course/' . $scorm_id . '/take',
-      )
-    )
-  );
+  $label = 'Launch';
+  $url = _wind_scorm_get_scorm_launch_url($scorm_id);
   $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . $label;
   $renderedAnchorContent = render($linkContent);
   return  [
@@ -90,6 +80,20 @@ function wind_scorm_get_lanuch_link_renable_array($scorm_id) {
       ),
     )
   ];
+}
+
+function _wind_scorm_get_scorm_launch_url($scorm_id){
+  return Url::fromRoute(
+    'wind_scorm.scorm_launcher',
+    array('id' => $scorm_id),
+    array(
+      'query' => ['dest' =>  \Drupal::service('path.current')->getPath()],
+      'attributes' => array(
+        'class' => 'wind-scorm-popup-link',
+        'data-coure-href' => '/scorm-course/' . $scorm_id . '/take',
+      )
+    )
+  );
 }
 
 function wind_scorm_get_player_rendable_array_by_scorm_id($id) {
