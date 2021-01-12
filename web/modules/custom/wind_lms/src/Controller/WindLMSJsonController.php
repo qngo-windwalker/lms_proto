@@ -11,6 +11,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\user\Entity\User;
 use Drupal\Core\Render\Markup;
+use Symfony\Component\HttpFoundation\Response;
 
 class WindLMSJsonController extends ControllerBase {
   public function getCurrentUser(){
@@ -34,12 +35,20 @@ class WindLMSJsonController extends ControllerBase {
     foreach ($coursesData as $courseData) {
       $rows[] = $this->buildCourseRow($courseData);
     }
-//    return $rows;
-    return new JsonResponse([
+
+    $data = [
       'uid' => $user->id(),
       'name' => $user->getAccountName(),
       'tableRow' => $rows
-    ]);
+    ];
+
+    // For debugging
+    if(\Drupal::request()->get('pretty') == 'true') {
+      $output = '<pre>' . print_r($data, TRUE) . '</pre>';
+      return new Response($output, 200, array());
+    }
+
+    return new JsonResponse($data);
   }
 
   public function getUserVRCourse(User $user){
@@ -92,6 +101,10 @@ class WindLMSJsonController extends ControllerBase {
         $this->buildCourseLink($title, $course_folder),
         $progress,
         $certificateLink,
+        'courseLink' => $this->buildCourseLink($title, $course_folder),
+        'progress' => $progress,
+        'certificateLink' => $certificateLink,
+        'package_files' => isset($courseData['package_files']) ? $courseData['package_files'] : [],
       ),
       'class' => array('course-row'),
       'data-tincan-id' =>$TC_COURSE_ID

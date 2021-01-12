@@ -366,9 +366,12 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
     $course['activity_link'] = _wind_lsm_build_tincan_course_Link($course['title'], $course['folder']);
   }
 
+  // Get all of the course nid(s) assigned to $user
   $scorm_course_nids = _wind_lms_get_all_courses_by_user($user);
+  // Combined with of course nid(s) that are available to everyone - "Accessible To All Leaners" field checked
   $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_get_all_courses_by_access_to_all_user());
-  $scorm_courses = _wind_lms_load_all_courses($scorm_course_nids);
+  // Load all of the nid(s) to get course data
+  $scorm_courses = _wind_lms_load_all_courses($scorm_course_nids, $user);
   return array_merge($courses, $scorm_courses);
 }
 
@@ -401,7 +404,7 @@ function _wind_lms_get_all_courses_by_access_to_all_user(){
   return $result;
 }
 
-function _wind_lms_load_all_courses($nids){
+function _wind_lms_load_all_courses($nids, $user){
   $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids);
   $courses = [];
   foreach ($nodes as $nid => $node){
@@ -425,12 +428,72 @@ function _wind_lms_load_all_courses($nids){
         'type' => 'scorm',
         'scorm_package' => $scormFile,
         'progress' => 'N/A',
-        'activity_link' => wind_scorm_get_lanuch_link_renable_array($scormFile->id)
+        'progress' => _wind_lms_get_user_course_progress($node, $user->id()),
+        'activity_link' => wind_scorm_get_lanuch_link_renable_array($scormFile->id),
+        'package_files' => _wind_lms_get_course_scorm_packages($node, $user->id()),
       ];
     }
   }
 
   return $courses;
+}
+
+/**
+ * @param \Drupal\node\NodeInterface $node
+ * @param $uid
+ *
+ * @return array
+ */
+function _wind_lms_get_course_scorm_packages(NodeInterface $node, $uid) {
+  $data = array();
+  /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $zipFiles */
+  $zipFiles = $node->get('field_package_file');
+  /** @var \Drupal\file\Entity\File $file */
+  foreach ($zipFiles->referencedEntities() as $key => $file) {
+    $scorm = _wind_scorm_load_by_fid($file->id());
+    $data[$key] = array(
+      'title' => '',
+      'file_name' => $file->label(),
+      'scorm_package' => $scorm,
+      'activity_link' => wind_scorm_get_lanuch_link_renable_array($scorm->id),
+      'progress' => _wind_lms_get_user_scorm_package_progress($file, $uid),
+    );
+  }
+
+  return $data;
+}
+
+function _wind_lms_get_user_course_progress($node, $uid){
+  $scorm_controller = \Drupal::service('opigno_scorm.scorm');
+
+  /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $zipFiles */
+  $zipFiles = $node->get('field_package_file');
+
+  foreach ($zipFiles->referencedEntities() as $file) {
+    return _wind_lms_get_user_scorm_package_progress($file, $uid);
+  }
+  return null;
+}
+
+function _wind_lms_get_user_scorm_package_progress($file, $uid) {
+  $db = \Drupal::database();
+  $scorm_controller = \Drupal::service('opigno_scorm.scorm');
+  $scorm = $scorm_controller->scormLoadByFileEntity($file);
+  $data = NULL;
+  $result = $db->select('opigno_scorm_scorm_cmi_data', 'o')
+    ->fields('o', array('value', 'serialized'))
+    ->condition('o.uid', $uid)
+    ->condition('o.scorm_id', $scorm->id)
+    ->condition('o.cmi_key', 'cmi.completion_status')
+    ->execute()
+    ->fetchObject();
+
+  if (isset($result->value)) {
+    $data = !empty($result->serialized) ? unserialize($result->value) : $result->value;
+    return $data;
+  }
+
+  return null;
 }
 
 function _wind_scorm_load_by_fid($fid){
