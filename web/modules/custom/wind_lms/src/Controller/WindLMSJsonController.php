@@ -92,26 +92,28 @@ class WindLMSJsonController extends ControllerBase {
 
   protected function buildCourseRow($courseData) {
     $title = $courseData['title'];
-    $course_folder = $courseData['folder'];
-    $TC_COURSE_ID = $courseData['tincan_course_id'];
     $progress = $courseData['progress'];
     $certificateLink = $progress != 'Completed' ? 'N/A' : $this->getCourseCertificate($courseData);
     return [
       'data' => array(
-        $this->buildCourseLink($title, $course_folder),
+        $this->buildCourseLink($title, $courseData),
         $progress,
         $certificateLink,
-        'courseLink' => $this->buildCourseLink($title, $course_folder),
+        'courseLink' => $this->buildCourseLink($title, $courseData),
         'progress' => $progress,
         'certificateLink' => $certificateLink,
         'package_files' => isset($courseData['package_files']) ? $courseData['package_files'] : [],
       ),
       'class' => array('course-row'),
-      'data-tincan-id' =>$TC_COURSE_ID
+      'data-tincan-id' => isset($courseData['tincan_course_id']) ?  $courseData['tincan_course_id'] : ''
     ];
   }
 
-  protected function buildCourseLink($title, $course_folder) {
+  protected function buildCourseLink($title, $courseData) {
+    if(!isset($courseData['folder'])){
+      return '';
+    }
+    $course_folder = $courseData['folder'];
     $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . "<span> {$title}</span>";
     $renderedAnchorContent = render($linkContent);
     $url = Url::fromUserInput(
