@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOMServer from "react-dom/server";
 import axios from "axios";
 
 export default class UserCourseTable extends Component{
@@ -97,12 +98,30 @@ export default class UserCourseTable extends Component{
 
   rendertBodyRow(dataObj, key){
     return(
-      <tr key={key}>
-        <td scope="row" className="text-left" dangerouslySetInnerHTML={{__html: dataObj.data[0]}}></td>
-        <td>{dataObj.data[1]}</td>
-        <td dangerouslySetInnerHTML={{__html: dataObj.data[2]}}></td>
+      <tr key={key} data-nid={dataObj.data['nid']}>
+        <td scope="row" className="text-left" dangerouslySetInnerHTML={{__html: this.getColumnNameContent(dataObj)}}></td>
+        <td>{dataObj.data['progress']}</td>
+        <td dangerouslySetInnerHTML={{__html: dataObj.data['certificateLink']}}></td>
       </tr>
     );
+  }
+
+  getColumnNameContent(dataObj) {
+    // If this course has more than 1 zip files, render the zip course as a list item.
+    if(dataObj.data['package_files'].length > 1){
+      return ReactDOMServer.renderToString(
+        <>
+          {dataObj.data['title']}
+          <ul className="list-unstyled ml-3">
+            {dataObj.data['package_files'].map((obj, index) => {
+              return (<li key={index} dangerouslySetInnerHTML={{__html: obj.activity_link['#markup']}}></li>);
+            })}
+          </ul>
+        </>
+      );
+    }
+    // In case when a course node is created but zip file is no available. Show the title so it's easier to troubleshoot.
+    return dataObj.data['courseLink'] ?  dataObj.data['courseLink'] :  dataObj.data['title'];
   }
 
   parseJson(data) {

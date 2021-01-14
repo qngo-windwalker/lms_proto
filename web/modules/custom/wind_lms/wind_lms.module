@@ -409,30 +409,18 @@ function _wind_lms_load_all_courses($nids, $user){
   $courses = [];
   foreach ($nodes as $nid => $node){
     $field_package_file = $node->get('field_package_file')->getValue();
+    // If there's no zip package attached to this node, skip it - nothing to launch.
     if (empty($field_package_file)) {
       continue;
     }
 
-    foreach ($field_package_file as $value) {
-      if(!$value['target_id']){
-        continue;
-      }
-
-      $scormFile = _wind_scorm_load_by_fid($value['target_id']);
-      if(!$scormFile){
-        continue;
-      }
-
-      $courses[] = [
-        'title' => $node->getTitle(),
-        'type' => 'scorm',
-        'scorm_package' => $scormFile,
-        'progress' => 'N/A',
-        'progress' => _wind_lms_get_user_course_progress($node, $user->id()),
-        'activity_link' => wind_scorm_get_lanuch_link_renable_array($scormFile->id),
-        'package_files' => _wind_lms_get_course_scorm_packages($node, $user->id()),
-      ];
-    }
+    $courses[] = [
+      'title' => $node->label(),
+      'type' => 'scorm',
+      'nid' => $node->id(),
+      'progress' => _wind_lms_get_user_course_progress($node, $user->id()),
+      'package_files' => _wind_lms_get_course_scorm_packages($node, $user->id()),
+    ];
   }
 
   return $courses;
@@ -451,11 +439,16 @@ function _wind_lms_get_course_scorm_packages(NodeInterface $node, $uid) {
   /** @var \Drupal\file\Entity\File $file */
   foreach ($zipFiles->referencedEntities() as $key => $file) {
     $scorm = _wind_scorm_load_by_fid($file->id());
+    // todo: why it failed to find the file.
+    if (!$scorm) {
+      continue;
+    }
+    $title =  _wind_lms_get_scorm_package_title($scorm->id);
     $data[$key] = array(
-      'title' => _wind_lms_get_scorm_package_title($scorm->id),
+      'title' => $title,
       'file_name' => $file->label(),
       'scorm_package' => $scorm,
-      'activity_link' => wind_scorm_get_lanuch_link_renable_array($scorm->id),
+      'activity_link' => wind_scorm_get_lanuch_link_renable_array($scorm->id, $title),
       'progress' => _wind_lms_get_user_scorm_package_progress($file, $uid),
     );
   }

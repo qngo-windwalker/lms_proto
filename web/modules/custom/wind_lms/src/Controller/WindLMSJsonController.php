@@ -99,10 +99,12 @@ class WindLMSJsonController extends ControllerBase {
         $this->buildCourseLink($title, $courseData),
         $progress,
         $certificateLink,
+        'title' => $title,
         'courseLink' => $this->buildCourseLink($title, $courseData),
         'progress' => $progress,
         'certificateLink' => $certificateLink,
         'package_files' => isset($courseData['package_files']) ? $courseData['package_files'] : [],
+        'nid' => isset($courseData['nid']) ? $courseData['nid'] : '',
       ),
       'class' => array('course-row'),
       'data-tincan-id' => isset($courseData['tincan_course_id']) ?  $courseData['tincan_course_id'] : ''
