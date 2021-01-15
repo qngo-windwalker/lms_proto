@@ -72,6 +72,15 @@ body.page-user.page-user-login #block-wind-theme-local-tasks,
 body.page-user.page-user-password #block-wind-theme-local-tasks,
 body.page-user.page-user-register #block-wind-theme-local-tasks{ display: none;}
 
+/*** [site]/node/{nid} ***/
+body.path-node article div:last-child > div:last-child  {margin-bottom: 1rem;}
+body.path-node article div:last-child > div > div:first-child {font-weight: bold;}
+body.path-node footer {color: #545560; margin-bottom: 1rem;} /*Author info. Ex: Submitted by admin on Thu, 12/17/2020 - 15:36 */
+
+/*** [site]/user/{uid} ***/
+body.page-not-front.path-user.user-logged-in article > div {margin-bottom: 1rem;}
+body.page-not-front.path-user.user-logged-in article > div > div:first-child{font-weight: bold;}
+
 /*** [site]/manager ***/
 /* Datatable */
 .dataTables_info{color: #8e8e8e;} /*Applies to 'Showing # to # of # entries' */
