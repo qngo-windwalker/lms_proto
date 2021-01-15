@@ -117,10 +117,10 @@ function wind_lms_node_update(NodeInterface $node) {
       // Todo: Remove file to save disc space.
     }
   }
-
 }
-function _wind_lms_cleanup_package_files($originalFids, $fids){
 
+function _wind_lms_cleanup_package_files($originalFids, $fids){
+  // Todo: Housekeeping for deleted course node or removal of package.
 }
 
 function wind_lms_create_group_learning_path($title) {
@@ -474,8 +474,6 @@ function _wind_lms_get_scorm_package_title($scorm_id) {
 }
 
 function _wind_lms_get_user_course_progress($node, $uid){
-  $scorm_controller = \Drupal::service('opigno_scorm.scorm');
-
   /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $zipFiles */
   $zipFiles = $node->get('field_package_file');
 
@@ -490,6 +488,9 @@ function _wind_lms_get_user_scorm_package_progress($file, $uid) {
   /** @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
   $scorm_controller = \Drupal::service('opigno_scorm.scorm');
   $scorm = $scorm_controller->scormLoadByFileEntity($file);
+  if(!$scorm){
+    return 'Unable to process SCORM package';
+  }
   $data = NULL;
   $result = $db->select('opigno_scorm_scorm_cmi_data', 'o')
     ->fields('o', array('value', 'serialized'))

@@ -92,7 +92,6 @@ class WindScormPackageController extends ControllerBase{
       ],
     ];
 
-
     return ['table' =>
       array(
         '#type' => 'table',

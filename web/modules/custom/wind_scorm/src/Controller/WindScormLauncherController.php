@@ -12,6 +12,7 @@ use Drupal\Core\Access\AccessResult;
 
 class WindScormLauncherController extends ControllerBase{
 
+  // This page is a contengency in case of the Javascript failed to popup the window due to popup blocker.
   public function getContent($id) {
     $output = '<p>We launched your course in a new window but if you do not see it, a popup blocker may be preventing it from opening. Please disable popup blockers for this site.</p>';
     $output .= $this->getReturnLink();
@@ -19,14 +20,6 @@ class WindScormLauncherController extends ControllerBase{
     return [
       'content' => [
         '#markup' => $output
-      ],
-    ];
-  }
-
-  public function courseRender() {
-    return [
-      'content' => [
-        '#markup' => '<p>coming soon</p>',
       ],
     ];
   }

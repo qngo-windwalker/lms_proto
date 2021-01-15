@@ -25,6 +25,7 @@ class WindScormAdminContentPackageController extends ControllerBase{
       array('data' => 'Title', 'class' => 'header-title'),
       array('data' => 'ID', 'class' => 'header-id'),
       array('data' => 'FID', 'class' => 'header-fid'),
+      array('data' => 'Course', 'class' => 'header-course'),
       array('data' => 'Extracted Dir', 'class' => 'header-dir'),
       array('data' => 'Namifest ID', 'class' => 'header-manifest'),
       array('data' => 'Meta Data', 'class' => 'header-meta-data'),
@@ -71,11 +72,13 @@ class WindScormAdminContentPackageController extends ControllerBase{
     foreach ($result as $obj) {
       $element = $scorm_player->toRendarableArray($obj);
       $title = $element['#start_sco']->title;
+      $courseNode = $this->getCourseByFileId($obj->id);
 
       $rows[$obj->id] = array(
         $this->getLink($obj->id, $title),
         $this->getLink($obj->id, $obj->id),
         $obj->fid,
+        $courseNode ? $this->getCourseLink($courseNode) : '',
         $obj->extracted_dir,
         // This info is not important. Ex: public://opigno_scorm_extracted/scorm_27/imsmanifest.xml.
 //        $obj->manifest_file,
@@ -97,6 +100,32 @@ class WindScormAdminContentPackageController extends ControllerBase{
     );
     $linkContent = '<i class="fas fa-pen"></i> ' . $label;
     $renderedAnchorContent = render($linkContent);
+    return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
+  }
+
+  private function getCourseByFileId($id) {
+    $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+    $query->condition('type', 'course');
+    $query->condition('field_package_file', $id, 'IN');
+    $result = $query->execute();
+
+    // If no result, return empty array.
+    if (empty($result)) {
+      return false;
+    }
+    return \Drupal\node\Entity\Node::load(array_shift($result));
+  }
+
+  private function getCourseLink(\Drupal\Core\Entity\EntityBase $courseNode) {
+    $linkContent = "<span> {$courseNode->label()}</span>";
+    $renderedAnchorContent = render($linkContent);
+    $url = Url::fromUserInput(
+      '/node/' . $courseNode->id(),
+      [
+        'attributes' => [
+        ]
+      ]
+    );
     return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
   }
 
