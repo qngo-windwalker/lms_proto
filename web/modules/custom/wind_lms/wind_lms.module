@@ -329,8 +329,30 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
   $isTestActive = \Drupal::request()->get('test');
   // Add testing courses if user has permission and parameter test is true
   if($isTestActive == 'true'){
-    $courses[] = ['title' => 'Test Course', 'type' => 'tincan', 'folder' => 'test_course', 'tincan_course_id' => 'test_abc123'];
-    $courses[] = ['title' => 'Le Rouge', 'type' => 'tincan', 'folder' =>  'le-rouge-tincan-4SaXPWmj', 'tincan_course_id' => 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'];
+    $courses[] = [
+      'title' => 'Test Course',
+      'type' => 'tincan',
+      'package_files' => array(
+        [
+          'course_data' => _wind_lms_course_add_tincan_course_data($user, 'test_abc123'),
+          'activity_link' => _wind_lms_build_tincan_course_link('Test Course', 'test_course')
+        ]
+      ),
+      'folder' => 'test_course',
+      'tincan_course_id' => 'test_abc123'
+    ];
+    $courses[] = [
+      'title' => 'Le Rouge',
+      'type' => 'tincan',
+      'package_files' => array(
+        [
+          'course_data' => _wind_lms_course_add_tincan_course_data($user, 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'),
+          'activity_link' => _wind_lms_build_tincan_course_link('Le Rouge', 'le-rouge-tincan-4SaXPWmj')
+        ]
+      ),
+      'folder' =>  'le-rouge-tincan-4SaXPWmj',
+      'tincan_course_id' => 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'
+    ];
   }
 
   if ($language == 'es'){
@@ -338,18 +360,36 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
       'title' => 'Gobierno del Estado de Illinois: Curso de Capacitación para la Prevención del Acoso Sexual',
       'type' => 'tincan',
       'folder' =>  'gobierno-del-estado-de-illinois-curso-de-capacitacion-para-la-prevencion-del-acoso-sexual',
-      'tincan_course_id' => 'http://Harassment Prevention Spanish'
+      'tincan_course_id' => 'http://Harassment Prevention Spanish',
+      'package_files' => array(
+        [
+          'course_data' => _wind_lms_course_add_tincan_course_data($user, 'http://Harassment Prevention Spanish'),
+          'activity_link' => _wind_lms_build_tincan_course_link('Gobierno del Estado de Illinois: Curso de Capacitación para la Prevención del Acoso Sexual', 'gobierno-del-estado-de-illinois-curso-de-capacitacion-para-la-prevencion-del-acoso-sexual')
+        ]
+      ),
     ];
   } else {
     $courses[] = [
       'title' => 'State of Illinois Sexual Harassment Prevention Training',
       'type' => 'tincan',
+      'package_files' => array(
+        [
+          'course_data' => _wind_lms_course_add_tincan_course_data($user, 'http://Harassment Prevention English'),
+          'activity_link' => _wind_lms_build_tincan_course_link('State of Illinois Sexual Harassment Prevention Training', 'state-of-illinois-sexual-harassment-prevention-training')
+        ]
+      ),
       'folder' =>  'state-of-illinois-sexual-harassment-prevention-training',
       'tincan_course_id' => 'http://Harassment Prevention English'
     ];
     $courses[] = [
       'title' => 'Employee Health and Wellness: Pandemic at Work',
       'type' => 'tincan',
+      'package_files' => array(
+        [
+          'course_data' => _wind_lms_course_add_tincan_course_data($user, 'http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise'),
+          'activity_link' => _wind_lms_build_tincan_course_link('Employee Health and Wellness: Pandemic at Work', 'employee-health-and-wellness-pandemic-at-work-tincan-NaiQeBVx')
+        ]
+      ),
       'folder' =>  'employee-health-and-wellness-pandemic-at-work-tincan-NaiQeBVx',
       'tincan_course_id' => 'http://tOf74Nvp4rNeR3OC3Xf27pbV_XDH-7Ew_rise',
     ];
@@ -360,11 +400,6 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
     return [];
   }
 
-  foreach ($courses as $index => &$course) {
-    $progress = _wind_lms_course_add_tincan_course_data($user, $course['tincan_course_id']);
-    $course += $progress;
-    $course['activity_link'] = _wind_lsm_build_tincan_course_Link($course['title'], $course['folder']);
-  }
 
   // Get all of the course nid(s) assigned to $user
   $scorm_course_nids = _wind_lms_get_all_courses_by_user($user);
@@ -418,7 +453,7 @@ function _wind_lms_load_all_courses($nids, $user){
       'title' => $node->label(),
       'type' => 'scorm',
       'nid' => $node->id(),
-      'progress' => _wind_lms_get_user_course_progress($node, $user->id()),
+//      'progress' => _wind_lms_get_user_course_progress($node, $user->id()),
       'package_files' => _wind_lms_get_course_scorm_packages($node, $user->id()),
     ];
   }
@@ -449,7 +484,9 @@ function _wind_lms_get_course_scorm_packages(NodeInterface $node, $uid) {
       'file_name' => $file->label(),
       'scorm_package' => $scorm,
       'activity_link' => wind_scorm_get_lanuch_link_renable_array($scorm->id, $title),
-      'progress' => _wind_lms_get_user_scorm_package_progress($file, $uid),
+      'course_data' => [
+        'progress' => _wind_lms_get_user_scorm_package_progress($file, $uid),
+      ]
     );
   }
 
@@ -505,7 +542,7 @@ function _wind_lms_get_user_scorm_package_progress($file, $uid) {
     return $data;
   }
 
-  return null;
+  return 'Not Started';
 }
 
 function _wind_scorm_load_by_fid($fid){
@@ -517,7 +554,7 @@ function _wind_scorm_load_by_fid($fid){
   return $query->execute()->fetchObject();
 }
 
-function _wind_lsm_build_tincan_course_Link($title, $course_folder) {
+function _wind_lms_build_tincan_course_link($title, $course_folder) {
   $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . "<span> {$title}</span>";
   $renderedAnchorContent = render($linkContent);
   $url = Url::fromUserInput(

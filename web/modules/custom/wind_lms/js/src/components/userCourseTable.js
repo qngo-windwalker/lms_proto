@@ -49,8 +49,8 @@ export default class UserCourseTable extends Component{
   popup(href){
     var day = new Date();
     var id = day.getTime();
-    var screenHeight = screen.height >= 768 ? 700 : screen.height;
-    var params = ['toolbar=no', 'scrollbars=no', 'location=no', 'statusbar=no', 'menubar=no', 'directories=no', 'titlebar=no', 'toolbar=no', 'resizable=1', 'height=' + screenHeight, 'width=1024'
+    var screenHeight = screen.height >= 768 ? 985 : screen.height;
+    var params = ['toolbar=no', 'scrollbars=no', 'location=no', 'statusbar=no', 'menubar=no', 'directories=no', 'titlebar=no', 'toolbar=no', 'resizable=1', 'height=' + screenHeight, 'width=1254'
       //            'fullscreen=yes' // only works in IE, but here for completeness
     ].join(',');
 
@@ -100,7 +100,7 @@ export default class UserCourseTable extends Component{
     return(
       <tr key={key} data-nid={dataObj.data['nid']}>
         <td scope="row" className="text-left" dangerouslySetInnerHTML={{__html: this.getColumnNameContent(dataObj)}}></td>
-        <td>{dataObj.data['progress']}</td>
+        <td className="text-capitalize" dangerouslySetInnerHTML={{__html: this.getColumnStatusContent(dataObj)}}></td>
         <td dangerouslySetInnerHTML={{__html: dataObj.data['certificateLink']}}></td>
       </tr>
     );
@@ -111,17 +111,36 @@ export default class UserCourseTable extends Component{
     if(dataObj.data['package_files'].length > 1){
       return ReactDOMServer.renderToString(
         <>
-          {dataObj.data['title']}
+          <h6>{dataObj.data['title']}</h6>
           <ul className="list-unstyled ml-3">
             {dataObj.data['package_files'].map((obj, index) => {
-              return (<li key={index} dangerouslySetInnerHTML={{__html: obj.activity_link['#markup']}}></li>);
+              return (<li className="mb-3"  key={index} dangerouslySetInnerHTML={{__html: obj.activity_link['#markup']}}></li>);
             })}
           </ul>
         </>
       );
     }
     // In case when a course node is created but zip file is no available. Show the title so it's easier to troubleshoot.
-    return dataObj.data['courseLink'] ?  dataObj.data['courseLink'] :  dataObj.data['title'];
+    return dataObj.data['package_files'][0]['activity_link'];
+  }
+
+  getColumnStatusContent(dataObj) {
+    // If this course has more than 1 zip files, render the zip course as a list item.
+    if(dataObj.data['package_files'].length > 1){
+      return ReactDOMServer.renderToString(
+        <>
+          <h6> &nbsp; </h6>
+          <ul className="list-unstyled">
+            {dataObj.data['package_files'].map((obj, index) => {
+              return (<li className="mb-3" key={index} dangerouslySetInnerHTML={{__html: obj['course_data']['progress']}}></li>);
+            })}
+          </ul>
+        </>
+      );
+    }
+
+    // If course node only has 1 zip file
+    return dataObj.data['package_files'][0]['course_data']['progress'];
   }
 
   parseJson(data) {

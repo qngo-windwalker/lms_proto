@@ -92,17 +92,11 @@ class WindLMSJsonController extends ControllerBase {
 
   protected function buildCourseRow($courseData) {
     $title = $courseData['title'];
-    $progress = $courseData['progress'];
-    $certificateLink = $progress != 'Completed' ? 'N/A' : $this->getCourseCertificate($courseData);
     return [
       'data' => array(
-        $this->buildCourseLink($title, $courseData),
-        $progress,
-        $certificateLink,
-        'title' => $title,
+        'title' => $courseData['title'],
         'courseLink' => $this->buildCourseLink($title, $courseData),
-        'progress' => $progress,
-        'certificateLink' => $certificateLink,
+        'certificateLink' => $this->getCourseCertificate($courseData),
         'package_files' => isset($courseData['package_files']) ? $courseData['package_files'] : [],
         'nid' => isset($courseData['nid']) ? $courseData['nid'] : '',
       ),
@@ -131,6 +125,19 @@ class WindLMSJsonController extends ControllerBase {
   }
 
   private function getCourseCertificate($courseData) {
+    $allCompleted = true;
+    foreach ($courseData['package_files'] as $package_file) {
+      if($package_file['course_data']['progress'] != 'completed'){
+        $allCompleted = false;
+        // will leave the foreach loop, if an item is not completed.
+        break;
+      }
+    }
+
+    return $allCompleted ? $this->buildCourseCertificateLink($courseData) : 'N/A';
+  }
+
+  private function buildCourseCertificateLink($courseData) {
     if(!isset($courseData['statement'])){
       return '';
     }

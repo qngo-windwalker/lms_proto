@@ -33,5 +33,4 @@
     }
   };
 
-
 })(jQuery, window, Drupal);
