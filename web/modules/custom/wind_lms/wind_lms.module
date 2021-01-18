@@ -13,6 +13,7 @@ use Drupal\opigno_module\Entity\OpignoActivity;
 use Drupal\opigno_group_manager\OpignoGroupContentTypesManager;
 use Drupal\Component\Serialization\Json;
 use Drupal\node\NodeInterface;
+use Drupal\user\Entity\User;
 
 //include_once('./inc/wind_lms.tincan.inc');
 module_load_include('inc', 'wind_lms', 'inc/wind_lms.tincan');
@@ -607,4 +608,18 @@ function _wind_lms_get_scheme_and_http_host(){
   // We have to make sure the URL is HTTPS
   $schemaAndHost = \Drupal::request()->getSchemeAndHttpHost();
   return $schemaAndHost;
+}
+
+/**
+ * @return string
+ */
+function _wind_lms_get_user_full_name( \Drupal\user\Entity\User $user) {
+  $firstName = $user->hasField('field_first_name') ? $user->get('field_first_name')->value : '';
+  $lastName = $user->hasField('field_last_name') ? $user->get('field_last_name')->value : '';
+
+  if (empty($firstName) && empty($lastName)) {
+    return $user->get('name')->value;
+  }
+
+  return $firstName . ' ' . $lastName;
 }

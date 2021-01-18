@@ -2,7 +2,9 @@
 
 namespace Drupal\wind_lms\Controller;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\wind_tincan\Entity\TincanStatement;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\node\NodeInterface;
@@ -133,19 +135,37 @@ class WindLMSJsonController extends ControllerBase {
         break;
       }
     }
-
     return $allCompleted ? $this->buildCourseCertificateLink($courseData) : 'N/A';
   }
 
   private function buildCourseCertificateLink($courseData) {
-    if(!isset($courseData['statement'])){
-      return '';
-    }
     $module_handler = \Drupal::service('module_handler');
     $module_path = $module_handler->getModule('wind_lms')->getPath();
     $linkContent = '<img width="26" src="/' . $module_path . '/img/certificate_icon.png">';
     $renderedAnchorContent = render($linkContent);
-    $url = Url::fromUserInput('/certificate/' . $courseData['statement']->get('statement_id')->value, ['attributes' => ['target' => '_blank']]);
-    return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
+
+    if($courseData['type'] == 'tincan'){
+      if(!isset($courseData['statement'])){
+        return '';
+      }
+
+      $url = Url::fromUserInput(
+        '/certificate/' . $courseData['statement']->get('statement_id')->value,
+        [
+          'attributes' => ['target' => '_blank'],
+        ]
+      );
+      return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
+    }
+
+    if($courseData['type'] == 'scorm'){
+      $user = $this->currentUser();
+      $url = Url::fromUserInput('/cert/' . $courseData['nid'] . '/user/' . $user->id(),
+        [
+          'attributes' => ['target' => '_blank'],
+        ]
+      );
+      return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
+    }
   }
 }

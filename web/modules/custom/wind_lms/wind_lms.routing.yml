@@ -16,7 +16,19 @@ wind_lms.course:
     _title: 'Windwalker'
   requirements:
     _permission: 'access content'
-
+wind_lms.cert.id:
+  path: cert/{node}/user/{user}
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSCertUserController::getContent
+    _title: 'Certificate'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      node:
+        type: entity:node
+      user:
+        type: entity:user
 # Old SCORM course URL
 # Need to streamline to /course
 #wind_lms.course:
