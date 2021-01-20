@@ -37,3 +37,19 @@ function wind_does_user_has_sudo($user) {
 
   return false;
 }
+
+/**
+ * Compare 2 arrays.
+ * When node field (multi value) was edited,
+ * use this to find out what was removed and what was added
+ * @param $array_new
+ * @param $array_origin
+ *
+ * @return array
+ */
+function _wind_array_compare($array_new, $array_origin) {
+  return [
+    'added' => array_diff($array_new, $array_origin),
+    'removed' => array_diff($array_origin, $array_new)
+  ];
+}

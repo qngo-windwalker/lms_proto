@@ -3,3 +3,6 @@ services:
     class: Drupal\wind_lms\PathProcessor\WindLMSPathProcessor
     tags:
       - { name: path_processor_inbound, priority: 250 }
+  wind_lms.course_node:
+    class: Drupal\wind_lms\CourseNode
+    arguments: ['@database']

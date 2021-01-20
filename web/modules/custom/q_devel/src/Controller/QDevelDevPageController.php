@@ -19,17 +19,28 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\group\Entity\Group;
 use Drupal\wind_jira\JiraRest\WindJiraWrapperService;
 use Drupal\jira_rest\JiraRestWrapperService;
+use Symfony\Component\HttpFoundation\Response;
 
 class QDevelDevPageController{
 
+  /**
+   * Out for page [site]/qdev
+   * @return array
+   */
   public function getContent(){
-    $page = new \Drupal\q_devel\Controller\QDevelUserController();
-    $value = $page->createIndividualAccount();
+//    $page = new \Drupal\q_devel\Controller\QDevelUserController();
+//    $value = $page->createIndividualAccount();
 
-    return array(
-      '#type' => 'markup',
-      '#markup' => 'bbtesting'
-    );
+    $array1 = array("a" => "green", "red", "blue", "red");
+    $array2 = array("a" => "violet", "yellow", "red", 'orange');
+    $result = _wind_array_compare($array1, $array2);
+
+    $output = print_r($result, true);
+//    return array(
+//      '#type' => 'markup',
+//      '#markup' => 'bbtesting'
+//    );
+    return new Response('<pre>' . $output . '</pre>', 200, array());
   }
 
   public function loadGroupMultiple() {

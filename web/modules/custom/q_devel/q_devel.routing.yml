@@ -1,7 +1,7 @@
 q_devel.dev:
   path: 'qdev'
   defaults:
-    _controller: '\Drupal\q_devel\Controller\QDevelDevPageController::content'
+    _controller: '\Drupal\q_devel\Controller\QDevelDevPageController::getContent'
     _title: 'Dev'
   requirements:
     _permission: 'access content'

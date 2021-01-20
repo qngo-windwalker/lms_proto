@@ -16,6 +16,7 @@ use Drupal\node\NodeInterface;
 use Drupal\user\Entity\User;
 
 //include_once('./inc/wind_lms.tincan.inc');
+module_load_include('inc', 'wind_lms', 'inc/wind_lms.db');
 module_load_include('inc', 'wind_lms', 'inc/wind_lms.tincan');
 
 /**
@@ -76,47 +77,10 @@ function wind_lms_node_insert(NodeInterface $node) {
  */
 function wind_lms_node_update(NodeInterface $node) {
   // Set the node title to the node ID and save.
-  if ($node->getType() != 'course') {
-    return;
-  }
-
-  /** @var  NodeInterface $originalNode */
-  $originalNode = $node->original;
-  $originalNodeField_package_file = $originalNode->get('field_package_file')->getValue();
-  $originalFids = array_map(function($value){
-    return $value['target_id'];
-  }, $originalNodeField_package_file);
-
-  $field_package_file = $node->get('field_package_file')->getValue();
-  $fids = array_map(function($value){
-    return $value['target_id'];
-  }, $field_package_file);
-
-  /* @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
-  $scorm_controller = \Drupal::service('opigno_scorm.scorm');
-
-  if(!empty($fids)){
-    $files = \Drupal::entityTypeManager()->getStorage('file')->loadMultiple($fids);
-
-    foreach ($files as $file){
-      $scorm = $scorm_controller->scormLoadByFileEntity($file);
-      // If this scorm already extracted, skip it.
-      if ($scorm) {
-        continue;
-      }
-
-      // Create SCORM package from file.
-      $result = $scorm_controller->scormExtract($file);
-    }
-  }
-
-  // array_diff will return $originalFids values that are not in $fids.
-  $diff = array_diff($originalFids, $fids);
-
-  if (!empty($diff)) {
-    foreach ($diff as $diff_file){
-      // Todo: Remove file to save disc space.
-    }
+  if ($node->getType() == 'course') {
+    /* @var \Drupal\wind_lms\CourseNode $course_node */
+    $course_node = \Drupal::service('wind_lms.course_node');
+    $course_node->onNodeUpdate($node);
   }
 }
 
@@ -403,44 +367,15 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
 
 
   // Get all of the course nid(s) assigned to $user
-  $scorm_course_nids = _wind_lms_get_all_courses_by_user($user);
+  $scorm_course_nids = _wind_lms_load_all_courses_by_user($user);
   // Combined with of course nid(s) that are available to everyone - "Accessible To All Leaners" field checked
-  $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_get_all_courses_by_access_to_all_user());
+  $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_load_all_courses_by_access_to_all_user());
   // Load all of the nid(s) to get course data
-  $scorm_courses = _wind_lms_load_all_courses($scorm_course_nids, $user);
+  $scorm_courses = _wind_lms_get_all_courses($scorm_course_nids, $user);
   return array_merge($courses, $scorm_courses);
 }
 
-function _wind_lms_get_all_courses_by_user($user){
-  // https://www.drupal.org/docs/drupal-apis/entity-api/working-with-the-entity-api
-  $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
-  $query->condition('type', 'course');
-  $query->condition('status', 1);
-  $query->condition('field_learner', $user->id(), 'IN');
-  $result = $query->execute();
-
-  // If no result, return empty array.
-  if (empty($result)) {
-    return [];
-  }
-  return $result;
-}
-
-function _wind_lms_get_all_courses_by_access_to_all_user(){
-  $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
-  $query->condition('type', 'course');
-  $query->condition('status', 1);
-  $query->condition('field_learner_access', '1');
-  $result = $query->execute();
-
-  // If no result, return empty array.
-  if (empty($result)) {
-    return [];
-  }
-  return $result;
-}
-
-function _wind_lms_load_all_courses($nids, $user){
+function _wind_lms_get_all_courses($nids, $user){
   $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids);
   $courses = [];
   foreach ($nodes as $nid => $node){
@@ -486,7 +421,7 @@ function _wind_lms_get_course_scorm_packages(NodeInterface $node, $uid) {
       'scorm_package' => $scorm,
       'activity_link' => wind_scorm_get_lanuch_link_renable_array($scorm->id, $title),
       'course_data' => [
-        'progress' => _wind_lms_get_user_scorm_package_progress($file, $uid),
+        'progress' => _wind_lms_load_user_scorm_package_progress($file, $uid),
       ]
     );
   }
@@ -516,34 +451,9 @@ function _wind_lms_get_user_course_progress($node, $uid){
   $zipFiles = $node->get('field_package_file');
 
   foreach ($zipFiles->referencedEntities() as $file) {
-    return _wind_lms_get_user_scorm_package_progress($file, $uid);
+    return _wind_lms_load_user_scorm_package_progress($file, $uid);
   }
   return null;
-}
-
-function _wind_lms_get_user_scorm_package_progress($file, $uid) {
-  $db = \Drupal::database();
-  /** @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
-  $scorm_controller = \Drupal::service('opigno_scorm.scorm');
-  $scorm = $scorm_controller->scormLoadByFileEntity($file);
-  if(!$scorm){
-    return 'Unable to process SCORM package';
-  }
-  $data = NULL;
-  $result = $db->select('opigno_scorm_scorm_cmi_data', 'o')
-    ->fields('o', array('value', 'serialized'))
-    ->condition('o.uid', $uid)
-    ->condition('o.scorm_id', $scorm->id)
-    ->condition('o.cmi_key', 'cmi.completion_status')
-    ->execute()
-    ->fetchObject();
-
-  if (isset($result->value)) {
-    $data = !empty($result->serialized) ? unserialize($result->value) : $result->value;
-    return $data;
-  }
-
-  return 'Not Started';
 }
 
 function _wind_scorm_load_by_fid($fid){
