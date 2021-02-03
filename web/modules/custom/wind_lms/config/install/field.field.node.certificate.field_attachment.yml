@@ -1,0 +1,27 @@
+uuid: 0dcd0397-1422-4cbc-b4d8-64950bbd3ed1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_attachment
+    - node.type.certificate
+  module:
+    - file
+id: node.certificate.field_attachment
+field_name: field_attachment
+entity_type: node
+bundle: certificate
+label: Attachment
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: 'certificate/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'pdf jpeg jpg png gif'
+  max_filesize: '10'
+  description_field: false
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

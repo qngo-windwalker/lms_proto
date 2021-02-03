@@ -46,6 +46,7 @@ class WindLMSJsonController extends ControllerBase {
 
     // For debugging
     if(\Drupal::request()->get('pretty') == 'true') {
+      // This can use up lots of memory even with 4GB of memory_limit
       $output = '<pre>' . print_r($data, TRUE) . '</pre>';
       return new Response($output, 200, array());
     }
@@ -94,9 +95,25 @@ class WindLMSJsonController extends ControllerBase {
 
   protected function buildCourseRow($courseData) {
     $title = $courseData['title'];
+
+    if($courseData['type'] == 'curriculum'){
+      return [
+        'data' => array(
+          'type' => $courseData['type'],
+          'title' => $courseData['title'],
+//          'certificateLink' => $this->getCourseCertificate($courseData),
+          'certificateLink' => '',
+          'courses' => $this->buildCurriculumCourses($courseData['courses']),
+          'nid' => isset($courseData['nid']) ? $courseData['nid'] : '',
+        ),
+        'class' => array('course-row'),
+      ];
+    }
+
     return [
       'data' => array(
         'title' => $courseData['title'],
+        'type' => $courseData['type'],
         'courseLink' => $this->buildCourseLink($title, $courseData),
         'certificateLink' => $this->getCourseCertificate($courseData),
         'package_files' => isset($courseData['package_files']) ? $courseData['package_files'] : [],
@@ -105,6 +122,14 @@ class WindLMSJsonController extends ControllerBase {
       'class' => array('course-row'),
       'data-tincan-id' => isset($courseData['tincan_course_id']) ?  $courseData['tincan_course_id'] : ''
     ];
+  }
+
+  protected function buildCurriculumCourses($couses) {
+    $collection = array();
+    foreach ($couses as $course) {
+      $collection[] = $this->buildCourseRow($course);
+    }
+    return $collection;
   }
 
   protected function buildCourseLink($title, $courseData) {

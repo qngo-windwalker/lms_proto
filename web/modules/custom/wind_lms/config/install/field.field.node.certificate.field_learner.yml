@@ -1,0 +1,28 @@
+uuid: 08f692b7-b555-4d5a-b005-eccf0017beb0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_learner
+    - node.type.certificate
+id: node.certificate.field_learner
+field_name: field_learner
+entity_type: node
+bundle: certificate
+label: Learner
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    include_anonymous: true
+    filter:
+      type: _none
+    target_bundles: null
+    sort:
+      field: _none
+    auto_create: false
+field_type: entity_reference

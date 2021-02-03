@@ -365,15 +365,56 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
     return [];
   }
 
-
   // Get all of the course nid(s) assigned to $user
-  $scorm_course_nids = _wind_lms_load_all_courses_by_user($user);
+  $course_nids = _wind_lms_get_all_courses_by_user($user);
+
+  $curriculums = [];
+  $curriculum_nids = _wind_lms_get_all_curriculums_by_user($user);
+  $curriculum_nodes = \Drupal\node\Entity\Node::loadMultiple($curriculum_nids);
+  foreach ($curriculum_nodes as $nid => $curriculum_node) {
+    // Get all of the courses in the curriculum
+    $field_course = $curriculum_node->get('field_course')->getValue();
+    $curriculum_course_nids = array_map(function($value){
+      return $value['target_id'];
+    }, $field_course);
+
+    foreach ($curriculum_course_nids as $curriculum_course_nid) {
+      $key = array_search($curriculum_course_nid, $course_nids);
+      // If the course exists in both curriculum and standalone course
+      if($key){
+        // Remove duplicate
+        unset($course_nids[$key]);
+      }
+    }
+
+    $curriculums[$nid] = array(
+      'title' => $curriculum_node->label(),
+      'type' => 'curriculum',
+      'nid' => $nid,
+      'courses' => _wind_lms_get_all_courses($curriculum_course_nids, $user),
+    );
+  }
+  // Load all of the nid(s) to get course data
+  $scorm_courses = _wind_lms_get_all_courses($course_nids, $user);
+  $all_activities =  array_merge($courses, $scorm_courses);
+  return array_merge($all_activities, $curriculums);
+}
+
+function _wind_lms_get_all_curriculums_by_user($user) {
+  $nids = _wind_lms_load_all_curriculum_assigned_to_user($user);
+  // Combined with of course nid(s) that are available to everyone - "Accessible To All Leaners" field checked
+  $nids = array_merge($nids, _wind_lms_load_all_curriculum_by_access_to_all_user());
+  return $nids;
+}
+
+function _wind_lms_get_all_courses_by_user($user) {
+  // Get all of the course nid(s) assigned to $user
+  $scorm_course_nids = _wind_lms_load_all_courses_assigned_to_user($user);
   // Combined with of course nid(s) that are available to everyone - "Accessible To All Leaners" field checked
   $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_load_all_courses_by_access_to_all_user());
-  // Load all of the nid(s) to get course data
-  $scorm_courses = _wind_lms_get_all_courses($scorm_course_nids, $user);
-  return array_merge($courses, $scorm_courses);
+  return $scorm_course_nids;
 }
+
 
 function _wind_lms_get_all_courses($nids, $user){
   $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids);
@@ -477,7 +518,7 @@ function _wind_lms_build_tincan_course_link($title, $course_folder) {
       ]
     ]
   );
-  return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
+  return array('#markup' => Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString());
 }
 
 /**

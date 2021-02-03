@@ -1,6 +1,35 @@
 <?php
 
-function _wind_lms_load_all_courses_by_user($user){
+function _wind_lms_load_all_curriculum_assigned_to_user($user){
+  // https://www.drupal.org/docs/drupal-apis/entity-api/working-with-the-entity-api
+  $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+  $query->condition('type', 'curriculum');
+  $query->condition('status', 1);
+  $query->condition('field_learner', $user->id(), 'IN');
+  $result = $query->execute();
+
+  // If no result, return empty array.
+  if (empty($result)) {
+    return [];
+  }
+  return $result;
+}
+
+function _wind_lms_load_all_curriculum_by_access_to_all_user(){
+  $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+  $query->condition('type', 'curriculum');
+  $query->condition('status', 1);
+  $query->condition('field_learner_access', '1');
+  $result = $query->execute();
+
+  // If no result, return empty array.
+  if (empty($result)) {
+    return [];
+  }
+  return $result;
+}
+
+function _wind_lms_load_all_courses_assigned_to_user($user){
   // https://www.drupal.org/docs/drupal-apis/entity-api/working-with-the-entity-api
   $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
   $query->condition('type', 'course');

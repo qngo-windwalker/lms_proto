@@ -1,0 +1,37 @@
+uuid: 48ab7eb7-24ec-466a-8cc9-d566426d354d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.certificate.body
+    - field.field.node.certificate.field_activity
+    - field.field.node.certificate.field_attachment
+    - field.field.node.certificate.field_learner
+    - node.type.certificate
+  module:
+    - text
+    - user
+id: node.certificate.teaser
+targetEntityType: node
+bundle: certificate
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_activity: true
+  field_attachment: true
+  field_learner: true
+  langcode: true
