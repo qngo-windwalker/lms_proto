@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import UserCourseTable from './userCourseTable';
 import AllUserProgressTable from './allUserProgressTable';
+import CurriculumTable from "./curriculumTable";
 
 export default class DashboardPanel extends React.Component {
   constructor(props) {
@@ -33,6 +34,7 @@ export default class DashboardPanel extends React.Component {
       <>
         <UserCourseTable />
         {this.getAllUsersProgressTable()}
+        {this.getCurriculumTable()}
       </>
     );
   }
@@ -44,6 +46,18 @@ export default class DashboardPanel extends React.Component {
 
     if(this.state.currentUser.roles.includes('administrator') || this.state.currentUser.roles.includes('manager')) {
       return <AllUserProgressTable />;
+    }
+
+    return null;
+  }
+
+  getCurriculumTable() {
+    if(!this.state.currentUser){
+      return null;
+    }
+
+    if(this.state.currentUser.roles.includes('administrator') || this.state.currentUser.roles.includes('manager')) {
+      return <CurriculumTable />;
     }
 
     return null;

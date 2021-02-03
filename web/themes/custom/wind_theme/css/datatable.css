@@ -1,0 +1,35 @@
+.dataTables_info {
+  font-size: 12px;
+  color: #8e8e8e;
+}
+.dataTables_paginate .paginate_button {padding: 0.3em .7em;
+  border-radius: 3px;
+  display: inline-block;
+  box-sizing: border-box;
+  margin-right: 0.333em;
+  margin-bottom: 0.333em;
+  padding: 0.5em 1em;
+  border: 1px solid rgba(0,0,0,0.3);
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 0.88em;
+  line-height: 1.6em;
+  color: black;
+  white-space: nowrap;
+  overflow: hidden;
+  background-color: rgba(0,0,0,0.1);
+  background: -webkit-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);
+  background: -moz-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);
+  background: -ms-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);
+  background: -o-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);
+  background: linear-gradient(to bottom, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='rgba(230, 230, 230, 0.1)', EndColorStr='rgba(0, 0, 0, 0.1)');
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-decoration: none;
+  outline: none;
+  text-overflow: ellipsis;
+}
+

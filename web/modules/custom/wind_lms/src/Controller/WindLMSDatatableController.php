@@ -79,6 +79,52 @@ class WindLMSDatatableController extends ControllerBase {
     return new JsonResponse(['data' => $collection]);
   }
 
+  public function getCurriculum() {
+    $collection = [];
+    $result = \Drupal::entityQuery('node')
+      ->condition('type', 'curriculum')
+      ->execute();
+
+    if ($result) {
+      $nodes = Node::loadMultiple($result);
+      $destination = $this->getDestinationOfReferer();
+      foreach ($nodes as $nid => $node) {
+        $courseTotal = $node->get('field_course')->isEmpty() ? '0' : count($node->get('field_course')->getValue());
+        //                $field = $node->get('field_user_last_name')->isEmpty() ? '' : $user_account->get('field_user_last_name')->value;
+        //                $progress = $this->getUserProgress($node);
+//        $viewLink = Link::fromTextAndUrl(
+//          $node->getTitle(),
+//          Url::fromRoute(
+//            "node.client_view",
+//            [
+//              'node_client' => $node->id(),
+//            ]
+//          )
+//        );
+
+        $operartions = '<div class="btn-group">';
+        $operartions .= '<a class="btn btn-sm btn-outline-secondary" href="node/' . $nid . '">View</a>';
+        $operartions .=  $this->getNodeEditLink($nid, $this->getDestinationOfReferer())->toString();
+        $operartions .= '<a class="btn btn-sm  btn-outline-secondary anchor-info" data-nid="'. $nid. '" href="#info" alt="Quick Information"><i class="fas fa-ellipsis-h"></i></a>';
+        $operartions .= '</div>';
+        $infoHTML =  $this->link(t('Delete'), "internal:/node/{$nid}/delete", $destination)->toString();
+        $collection[] = [
+          'title' => $node->label(),
+          '',
+          'course' => $courseTotal,
+          'status' => $this->getStatusHTML($node),
+          'action' => $operartions,
+          'nid' => $nid,
+          'rowNid' => 'nid-' . $nid,
+          'expiration' => '12/12/2020',
+          'infoHTML' => $infoHTML,
+          'DT_RowId' => "row-nid-" . $nid, // Datatable <tr /> id
+        ];
+      }
+    }
+    return new JsonResponse(['data' => $collection]);
+  }
+
   private function formatTime($timestamp) {
     if ($timestamp) {
       return date('m-d-Y', $timestamp);
@@ -120,7 +166,7 @@ class WindLMSDatatableController extends ControllerBase {
       Url::fromUri(
         "internal:/node/{$nid}/edit",
         [
-          'attributes' => ['class' => 'btn btn-sm btn-outline-light'],
+          'attributes' => ['class' => 'btn btn-sm btn-outline-secondary'],
           'query' => ['destination' => $destination]
         ]
       )

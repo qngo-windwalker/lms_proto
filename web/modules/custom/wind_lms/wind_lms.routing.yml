@@ -154,6 +154,13 @@ wind_lms.datatable.course.users:
     parameters:
       group:
         type: entity:group
+wind_lms.datatable.curriculum:
+  path: 'wl-datatable/curriculum'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSDatatableController::getCurriculum'
+    _title: 'Curriculum'
+  requirements:
+    _role: 'authenticated'
 #################################################
 ## Admin
 #################################################

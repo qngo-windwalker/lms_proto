@@ -1,6 +1,9 @@
 @import "../../../../core/themes/classy/css/components/messages.css";
 @import "../../../../core/modules/system/css/components/hidden.module.css";
 @import "message.css";
+@import "https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css";
+@import "datatable.css";
+
 /* Import style for Block Tabs menu*/
 @import "block_wind_theme_local_tasks.css";
 
@@ -49,6 +52,8 @@ h2{color: rgb(117,121,137); }
 #site-footer a{color: white;}
 #block-wind-theme-footer ul{ list-style: none; }
 #block-wind-theme-footer a{ font-size: 16px; }
+
+.section{margin-bottom: 3vh;}
 
 /********************************
   Page specific styles

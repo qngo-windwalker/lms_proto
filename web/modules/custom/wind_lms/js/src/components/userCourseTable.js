@@ -75,7 +75,7 @@ export default class UserCourseTable extends Component{
 
 	render(){
 		return (
-			<>
+			<div className="section">
         <h3 className="mb-3">{this.isEnglishMode() ? 'My Training' : 'Mi Entrenamiento'}</h3>
         <table className="table responsive-enabled mb-5" data-striping="1">
           <thead className="thead-light">
@@ -92,7 +92,7 @@ export default class UserCourseTable extends Component{
           })}
           </tbody>
         </table>
-			</>
+			</div>
 		);
 	}
 

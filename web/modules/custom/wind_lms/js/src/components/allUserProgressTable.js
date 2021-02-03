@@ -42,10 +42,10 @@ export default class AllUserProgressTable extends Component{
 
   render(){
     return (
-      <>
+      <div className="section">
         <h3 className="mb-3">{this.isEnglishMode() ? 'User Progress' : 'Progreso De Los Usuarios'}</h3>
         <table id="user-progress-tbl" ref="main" className="table table-user-progress responsive-enabled mb-5" data-striping="1" />
-      </>
+      </div>
     );
   }
 
@@ -119,7 +119,7 @@ export default class AllUserProgressTable extends Component{
       //   }
       // } ],
       ordering: true,
-      paging : false,
+      paging : true,
       // Dom positioning: https://datatables.net/examples/basic_init/dom.html
       // f - Filtering input
       // t - The Table!
