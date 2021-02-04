@@ -21,6 +21,17 @@ function wind_user_login($account) {
   $response->send();
 }
 
+/**
+ * Implements hook_theme().
+ */
+function wind_theme($existing, $type, $theme, $path) {
+  return [
+    'wind_email' => [
+      'variables' => ['body' => ''],
+    ],
+  ];
+}
+
 function wind_does_user_has_sudo($user) {
   if ($user->id() == 1) {
     return true;

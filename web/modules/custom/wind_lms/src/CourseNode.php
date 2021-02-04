@@ -106,18 +106,28 @@ class CourseNode {
   }
 
   private function sendEmail(NodeInterface $node, $uid) {
+    $site_name = \Drupal::config('system.site')->get('name');
+    $site_mail = \Drupal::config('system.site')->get('mail');
     $user = \Drupal\user\Entity\User::load($uid);
     $mailManager = \Drupal::service('plugin.manager.mail');
-    $module = 'wind_lms';
-    $key = 'create_article';
+    $renderable = [
+      '#theme' => 'wind_email',
+      '#body' => 'You have been enrolled to course: ' ,
+    ];
+    $rendered = \Drupal::service('renderer')->renderPlain($renderable);
     $to = $user->get('mail')->value;
-//    $params['message'] = $entity->get('body')->value;
+    $params['to'] = $to;
+    $params['subject'] = 'New enrollment';
+    $params['from_name'] = $site_mail;
+    $params['to_name'] = $site_name;
+    $params['reply_to'] = $site_mail;
     $params['message'] = 'You have been enrolled to course: ' . $node->label();
     $params['node_title'] = 'node title';
+    $params['body'] = $rendered;
     $langcode = \Drupal::currentUser()->getPreferredLangcode();
-    $send = TRUE;
 
-    $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+    // Note: 1st param module name needed so MailManager will invoke hook_mail (!!this hook is required !!!)
+    $result = $mailManager->mail('wind_lms', 'New Enrollment', $to, $langcode, $params, $site_mail);
     if ($result['result'] !== TRUE) {
       \Drupal::messenger()->addError('There was a problem sending your message and it was not sent.');
     } else {
