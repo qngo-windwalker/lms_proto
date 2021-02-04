@@ -2,28 +2,28 @@
   font-size: 12px;
   color: #8e8e8e;
 }
-.dataTables_paginate .paginate_button {padding: 0.3em .7em;
+.dataTables_paginate .paginate_button {
   border-radius: 3px;
   display: inline-block;
   box-sizing: border-box;
   margin-right: 0.333em;
   margin-bottom: 0.333em;
-  padding: 0.5em 1em;
-  border: 1px solid rgba(0,0,0,0.3);
-  border-radius: 2px;
+  padding: 0.1em .65em;
+  /*border: 1px solid rgba(0,0,0,0.3);*/
+  border-radius: 20px;
   cursor: pointer;
   font-size: 0.88em;
   line-height: 1.6em;
   color: black;
   white-space: nowrap;
   overflow: hidden;
-  background-color: rgba(0,0,0,0.1);
-  background: -webkit-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);
-  background: -moz-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);
-  background: -ms-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);
-  background: -o-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);
-  background: linear-gradient(to bottom, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='rgba(230, 230, 230, 0.1)', EndColorStr='rgba(0, 0, 0, 0.1)');
+  /*background-color: rgba(0,0,0,0.1);*/
+  /*background: -webkit-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);*/
+  /*background: -moz-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);*/
+  /*background: -ms-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);*/
+  /*background: -o-linear-gradient(top, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);*/
+  /*background: linear-gradient(to bottom, rgba(230,230,230,0.1) 0%, rgba(0,0,0,0.1) 100%);*/
+  /*filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='rgba(230, 230, 230, 0.1)', EndColorStr='rgba(0, 0, 0, 0.1)');*/
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -32,4 +32,11 @@
   outline: none;
   text-overflow: ellipsis;
 }
-
+.dataTables_paginate .paginate_button.disabled{ color: #6c757d; }
+.dataTables_paginate .paginate_button.current{ border: 1px solid rgba(0,0,0,0.3); }
+table.dataTable tr.details + tr { background: url('../img/table_row_top_shadow.png') repeat-x #e8f4f9;}
+/*table.dataTable tr.info-row td {height: 5px; padding: 0; visibility: hidden; background: #f4f8f9; border-radius: unset; }*/
+/*table.dataTable tr.info-row td * {display: none;}*/
+/*table.dataTable tr.info-row.active td {height: auto; padding: .75em; visibility: visible; background: url('../img/table_row_top_shadow.png') repeat-x #e8f4f9; }*/
+/*table.dataTable tr.info-row.active td *{display: initial;}*/
+table.dataTable tr a.anchor-info.active i:before{content: '\f00d';}

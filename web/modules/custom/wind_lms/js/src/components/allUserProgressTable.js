@@ -45,6 +45,9 @@ export default class AllUserProgressTable extends Component{
       <div className="section">
         <h3 className="mb-3">{this.isEnglishMode() ? 'User Progress' : 'Progreso De Los Usuarios'}</h3>
         <table id="user-progress-tbl" ref="main" className="table table-user-progress responsive-enabled mb-5" data-striping="1" />
+        <a className="btn btn-primary " href="/admin/people/create?destination=/dashboard">
+          <i className="fas fa-plus-circle mr-1"></i> Add User
+        </a>
       </div>
     );
   }
@@ -83,7 +86,9 @@ export default class AllUserProgressTable extends Component{
       },
       {
         title: 'Status',
-        data: 'status'
+        data:  function ( row, type, val, meta ) {
+          return (row.status) ? '<span class="text-success">&#9679;</span>  Active' : '<span class="text-danger">&#9679;</span> Inactive';
+        }
       },
       {
         title: 'Enroll Date',
@@ -99,7 +104,8 @@ export default class AllUserProgressTable extends Component{
       },
       {
         title: 'Progress',
-        data: 'courseProgress'
+        className : "text-capitalize",
+        data: this.getProgressOutput
       }
     ];
     $(this.refs.main).DataTable({
@@ -156,5 +162,27 @@ export default class AllUserProgressTable extends Component{
   onDataTableInitComplete(settings, json){
     // Add some magic.
     $('#user-progress-tbl thead').addClass('thead-light');
+  }
+
+  getProgressOutput(row, type, val, meta) {
+    let allPackageStatuses = _.map(row.package_files, function(item){
+      return item.course_data.progress;
+    });
+    // Creates a duplicate-free version of an array. @see https://lodash.com/docs/4.17.15#uniq
+    allPackageStatuses = _.uniq(allPackageStatuses);
+    if(allPackageStatuses.length == 1){
+      // Make text green only if status is 'completed.
+      return allPackageStatuses[0] == 'completed' ? '<span class="text-success">' + allPackageStatuses[0] + '</span>' : allPackageStatuses[0];
+    }
+
+    // If one out of a bunch has an 'Incomplete' status.
+    if(_.includes(allPackageStatuses, 'incomplete')){
+      return 'incomplete';
+    }
+
+    // At this point, incomlete with cover these scenarios:
+    // ["completed", "Not Started"]
+    return 'incomplete';
+
   }
 }

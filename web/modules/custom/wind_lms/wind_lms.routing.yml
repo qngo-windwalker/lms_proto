@@ -161,6 +161,13 @@ wind_lms.datatable.curriculum:
     _title: 'Curriculum'
   requirements:
     _role: 'authenticated'
+wind_lms.datatable.courses:
+  path: 'wl-datatable/courses'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSDatatableController::getCourses'
+    _title: 'Courses'
+  requirements:
+    _role: 'authenticated'
 #################################################
 ## Admin
 #################################################

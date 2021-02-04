@@ -51,7 +51,7 @@ class WindLMSDatatableController extends ControllerBase {
           'nid' => $nid,
           'rowNid' => 'nid-' . $nid,
           'expiration' => '12/12/2020',
-          'infoHTML' => $infoHTML
+          'infoHTML' => $infoHTML,
         ];
       }
     }
@@ -118,11 +118,65 @@ class WindLMSDatatableController extends ControllerBase {
           'rowNid' => 'nid-' . $nid,
           'expiration' => '12/12/2020',
           'infoHTML' => $infoHTML,
+          'course_data' => $this->getCoursesJsonData($node->get('field_course')->referencedEntities()),
           'DT_RowId' => "row-nid-" . $nid, // Datatable <tr /> id
         ];
       }
     }
     return new JsonResponse(['data' => $collection]);
+  }
+
+  public function getCourses() {
+    $collection = [];
+    $result = \Drupal::entityQuery('node')
+      ->condition('type', 'course')
+      ->execute();
+
+    if ($result) {
+      $nodes = Node::loadMultiple($result);
+      $destination = $this->getDestinationOfReferer();
+      /**
+       * @var Number $nid
+       * @var  NodeInterface $node
+       */
+      foreach ($nodes as $nid => $node) {
+//        $courseTotal = $node->get('field_course')->isEmpty() ? '0' : count($node->get('field_course')->getValue());
+        //                $field = $node->get('field_user_last_name')->isEmpty() ? '' : $user_account->get('field_user_last_name')->value;
+        //                $progress = $this->getUserProgress($node);
+        //        $viewLink = Link::fromTextAndUrl(
+        //          $node->getTitle(),
+        //          Url::fromRoute(
+        //            "node.client_view",
+        //            [
+        //              'node_client' => $node->id(),
+        //            ]
+        //          )
+        //        );
+
+        $operartions = '<div class="btn-group">';
+        $operartions .= '<a class="btn btn-sm btn-outline-secondary" href="node/' . $nid . '">View</a>';
+        $operartions .=  $this->getNodeEditLink($nid, $this->getDestinationOfReferer())->toString();
+        $operartions .= '<a class="btn btn-sm  btn-outline-secondary anchor-info" data-nid="'. $nid. '" href="#info" alt="Quick Information"><i class="fas fa-ellipsis-h"></i></a>';
+        $operartions .= '</div>';
+        $infoHTML =  $this->link(t('Delete'), "internal:/node/{$nid}/delete", $destination)->toString();
+        $collection[] = [
+          'title' => $node->label(),
+          '',
+          'status' => $node->isPublished(),
+          'action' => $operartions,
+          'nid' => $nid,
+          'rowNid' => 'nid-' . $nid,
+          'field_learner_access' => $node->get('field_learner_access')->getString(),
+          'learners_data' => $this->getLearnersJsonData($node->get('field_learner')->referencedEntities()),
+          'courses_data' => $this->getCourseJsonData($node->get('field_package_file')->referencedEntities()),
+          'category_data' => $this->getCategoryJsonData($node->get('field_category')->referencedEntities()),
+          'infoHTML' => $infoHTML,
+          'DT_RowId' => "row-nid-" . $nid, // Datatable <tr /> id
+        ];
+      }
+    }
+    return new JsonResponse(['data' => $collection]);
+
   }
 
   private function formatTime($timestamp) {
@@ -134,6 +188,50 @@ class WindLMSDatatableController extends ControllerBase {
     }
   }
 
+  private function getCoursesJsonData($arr) {
+    return array_map(function(NodeInterface $node){
+      return [
+        'title' => $node->label(),
+      ];
+    }, $arr);
+  }
+
+  private function getLearnersJsonData($arr) {
+    return array_map(function(User $user){
+      return [
+        'username' => $user->label(),
+        'full_name' => _wind_lms_get_user_full_name($user),
+        'uid' => $user->id(),
+        'email' => $user->getEmail()
+      ];
+    }, $arr);
+  }
+
+  private function getCategoryJsonData($arr) {
+    return array_map(function(\Drupal\taxonomy\Entity\Term $term){
+      return [
+        'tid' => $term->id(),
+        'label' => $term->label()
+      ];
+    }, $arr);
+  }
+
+  private function getCourseJsonData($arr) {
+    return array_map(function(\Drupal\file\Entity\File $file){
+      $output = [
+        'title' => '',
+        'fid' => $file->id(),
+      ];
+
+      $scorm = _wind_scorm_load_by_fid($file->id());
+      if ($scorm) {
+        $output['title'] = _wind_lms_get_scorm_package_title($scorm->id);
+      }
+      return $output;
+    }, $arr);
+  }
+
+
   /**
    * @param NodeInterface $node
    * @return string
@@ -143,8 +241,9 @@ class WindLMSDatatableController extends ControllerBase {
   }
 
   /**
-   * When using  \Drupal::service('path.current')->getPath(); it returns .../datatable/...
-   * We want the page that ajax-ing (GET) the datatable/.. URL
+   * When using  \Drupal::service('path.current')->getPath(); it returns
+   * .../datatable/... We want the page that ajax-ing (GET) the datatable/..
+   * URL
    * @return string
    */
   private function getDestinationOfReferer() {
@@ -167,7 +266,7 @@ class WindLMSDatatableController extends ControllerBase {
         "internal:/node/{$nid}/edit",
         [
           'attributes' => ['class' => 'btn btn-sm btn-outline-secondary'],
-          'query' => ['destination' => $destination]
+          'query' => ['destination' => $destination],
         ]
       )
     );
@@ -188,7 +287,7 @@ class WindLMSDatatableController extends ControllerBase {
         $fromUri,
         [
           'attributes' => ['class' => 'btn btn-sm btn-outline-light'],
-          'query' => ['destination' => $destination]
+          'query' => ['destination' => $destination],
         ]
       )
     );
