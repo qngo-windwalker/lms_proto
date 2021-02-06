@@ -54,6 +54,19 @@ class WindLMSJsonController extends ControllerBase {
     return new JsonResponse($data);
   }
 
+  public function getUser(User $user) {
+    return new JsonResponse([
+      'uid' => $user->id(),
+      'username' => $user->getAccountName(),
+      'name' => $user->getAccountName(),
+      'full_name' => _wind_lms_get_user_full_name($user),
+      'status' => $user->get('status')->value,
+      'mail' => $user->get('mail')->value,
+      'access' => $user->get('access')->value,
+      'login' => $user->get('login')->value,
+    ]);
+  }
+
   public function getUserVRCourse(User $user){
     // Current user is what's in the sesssion, argument $user is what we are inquiring.
     if(!$this->currentUser()->isAuthenticated()){

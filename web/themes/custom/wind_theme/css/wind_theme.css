@@ -55,6 +55,23 @@ h2{color: rgb(117,121,137); }
 
 .section{margin-bottom: 3vh;}
 
+/* Modified Bootsrap styles */
+.modal.side-modal{ display: block;  background: rgba(0, 0, 0, 0.35); }
+/* pointer-events: auto  will prevent mouse event of the grey background div from propogating (event bubbling) */
+.modal.side-modal .modal-dialog{ pointer-events: auto; position: fixed; top: 0; right: -820px; transition: right .5s; width: 820px; height: 100%; margin: 0; overflow-x: hidden;  background: white; box-shadow: -2px 0 6px rgba(41, 70, 97, .1);  }
+.modal.side-modal.show .modal-dialog{ right: 0;} /* Animates @see transition */
+.modal.side-modal .modal-content{border: none;}
+.modal.side-modal .modal-header{border: none;}
+.modal.side-modal .close{ color: #bd2130;}
+/*.modal.side-modal:hover{background-color: red !important;}*/
+/*.modal.side-modal .modal-dialog:hover{background-color: blue !important;}*/
+@media (min-width: 576px){
+  .modal-dialog {
+    max-width: 820px;
+    margin: 1.75rem auto;
+  }
+}
+
 /********************************
   Page specific styles
 ********************************/
@@ -112,7 +129,7 @@ body.page-module-answer iframe{ width: 100%; min-height: 700px;}
 
 /* 'update-activity' is the right panel that opens up. */
 body.page-opigno_module-inner-modules update-activity{margin-top: 100px;}
-body.page-opigno_module-inner-modules update-activity .mat-24.mat-icon{color: red;} /* Close X icon */
+body.page-opigno_module-inner-modules update-activity .mat-24.mat-icon{color: #bd2130;} /* Close X icon */
 body.page-opigno_module-inner-modules update-activity .ic-drag-handle-black-24px{opacity: .5;}
 #header-top{padding: 20px; background: #1a1a1a;}
 

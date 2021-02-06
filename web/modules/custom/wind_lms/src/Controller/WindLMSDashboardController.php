@@ -39,6 +39,7 @@ class WindLMSDashboardController extends ControllerBase {
           'myvar' => 'todo. find out why it is not working.'
         ]
       ],
+      '#suffix' => '<div id="modal_root"></div>'
     ];
     return $response;
   }

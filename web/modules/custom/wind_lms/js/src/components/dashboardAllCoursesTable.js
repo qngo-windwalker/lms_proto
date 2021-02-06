@@ -104,7 +104,6 @@ export default class DashboardAllCoursesTable extends Component{
   }
 
   initDataTable(data) {
-    console.log(data);
     let columns = [
       {
         title: 'Title',

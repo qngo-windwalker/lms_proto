@@ -120,6 +120,17 @@ wind_lms.json.all_users_progress:
   requirements:
     _role: 'authenticated'
 wind_lms.json.user:
+  path: 'wl-json/user/{user}'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getUser'
+    _title: 'Courses'
+  requirements:
+    _role: 'authenticated'
+  options:
+    parameters:
+      user:
+        type: entity:user
+wind_lms.json.user.vr-course:
   path: 'wind-lms/json/user/{user}/vr-course'
   defaults:
     _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getUserVRCourse'
@@ -168,6 +179,7 @@ wind_lms.datatable.courses:
     _title: 'Courses'
   requirements:
     _role: 'authenticated'
+
 #################################################
 ## Admin
 #################################################

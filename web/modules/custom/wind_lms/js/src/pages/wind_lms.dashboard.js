@@ -8,6 +8,8 @@ import {
   Route,
   HashRouter,
   withRouter,
+  useHistory,
+  useLocation,
   Link
 } from "react-router-dom";
 import DashboardPanel from '../components/dashboardPanel';
@@ -24,15 +26,22 @@ export default class Dashboard extends React.Component {
       <>
         <HashRouter>
           <Switch>
-            <HashRouter exact path="/">
+            <HashRouter path="/">
               <DashboardPanel/>
             </HashRouter>
-
           </Switch>
+
+          <LocationConsole />
         </HashRouter>
       </>
     );
   }
+}
+
+function LocationConsole() {
+  const location = useLocation();
+  console.log( '%clocation.pathname : ' + location.pathname, 'color: green');
+  return (<> </>);
 }
 
 ReactDOM.render(<Dashboard/>, document.getElementById('react-container'));
