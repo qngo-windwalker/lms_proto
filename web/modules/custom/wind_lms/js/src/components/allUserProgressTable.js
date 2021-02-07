@@ -77,7 +77,9 @@ export default class AllUserProgressTable extends Component{
       {
         title: 'Username',
         // width: 120,
-        data: 'username',
+        data: function ( row, type, val, meta ) {
+          return '<a href="#/user/' + row.uid + '">' + row.username + '</a>';
+        },
         className : "first-child"
       },
       {
@@ -86,7 +88,7 @@ export default class AllUserProgressTable extends Component{
       },
       {
         title: 'Status',
-        data:  function ( row, type, val, meta ) {
+        data: function ( row, type, val, meta ) {
           return (row.status) ? '<span class="text-success">&#9679;</span>  Active' : '<span class="text-danger">&#9679;</span> Inactive';
         }
       },

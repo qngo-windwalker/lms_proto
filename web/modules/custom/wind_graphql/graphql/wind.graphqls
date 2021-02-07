@@ -1,0 +1,39 @@
+schema {
+  query: Query
+}
+
+type Query {
+  article(id: Int!): Article
+  articles(
+    offset: Int = 0
+    limit: Int = 10
+  ): ArticleConnection!
+
+  node(id: Int!): Node
+  nodes(
+    offset: Int = 0
+    limit: Int = 10
+  ): NodeConnection!
+}
+
+type Article {
+  id: Int!
+  title: String!
+  author: String
+}
+
+type ArticleConnection {
+  total: Int!
+  items: [Article!]
+}
+
+type Node {
+  id: Int!
+  title: String!
+  author: String
+}
+
+type NodeConnection {
+  total: Int!
+  items: [Node!]
+}

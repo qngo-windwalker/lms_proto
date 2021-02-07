@@ -10,10 +10,11 @@ import {
   Link
 } from "react-router-dom";
 import axios from 'axios';
-import UserCourseTable from './userCourseTable';
+import CurrentUserCourseTable from './currentUserCourseTable';
 import AllUserProgressTable from './allUserProgressTable';
 import DashboardAllCoursesTable from './dashboardAllCoursesTable';
-import ModalContent from "./modalContent";
+import SideModalContentUser from "./sideModalContentUser";
+import SideModalContentCertUpload from "./sideModalContentCourseCertUpload";
 
 export default class DashboardPanel extends React.Component {
   constructor(props) {
@@ -34,20 +35,16 @@ export default class DashboardPanel extends React.Component {
   render() {
     return(
       <>
-        <Link to="/user/1">User</Link>
-        <Link to="/user/5">User</Link>
-        <UserCourseTable />
+        <CurrentUserCourseTable />
         {this.getAllUsersProgressTable()}
         {this.getDashboardAllCoursesTable()}
-        <Route path="/user/:id"
-          render={routeProps => {
-            return (
-              <Modala>
-                <ModalContent {...routeProps}/>
-              </Modala>
-            );
-          }}
-        />
+        <Route path={["/user/:id", "/course/:id/cert/upload"]} render={routeProps => { return (
+          <Modala>
+            {console.log(routeProps)}
+            {routeProps.match.path == '/user/:id' && <SideModalContentUser {...routeProps}/>}
+            {routeProps.match.path == '/course/:id/cert/upload' && <SideModalContentCertUpload {...routeProps}/>}
+          </Modala>
+        );}}/>
       </>
     );
   }
@@ -90,7 +87,7 @@ function Modala(props) {
     setTimeout(() => {
       // After CSS transition finished, call history to hide this hook.
       history.goBack();
-    }, 200);
+    }, 350);
   };
 
   /**
@@ -104,23 +101,23 @@ function Modala(props) {
     const timer  = setTimeout(() => {
       // Assign className variable to 'show'. Which will add animation to modal.
       setClassName('show');
-    }, 350);
+    }, 100);
     // returning a function inside useEffect hook is like using a componentWillUnmount()
     // lifecycle method inside class-based react components.
     return () => clearTimeout(timer);
   },[]);
 
   return (
-      <div className={`modal fade side-modal ${className} `} onClick={back} aria-modal="true">
-        <div className="modal-dialog" onClick={ e => { e.stopPropagation()}} >
-          <div className="modal-content pt-3">
-            {props.children}
-            <div className="modal-footer text-align-center">
-              <button onClick={back} type="button" className="btn btn-secondary mx-auto" data-dismiss="modal">Close</button>
-            </div>
+    <div className={`modal fade side-modal ${className} `} onClick={back} aria-modal="true">
+      <div className="modal-dialog" onClick={ e => { e.stopPropagation()}} >
+        <div className="modal-content pt-3">
+          {props.children}
+          <div className="modal-footer text-align-center">
+            <button onClick={back} type="button" className="btn btn-outline-primary mx-auto" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
+    </div>
   );
 }
 

@@ -1,0 +1,9 @@
+name: Wind GraphQL
+type: module
+description: 'Provide schema for the GraphQL module.'
+package: Windwalker
+core: 8.x
+dependencies:
+  - graphql:graphql
+  - node:node
+core_version_requirement: ^8 || ^9

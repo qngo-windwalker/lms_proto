@@ -16,6 +16,7 @@ use Drupal\Core\Render\Markup;
 use Symfony\Component\HttpFoundation\Response;
 
 class WindLMSJsonController extends ControllerBase {
+
   public function getCurrentUser(){
     $user = $this->currentUser();
 
@@ -32,17 +33,8 @@ class WindLMSJsonController extends ControllerBase {
    */
   public function getCurrentDashboard(){
     $user = $this->currentUser();
-    $rows = array();
-    $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
-    foreach ($coursesData as $courseData) {
-      $rows[] = $this->buildCourseRow($courseData);
-    }
-
-    $data = [
-      'uid' => $user->id(),
-      'name' => $user->getAccountName(),
-      'tableRow' => $rows
-    ];
+    $userAccount = User::load($user->id());
+    $data = $this->getUserData($userAccount);
 
     // For debugging
     if(\Drupal::request()->get('pretty') == 'true') {
@@ -54,17 +46,14 @@ class WindLMSJsonController extends ControllerBase {
     return new JsonResponse($data);
   }
 
+  /**
+   * Render Json for Dashboard side-modal
+   * path: 'wl-json/user/{user}'
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   */
   public function getUser(User $user) {
-    return new JsonResponse([
-      'uid' => $user->id(),
-      'username' => $user->getAccountName(),
-      'name' => $user->getAccountName(),
-      'full_name' => _wind_lms_get_user_full_name($user),
-      'status' => $user->get('status')->value,
-      'mail' => $user->get('mail')->value,
-      'access' => $user->get('access')->value,
-      'login' => $user->get('login')->value,
-    ]);
+    $data = $this->getUserData($user);
+    return new JsonResponse($data);
   }
 
   public function getUserVRCourse(User $user){
@@ -104,6 +93,25 @@ class WindLMSJsonController extends ControllerBase {
     return new JsonResponse([
 
     ]);
+  }
+
+  private function getUserData(User $user) {
+    $rows = array();
+    $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
+    foreach ($coursesData as $courseData) {
+      $rows[] = $this->buildCourseRow($courseData);
+    }
+    return [
+      'uid' => $user->id(),
+      'username' => $user->getAccountName(),
+      'name' => $user->getAccountName(),
+      'full_name' => _wind_lms_get_user_full_name($user),
+      'status' => $user->get('status')->value,
+      'mail' => $user->get('mail')->value,
+      'access' => $user->get('access')->value,
+      'login' => $user->get('login')->value,
+      'user_courses' => $rows
+    ];
   }
 
   protected function buildCourseRow($courseData) {

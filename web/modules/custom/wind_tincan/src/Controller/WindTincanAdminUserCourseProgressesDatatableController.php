@@ -31,7 +31,8 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
 
         $collection[] = [
           'uid' => $uid,
-          'username' => $this->getUserNameLink($user),
+          'username' => $user->label(),
+          'user_link' => $this->getUserNameLink($user),
           'status' => $user->get('status')->value,
           'mail' => $user->get('mail')->value,
           'fullName' => $user->get('field_first_name')->value . ' ' . $user->get('field_last_name')->value,

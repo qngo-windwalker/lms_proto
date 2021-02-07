@@ -1,0 +1,4 @@
+type Course {
+  id: Int!
+  title: String
+}
