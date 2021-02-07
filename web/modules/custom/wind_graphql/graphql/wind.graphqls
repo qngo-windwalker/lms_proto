@@ -14,6 +14,13 @@ type Query {
     offset: Int = 0
     limit: Int = 10
   ): NodeConnection!
+
+  user(id: Int!): User
+  users(
+    offset: Int = 0
+    limit: Int = 10
+  ): UserConnection!
+  currentUser: User
 }
 
 type Article {
@@ -36,4 +43,24 @@ type Node {
 type NodeConnection {
   total: Int!
   items: [Node!]
+}
+
+type UserConnection {
+  total: Int!
+  items: [User!]
+}
+
+type User {
+  id: Int
+  name: String
+}
+
+type File {
+  id: Int
+  name: String
+}
+
+type FileConnection {
+  total: Int!
+  items: [File!]
 }

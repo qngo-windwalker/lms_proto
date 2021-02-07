@@ -29,12 +29,15 @@ class WindSchema extends SdlSchemaPluginBase {
     $this->addQueryFields($registry, $builder);
     $this->addArticleFields($registry, $builder);
 
+    $this->addCurrentUserQueryFields($registry, $builder);
+
     $this->addNode($registry, $builder);
+    $this->addFile($registry, $builder);
 
     // Re-usable connection type fields.
     $this->addConnectionFields('ArticleConnection', $registry, $builder);
     $this->addConnectionFields('NodeConnection', $registry, $builder);
-
+    $this->addConnectionFields('FileConnection', $registry, $builder);
 
     return $registry;
   }
@@ -156,6 +159,50 @@ class WindSchema extends SdlSchemaPluginBase {
         $builder->produce('entity_label')
           ->map('entity', $builder->fromParent())
       )
+    );
+  }
+
+  /**
+   * @param \Drupal\graphql\GraphQL\ResolverRegistry $registry
+   * @param \Drupal\graphql\GraphQL\ResolverBuilder $builder
+   */
+  protected function addCurrentUserQueryFields(ResolverRegistry $registry, ResolverBuilder $builder) {
+    $registry->addFieldResolver('Query', 'currentUser', $builder->compose(
+      $builder->produce('current_user'),
+      $builder->produce('entity_load')
+        ->map('type', $builder->fromValue('user'))
+        ->map('id', $builder->fromParent())
+    ));
+  }
+
+  /**
+   * @param \Drupal\graphql\GraphQL\ResolverRegistry $registry
+   * @param \Drupal\graphql\GraphQL\ResolverBuilder $builder
+   */
+  protected function addFile(ResolverRegistry $registry, ResolverBuilder $builder) {
+    // Query ---------------------------
+    $registry->addFieldResolver('Query', 'file',
+      $builder->produce('entity_load')
+        ->map('type', $builder->fromValue('file'))
+        //        ->map('bundles', $builder->fromValue(['entity']))
+        ->map('id', $builder->fromArgument('id'))
+    );
+
+    $registry->addFieldResolver('Query', 'files',
+      $builder->produce('query_files')
+        ->map('offset', $builder->fromArgument('offset'))
+        ->map('limit', $builder->fromArgument('limit'))
+    );
+
+    // Field ---------------------------
+    $registry->addFieldResolver('File', 'id',
+      $builder->produce('entity_id')
+        ->map('entity', $builder->fromParent())
+    );
+
+    $registry->addFieldResolver('File', 'name',
+      $builder->produce('entity_label')
+        ->map('entity', $builder->fromParent())
     );
   }
 

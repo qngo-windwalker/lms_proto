@@ -1,4 +1,13 @@
 type Course {
   id: Int!
   title: String
+  packages: [CoursePackage]
+  field_package_file: [File]
+  field_learner: [User]
+  field_learner_access: String
+}
+
+type CoursePackage {
+  id: Int
+  name: String
 }

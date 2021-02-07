@@ -27,6 +27,7 @@ class WindLMSSchemaExtension extends SdlSchemaExtensionPluginBase {
 
     $this->addQueryFields($registry, $builder);
     $this->addPageFields($registry, $builder);
+//    $this->addCoursePackageFields($registry, $builder);
   }
 
   /**
@@ -47,6 +48,28 @@ class WindLMSSchemaExtension extends SdlSchemaExtensionPluginBase {
           ->map('string', $builder->fromParent())
       )
     );
+
+    $registry->addFieldResolver('Course', 'field_package_file', $builder->compose(
+        $builder->produce('entity_reference')->map('entity', $builder->fromParent())->map('field', $builder->fromValue('field_package_file'))
+    ));
+
+    // @see https://drupal-graphql.gitbook.io/graphql/v/8.x-4.x/queries/references
+    $registry->addFieldResolver('Course', 'packages',
+      $builder->produce('entity_reference')
+        ->map('entity', $builder->fromParent())
+        ->map('field', $builder->fromValue('field_package_file'))
+    );
+
+    $registry->addFieldResolver('CoursePackage', 'id',
+      $builder->produce('entity_id')
+        ->map('entity', $builder->fromParent())
+    );
+
+    $registry->addFieldResolver('CoursePackage', 'name',
+      $builder->produce('entity_label')
+        ->map('entity', $builder->fromParent())
+    );
+
   }
 
   /**
@@ -62,4 +85,16 @@ class WindLMSSchemaExtension extends SdlSchemaExtensionPluginBase {
     );
   }
 
+  /**
+   * @param \Drupal\graphql\GraphQL\ResolverRegistryInterface $registry
+   * @param \Drupal\graphql\GraphQL\ResolverBuilder $builder
+   */
+  protected function addCoursePackageFields(ResolverRegistryInterface $registry, ResolverBuilder $builder) {
+    $registry->addFieldResolver('Query', 'course',
+      $builder->produce('entity_load')
+        ->map('type', $builder->fromValue('node'))
+        ->map('bundles', $builder->fromValue(['course']))
+        ->map('id', $builder->fromArgument('id'))
+    );
+  }
 }
