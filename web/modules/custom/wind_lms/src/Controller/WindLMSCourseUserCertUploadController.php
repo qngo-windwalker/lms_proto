@@ -29,11 +29,21 @@ class WindLMSCourseUserCertUploadController extends ControllerBase{
       \Drupal::logger('wind_lms Certificate Upload')->warning('Unable to find file at the request level.', []);
       return new JsonResponse([
         'code' => 500,
+        'error' => 1,
         'message' => 'Unable to find file.',
       ]);
     }
 
     $file = $_FILES['file'];
+
+    // Checking File Size (Max Size - 5MB)
+    if($file['size'] > 5242880){
+      return new JsonResponse([
+        'code' => 500,
+        'error' => 1,
+        'message' => 'File is too large.',
+      ]);
+    }
 
     // Todo: Add file extension validition
     $extensions = ['jpg jpeg gif png txt doc xls pdf ppt pptx'];
@@ -44,7 +54,8 @@ class WindLMSCourseUserCertUploadController extends ControllerBase{
       \Drupal::logger('wind_lms Certificate Upload')->notice('The upload directory %directory for the file field %name could not be created or is not accessible. A newly uploaded file could not be saved in this directory as a consequence, and the upload was canceled.', ['%directory' => $destination, '%name' => $element['#field_name']]);
       return new JsonResponse([
         'code' => 500,
-        'message' => 'The upload directory had a problem.',
+        'error' => 1,
+        'message' => 'Unable to prepare directory for upload.',
       ]);
     }
 
@@ -57,12 +68,14 @@ class WindLMSCourseUserCertUploadController extends ControllerBase{
       \Drupal::logger('wind_lms Certificate Upload')->warning('Unable to save file data to the system', []);
       return new JsonResponse([
         'code' => 500,
+        'error' => 1,
         'message' => 'Unable to find file.',
       ]);
     }
     $certNode = $this->createNewCertNode($result->id(), $node, $user->id());
     return new JsonResponse([
       'code' => 200,
+      'success' => 1,
       'message' => 'Success',
       'nodeId' => $certNode->id(),
       'file' => array(

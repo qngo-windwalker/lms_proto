@@ -108,8 +108,10 @@ export default class DashboardAllCoursesTable extends Component{
       {
         title: 'Title',
         // width: 120,
-        data: 'title',
-        className : "first-child"
+        className : "first-child",
+        data: function ( row, type, val, meta ) {
+          return `<a href="/node/${row.nid}">${row.title}</a>` ;
+        },
       },
       {
         title: 'Learners <i class="fas fa-users"></i> ',

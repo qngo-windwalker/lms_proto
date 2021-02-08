@@ -94,10 +94,19 @@ export default class FileUpload extends React.Component {
           loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
         })
       }
-      // receive two    parameter endpoint url ,form data
+      // receive two parameter endpoint url ,form data
     }).then(res => { // then print response status
-      console.log(res.statusText)
-      toast.success('upload success')
+      // If server doesn't crash
+      if(res.statusText == 'OK'){
+        // console.log(res.data.message);
+        if(res.data.hasOwnProperty('error') ){
+          res.data.hasOwnProperty('message') && toast.error(res.data.message);
+        }
+
+        if(res.data.hasOwnProperty('success') ){
+          res.data.hasOwnProperty('message') && toast.success(res.data.message);
+        }
+      }
     })
   }
 

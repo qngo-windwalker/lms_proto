@@ -64,7 +64,6 @@ export default class SideModalContentUser extends React.Component {
                   <div>
                     {obj.data.title}
                   </div>
-                  <span>Todo: add completion status</span>
                 </li>
               );
             })}
