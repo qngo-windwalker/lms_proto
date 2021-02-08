@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 import { createPortal } from "react-dom";
+import FileUpload from "./fileUpload";
 
 export default class SideModalContentCourseCertUpload extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ export default class SideModalContentCourseCertUpload extends React.Component {
   componentDidMount() {
     let match = this.props.match;
     let query = `query {
-      course(id: ${match.params.id}){
+      course(id: ${match.params.nid}){
         id
         title
       }
@@ -31,7 +32,6 @@ export default class SideModalContentCourseCertUpload extends React.Component {
   async load(url) {
     axios.get(url)
       .then(res => {
-        console.log(res.data);
         this.setState({
           ajaxRespondData : res.data
         });
@@ -39,6 +39,12 @@ export default class SideModalContentCourseCertUpload extends React.Component {
   }
 
   render() {
+    if (!this.state.ajaxRespondData) {
+      return (<p>Loading...</p>);
+    }
+
+    let match = this.props.match;
+
     return (
       <>
         <div className="modal-header">
@@ -47,7 +53,7 @@ export default class SideModalContentCourseCertUpload extends React.Component {
 
         <div className="modal-body">
           <h4>Upload</h4>
-
+          <FileUpload postURL={`course/${match.params.nid}/user/${match.params.uid}/cert/upload`} />
         </div>
       </>
     );
@@ -55,6 +61,11 @@ export default class SideModalContentCourseCertUpload extends React.Component {
 
   getCourseData(property) {
     if (!this.state.ajaxRespondData) {
+      return '';
+    }
+
+    if (this.state.ajaxRespondData.hasOwnProperty('errors') && this.state.ajaxRespondData.errors.length) {
+      console.log('%c' + this.state.ajaxRespondData.errors[0].message, 'color: #ff0000');
       return '';
     }
 

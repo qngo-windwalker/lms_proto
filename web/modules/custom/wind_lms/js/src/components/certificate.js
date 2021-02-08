@@ -24,11 +24,12 @@ export default class Certificate extends React.Component {
 
   render(){
     let courseData = this.props['course-data'];
+    // The Add button will open the Side Modal. @see ./sideModalContentCourseCertUpload.js
     return (
       <>
         { courseData.certificateLink == 'N/A'
-          ? <a className="btn btn-outline-secondary btn-sm" href={`#/course/${courseData.nid}/cert/upload`}>
-            <i className="fas fa-file-upload mr-1"></i> Upload
+          ? <a className="btn btn-outline-secondary btn-sm" href={`#/course/${courseData.nid}/user/${this.props.user.uid}/cert/upload`}>
+            <i className="fas fa-plus-circle mr-1"></i> Add
         </a>
           : <span dangerouslySetInnerHTML={{__html: courseData.certificateLink}}></span>
         }

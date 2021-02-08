@@ -16,14 +16,18 @@ import DashboardAllCoursesTable from './dashboardAllCoursesTable';
 import SideModalContentUser from "./sideModalContentUser";
 import SideModalContentCertUpload from "./sideModalContentCourseCertUpload";
 
-export default class DashboardPanel extends React.Component {
+export default class  DashboardPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = { currentUser : null };
   }
 
   componentDidMount() {
-    axios.get(`/wind/json/current-user`)
+    this.load(`/wind/json/current-user`);
+  }
+
+  async load(url) {
+    axios.get(url)
       .then(res => {
         // const posts = res.data.data.children.map(obj => obj.data);
         this.setState({
@@ -35,14 +39,13 @@ export default class DashboardPanel extends React.Component {
   render() {
     return(
       <>
-        <CurrentUserCourseTable />
-        {this.getAllUsersProgressTable()}
-        {this.getDashboardAllCoursesTable()}
-        <Route path={["/user/:id", "/course/:id/cert/upload"]} render={routeProps => { return (
+        {this.state.currentUser ? <CurrentUserCourseTable /> : <p>Loading...</p>}
+        {/*{this.getAllUsersProgressTable()}*/}
+        {/*{this.getDashboardAllCoursesTable()}*/}
+        <Route path={["/user/:id", "/course/:nid/user/:uid/cert/upload"]} render={routeProps => { return (
           <Modala>
-            {console.log(routeProps)}
             {routeProps.match.path == '/user/:id' && <SideModalContentUser {...routeProps}/>}
-            {routeProps.match.path == '/course/:id/cert/upload' && <SideModalContentCertUpload {...routeProps}/>}
+            {routeProps.match.path == '/course/:nid/user/:uid/cert/upload' && <SideModalContentCertUpload {...routeProps}/>}
           </Modala>
         );}}/>
       </>

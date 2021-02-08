@@ -29,6 +29,19 @@ wind_lms.cert.id:
         type: entity:node
       user:
         type: entity:user
+wind_lms.course.user.cert.upload:
+  path: course/{node}/user/{user}/cert/upload
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSCourseUserCertUploadController::getContent
+    _title: 'Certificate Upload'
+  requirements:
+    _role: 'authenticated'
+  options:
+    parameters:
+      node:
+        type: entity:node
+      user:
+        type: entity:user
 # Old SCORM course URL
 # Need to streamline to /course
 #wind_lms.course:

@@ -6,7 +6,7 @@ import Certificate from "./certificate";
 export default class CurrentUserCourseTable extends Component{
 	constructor(props) {
     super(props);
-    this.state = { tableRow: [] };
+    this.state = { tableRow: [], user : null };
     this.courseClickHandler = this.courseClickHandler.bind(this);
   };
 
@@ -97,12 +97,12 @@ export default class CurrentUserCourseTable extends Component{
 		);
 	}
 
-  rendertBodyRow(dataObj, key){
+  rendertBodyRow(dataObj, key, user){
     return(
       <tr key={key} data-nid={dataObj.data['nid']}>
         <td>{this.getColumnNameContent(dataObj)}</td>
         <td className="text-capitalize" dangerouslySetInnerHTML={{__html: this.getColumnStatusContent(dataObj)}}></td>
-        <td><Certificate course-data={dataObj.data} /></td>
+        <td><Certificate user={user} course-data={dataObj.data} /></td>
       </tr>
     );
   }
@@ -159,15 +159,17 @@ export default class CurrentUserCourseTable extends Component{
   }
 
   parseJson(data) {
+    let user = {uid: data.uid, username: data.username, name: data.name};
     let collection = [];
     for(var i = 0; i < data.user_courses.length; i++){
-      let Comp = this.rendertBodyRow(data.user_courses[i], i);
+      let Comp = this.rendertBodyRow(data.user_courses[i], i, user);
       // If user has not made selected an option to this item, then skip it.
       collection.push({Comp : Comp});
     }
     // const posts = res.data.data.children.map(obj => obj.data);
     this.setState({
-      tableRow : collection
+      tableRow : collection,
+      user : user
     });
   }
 }

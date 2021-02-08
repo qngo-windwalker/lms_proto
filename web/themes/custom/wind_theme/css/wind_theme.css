@@ -3,6 +3,7 @@
 @import "message.css";
 @import "https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css";
 @import "datatable.css";
+@import "file_upload.css";
 
 /* Import style for Block Tabs menu*/
 @import "block_wind_theme_local_tasks.css";
