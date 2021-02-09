@@ -15,7 +15,6 @@ export default class Certificate extends React.Component {
 
   render(){
     let courseData = this.props['course-data'];
-    console.log(courseData);
     // The Add button will open the Side Modal. @see ./sideModalContentCourseCertUpload.js
     return (
       <>

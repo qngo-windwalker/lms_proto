@@ -449,9 +449,10 @@ function _wind_lms_get_course_package_definition(NodeInterface $node, $user) {
       $tincan = _wind_lms_tincan_load_by_fid($file->id());
       if ($tincan) {
         $tincan_uri = $tincan_service::getExtractPath($file);
+        $title = $node->label();
         $path = file_url_transform_relative(file_create_url($tincan_uri)) . '/' . $tincan->launch_filename;
         $data[$key]['type'] = 'tincan';
-        $data[$key]['title'] = $node->label();
+        $data[$key]['title'] = $title;
         $data[$key]['file_name'] = $file->label();
         $data[$key]['tincan_package'] = $tincan;
         $data[$key]['activity_link'] = _wind_lms_tincan_build_course_link($title, $path, $tincan);
