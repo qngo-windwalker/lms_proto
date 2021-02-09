@@ -42,7 +42,7 @@ class WindScormLauncherController extends ControllerBase{
       '/course/' . $course_folder,
       [
         'attributes' => [
-          'data-coure-href' => _wind_lms_gen_course_link($course_folder),
+          'data-coure-href' => _wind_lms_tincan_gen_static_course_link($course_folder),
           'class' => array('wind-scorm-popup-link', 'd-flex')
         ]
       ]

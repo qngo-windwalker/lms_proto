@@ -14,6 +14,7 @@ export default class CurrentUserCourseTable extends Component{
     let url = new URL(window.location.href);
     let testParam = url.searchParams.get('test') ? 'test=true' : '';
     let langParam = this.isEnglishMode() ? 'en' : 'es';
+    // @see WindLMSJsonController.php
     axios.get(`/wind-lms/json/dashboard?lang=${langParam}&${testParam}`)
       .then(res => {
         this.parseJson(res.data);
@@ -112,7 +113,7 @@ export default class CurrentUserCourseTable extends Component{
       return (<CurriculumNameColumn title={dataObj.data.title} courses={dataObj.data.courses} />)
     }
 
-    if(dataObj.data.type == 'tincan' || dataObj.data.type == 'scorm'){
+    if(dataObj.data.type == 'course'){
       return (<CourseNameColumn title={dataObj.data.title} packages={dataObj.data.package_files} />)
     }
   }

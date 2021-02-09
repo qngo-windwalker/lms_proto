@@ -20,6 +20,8 @@ label{margin-top: 10px;}
 h2{color: rgb(117,121,137); }
 /*label.form-required::after{ content: ' *'; color: red;}*/
 
+.badge.badge-secondary.badge-outline{ background: none; border: 1px solid #6c757d; color: inherit;}
+
 #site-top-header{padding: 20px 0; background: #1a1a1a; color: white;}
   #site-logo{display: inline-block;}
   #site-header-left-nav {display: inline-block;}

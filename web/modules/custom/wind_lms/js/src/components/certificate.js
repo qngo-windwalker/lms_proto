@@ -1,15 +1,6 @@
 'use strict';
 
 import React, { useEffect, useState  } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useLocation, useHistory, useParams,
-  HashRouter,
-  Link
-} from "react-router-dom";
-import axios from 'axios';
 
 export default class Certificate extends React.Component {
 
@@ -24,6 +15,7 @@ export default class Certificate extends React.Component {
 
   render(){
     let courseData = this.props['course-data'];
+    console.log(courseData);
     // The Add button will open the Side Modal. @see ./sideModalContentCourseCertUpload.js
     return (
       <>

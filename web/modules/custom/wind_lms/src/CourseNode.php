@@ -42,6 +42,9 @@ class CourseNode {
     /* @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
     $scorm_controller = \Drupal::service('opigno_scorm.scorm');
 
+    /* @var \Drupal\wind_tincan\WindTincanService $tincan_service */
+    $tincan_service = \Drupal::service('wind_tincan.tincan');
+
     if(!empty($fids)){
       $files = \Drupal::entityTypeManager()->getStorage('file')->loadMultiple($fids);
 
@@ -51,6 +54,8 @@ class CourseNode {
         if ($scorm) {
           continue;
         }
+
+//        $tincan_service->saveTincanPackageInfo($file);
 
         // Create SCORM package from file.
         $scorm_controller->scormExtract($file);
@@ -108,6 +113,7 @@ class CourseNode {
   private function sendEmail(NodeInterface $node, $uid) {
     $site_name = \Drupal::config('system.site')->get('name');
     $site_mail = \Drupal::config('system.site')->get('mail');
+    /** @var \Drupal\user\Entity\User $user */
     $user = \Drupal\user\Entity\User::load($uid);
     $mailManager = \Drupal::service('plugin.manager.mail');
     $renderable = [
@@ -131,7 +137,7 @@ class CourseNode {
     if ($result['result'] !== TRUE) {
       \Drupal::messenger()->addError('There was a problem sending your message and it was not sent.');
     } else {
-      \Drupal::messenger()->addMessage('Your message has been sent.');
+      \Drupal::messenger()->addMessage("An email has been send to {$to}.");
     }
   }
 

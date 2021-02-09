@@ -1,0 +1,4 @@
+services:
+  wind_tincan.tincan:
+    class: Drupal\wind_tincan\WindTincanService
+    arguments: ['@database']

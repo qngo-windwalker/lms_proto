@@ -2,6 +2,18 @@
 
 use Drupal\wind_tincan\Entity\TincanStatement;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+use Drupal\Core\Render\Markup;
+
+function _wind_lms_tincan_load_by_fid($fid){
+  //  $db = \Drupal\Core\Database\Database::getConnection();
+  $db = \Drupal::database();
+  $query = $db->select('wind_tincan_type_properties', 'o');
+  $query->fields('o', []);
+  $query->condition('fid', $fid);
+  return $query->execute()->fetchObject();
+}
 
 /**
  * @param $user
@@ -95,4 +107,93 @@ function _wind_lms_get_agent_id_by_tincan_agent_account_name($tincan_agent_accou
     return end($result);
   }
   return FALSE;
+}
+
+/**
+ * This is only for the 2 test courses
+ * @param $title
+ * @param $course_folder
+ *
+ * @return array
+ */
+function _wind_lms_tincan_build_link_of_static_course($title, $course_folder) {
+  $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . "<span> {$title}</span>";
+  $renderedAnchorContent = render($linkContent);
+  $url = Url::fromUserInput(
+    '/course/' . $course_folder,
+    [
+      'attributes' => [
+        'data-coure-href' => _wind_lms_tincan_gen_static_course_link($course_folder),
+        'class' => array('wind-scorm-popup-link', 'd-flex')
+      ]
+    ]
+  );
+  return array('#markup' => Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString());
+}
+
+/**
+ * @param $course_folder
+ *
+ * @return string
+ */
+function _wind_lms_tincan_gen_static_course_link($course_folder) {
+  $currentUser = \Drupal::currentUser();
+  $schemaAndHost = _wind_lms_get_scheme_and_http_host();
+
+  //Ex: {"name":["quan ngo"],"account":[{"accountServiceHomePage":"http://cloud.scorm.com","accountName":"0QTP625WM3|quan.ngo@windwalker.com"}],"objectType":"Agent"}
+  $actor = [
+    'name' => array($currentUser->getAccountName()),
+    'account' => array(
+      array(
+        "accountName" => _wind_lms_get_user_tincan_agent_account_name($currentUser),
+        'accountServiceHomePage' => $schemaAndHost . '/user/' . $currentUser->id(),
+      )
+    ),
+    'objectType' => 'Agent'
+  ];
+  $actorJson = Json::encode($actor);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = $module_handler->getModule('wind_lms')->getPath();
+  $link = $module_path . '/course/' . $course_folder . '?';
+  $link .= 'endpoint=' . $schemaAndHost . '/course/tcapi';
+  $link .= '&actor=' . urlencode($actorJson);
+  return $link;
+}
+
+
+function _wind_lms_tincan_build_course_link($title, $path, $tincan) {
+  $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . "<span> {$title}</span>";
+  $renderedAnchorContent = render($linkContent);
+  $url = Url::fromUserInput(
+    $path,
+    [
+      'attributes' => [
+        'data-coure-href' => _wind_lms_tincan_gen_course_link($path),
+        'class' => array('wind-scorm-popup-link', 'd-flex')
+      ]
+    ]
+  );
+  return array('#markup' => Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString());
+}
+
+function _wind_lms_tincan_gen_course_link($path) {
+  $currentUser = \Drupal::currentUser();
+  $schemaAndHost = _wind_lms_get_scheme_and_http_host();
+
+  //Ex: {"name":["quan ngo"],"account":[{"accountServiceHomePage":"http://cloud.scorm.com","accountName":"0QTP625WM3|quan.ngo@windwalker.com"}],"objectType":"Agent"}
+  $actor = [
+    'name' => array($currentUser->getAccountName()),
+    'account' => array(
+      array(
+        "accountName" => _wind_lms_get_user_tincan_agent_account_name($currentUser),
+        'accountServiceHomePage' => $schemaAndHost . '/user/' . $currentUser->id(),
+      )
+    ),
+    'objectType' => 'Agent'
+  ];
+  $actorJson = Json::encode($actor);
+  $link = $path . '?';
+  $link .= 'endpoint=' . $schemaAndHost . '/course/tcapi';
+  $link .= '&actor=' . urlencode($actorJson);
+  return $link;
 }

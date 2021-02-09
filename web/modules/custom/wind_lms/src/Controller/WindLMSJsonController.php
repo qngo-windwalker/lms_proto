@@ -99,7 +99,7 @@ class WindLMSJsonController extends ControllerBase {
     $rows = array();
     $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
     foreach ($coursesData as $courseData) {
-      $rows[] = $this->buildCourseRow($courseData);
+      $rows[] = $this->buildCourseRow($courseData, $user);
     }
     return [
       'uid' => $user->id(),
@@ -114,7 +114,7 @@ class WindLMSJsonController extends ControllerBase {
     ];
   }
 
-  protected function buildCourseRow($courseData) {
+  protected function buildCourseRow($courseData, $user) {
     $title = $courseData['title'];
 
     if($courseData['type'] == 'curriculum'){
@@ -136,7 +136,7 @@ class WindLMSJsonController extends ControllerBase {
         'title' => $courseData['title'],
         'type' => $courseData['type'],
         'courseLink' => $this->buildCourseLink($title, $courseData),
-        'certificateLink' => $this->getCourseCertificate($courseData),
+        'certificateLink' => $this->getCourseCertificate($courseData, $user),
         'package_files' => isset($courseData['package_files']) ? $courseData['package_files'] : [],
         'nid' => isset($courseData['nid']) ? $courseData['nid'] : '',
       ),
@@ -164,7 +164,7 @@ class WindLMSJsonController extends ControllerBase {
       '/course/' . $course_folder,
       [
         'attributes' => [
-          'data-coure-href' => _wind_lms_gen_course_link($course_folder),
+          'data-coure-href' => _wind_lms_tincan_gen_static_course_link($course_folder),
           'class' => array('wind-scorm-popup-link', 'd-flex')
         ]
       ]
@@ -172,46 +172,66 @@ class WindLMSJsonController extends ControllerBase {
     return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
   }
 
-  private function getCourseCertificate($courseData) {
+  /**
+   * @param array $courseData
+   * @param \Drupal\user\Entity\User $user
+   *
+   * @return \Drupal\Core\GeneratedLink|string
+   */
+  private function getCourseCertificate($courseData, $user) {
     $allCompleted = true;
     foreach ($courseData['package_files'] as $package_file) {
-      if($package_file['course_data']['progress'] != 'completed'){
+      // Scorm is completed, Tincan is Completed (uppercase)
+      // strtolower to make it all lowercase.
+      $progress = strtolower($package_file['course_data']['progress']);
+      if($progress != 'completed'){
         $allCompleted = false;
         // will leave the foreach loop, if an item is not completed.
         break;
       }
     }
-    return $allCompleted ? $this->buildCourseCertificateLink($courseData) : 'N/A';
+    return $allCompleted ? $this->buildCourseCertificateLink($courseData, $user) : 'N/A';
   }
 
-  private function buildCourseCertificateLink($courseData) {
+  /**
+   * Generate Certificate Id that can be decoded for traceability
+   * @param array $courseData
+   * @param \Drupal\user\Entity\User $user
+   *
+   * @return \Drupal\Core\GeneratedLink
+   */
+  private function buildCourseCertificateLink($courseData, User $user) {
     $module_handler = \Drupal::service('module_handler');
     $module_path = $module_handler->getModule('wind_lms')->getPath();
     $linkContent = '<img width="26" src="/' . $module_path . '/img/certificate_icon.png">';
     $renderedAnchorContent = render($linkContent);
 
-    if($courseData['type'] == 'tincan'){
-      if(!isset($courseData['statement'])){
-        return '';
+    // Create an Id that can be decoded to lookup.
+    // CN = Course Node
+    $code_ids = ['CN' . $courseData['nid'] ];
+    foreach ($courseData['package_files'] as $package_file) {
+
+      if($package_file['type'] == 'scorm'){
+        // SM = SCORM
+        $code_ids[] = 'SM' . $package_file['scorm_package']->id;
       }
 
-      $url = Url::fromUserInput(
-        '/certificate/' . $courseData['statement']->get('statement_id')->value,
-        [
-          'attributes' => ['target' => '_blank'],
-        ]
-      );
-      return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
+      if($package_file['type'] == 'tincan'){
+        // TC = Tincan
+        $code_ids[] = 'TC' .  $package_file['course_data']['statement']->get('statement_id')->value;
+      }
     }
 
-    if($courseData['type'] == 'scorm'){
-      $user = $this->currentUser();
-      $url = Url::fromUserInput('/cert/' . $courseData['nid'] . '/user/' . $user->id(),
-        [
-          'attributes' => ['target' => '_blank'],
-        ]
-      );
-      return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
-    }
+    // Separate each structure with 00.
+    $transaction_id = implode('00', $code_ids);
+
+    $url = Url::fromUserInput(
+      '/certificate/' . $transaction_id . '/' . $user->id(),
+      [
+        'attributes' => ['target' => '_blank'],
+      ]
+    );
+
+    return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
   }
 }

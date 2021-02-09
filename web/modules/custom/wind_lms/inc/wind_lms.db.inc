@@ -1,5 +1,31 @@
 <?php
 
+function _wind_scorm_load_by_fid($fid){
+  //  $db = \Drupal\Core\Database\Database::getConnection();
+  $db = \Drupal::database();
+  $query = $db->select('opigno_scorm_packages', 'o');
+  $query->fields('o', []);
+  $query->condition('fid', $fid);
+  return $query->execute()->fetchObject();
+}
+
+function _wind_lms_get_scorm_package_title($scorm_id) {
+  $db = \Drupal::database();
+
+  $data = NULL;
+  $sco = $db->select('opigno_scorm_package_scos', 'o')
+    ->fields('o', [])
+    ->condition('o.scorm_id', $scorm_id)
+    ->execute()
+    ->fetchObject();
+
+  if ($sco) {
+    return $sco->title;
+  }
+
+  return '';
+}
+
 function _wind_lms_load_all_curriculum_assigned_to_user($user){
   // https://www.drupal.org/docs/drupal-apis/entity-api/working-with-the-entity-api
   $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();

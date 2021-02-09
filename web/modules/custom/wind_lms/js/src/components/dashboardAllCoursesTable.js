@@ -114,17 +114,20 @@ export default class DashboardAllCoursesTable extends Component{
         },
       },
       {
-        title: 'Learners <i class="fas fa-users"></i> ',
+        title: 'Learners ',
         data: function ( row, type, val, meta ) {
           return (row.field_learner_access == '1') ? 'Avail to All' : row.learners_data.length + ' Enrolled' ;
         },
         className : "learner-col"
       },
       {
-        title: 'Category <i class="fas fa-tag"></i>',
+        title: 'Category',
         data: function ( row, type, val, meta ) {
-          let labels = _.map(row.category_data, 'label')
-          return _.join(labels, ', ');
+          let markup = '';
+          _.forEach(row.category_data, (term) => {
+            markup += '<span class="badge badge-pill badge-outline badge-secondary mr-1 mb-1" data-tid="' + term.tid + '">' + term.label + '</span>';
+          });
+          return markup;
         }
       },
       {
@@ -134,7 +137,7 @@ export default class DashboardAllCoursesTable extends Component{
         }
       },
       {
-        title: 'Action <i class="fas fa-cogs"></i>',
+        title: 'Operations',
         data: 'action',
         orderable: false,
         className : "td-action"

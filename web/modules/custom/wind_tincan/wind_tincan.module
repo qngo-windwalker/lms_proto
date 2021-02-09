@@ -3,6 +3,19 @@
 use Drupal\wind_tincan\Entity\TincanStatement;
 use Drupal\Component\Serialization\Json;
 
+
+/**
+ * Implements hook_file_delete().
+ */
+function wind_tincan_file_delete($file) {
+  // Delete the extracted files that are in the extracted folder.
+  $tincan_content_service = \Drupal::service('wind_tincan.tincan');
+  $len = strlen($tincan_content_service->PATH_PUBLIC_PACKAGE_FOLDER);
+  if (substr($file->getFileUri(), 0, $len) === $tincan_content_service->PATH_PUBLIC_PACKAGE_FOLDER) {
+    file_unmanaged_delete_recursive($tincan_content_service->getExtractPath($file));
+  }
+}
+
 /**
  * Helper function to decode json and log the resulting error message
  *
