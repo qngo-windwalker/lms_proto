@@ -177,7 +177,7 @@ class WindTincanAPIActivitiesStateController extends ControllerBase{
     if ($agent_json) {
       $agentArray = Json::decode($agent_json);
       $accountName = $agentArray['account']['name'];
-      $agent_id = _ch_nav_get_agent_id_by_tincan_agent_account_name($accountName);
+      $agent_id = _wind_tincan_get_agent_id_by_tincan_agent_account_name($accountName);
 
       if($agent_id) {
         $query->condition('field_tincan_agent', $agent_id);
