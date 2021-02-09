@@ -115,21 +115,21 @@ class CourseNode {
     $site_mail = \Drupal::config('system.site')->get('mail');
     /** @var \Drupal\user\Entity\User $user */
     $user = \Drupal\user\Entity\User::load($uid);
+    $user_full_name = _wind_lms_get_user_full_name($user);
+    $greeting = '<p><b>' . _wind_get_greeting_time() . ' ' . $user_full_name . ', </b><br /></p>';
+    $closingStatment = '<p>Sincerely,<br /> ' . $site_name . ' team</p>';
+    $courseLink = _wind_gen_button_for_email($node->label(),  $_SERVER['HTTP_ORIGIN']  . '?destination=/dashboard');
+    $debugInfo = '<p><!-- Course Id: ' . $node->id() . '- User Id: ' . $uid . ' --></p>';
     $mailManager = \Drupal::service('plugin.manager.mail');
-    $renderable = [
-      '#theme' => 'wind_email',
-      '#body' => 'You have been enrolled to course: ' ,
-    ];
-    $rendered = \Drupal::service('renderer')->renderPlain($renderable);
     $to = $user->get('mail')->value;
     $params['to'] = $to;
     $params['subject'] = 'New enrollment';
     $params['from_name'] = $site_mail;
     $params['to_name'] = $site_name;
     $params['reply_to'] = $site_mail;
-    $params['message'] = 'You have been enrolled to course: ' . $node->label();
-    $params['node_title'] = 'node title';
-    $params['body'] = $rendered;
+    $params['message'] = 'New enrollment: ' . $node->label();
+    $params['node_title'] = $node->label() ;
+    $params['body'] = $greeting . 'A new training course is available to you. Please click on the link below to login and take the course: <br /><br /> '  . $courseLink . '<br />' . $closingStatment . $debugInfo;
     $langcode = \Drupal::currentUser()->getPreferredLangcode();
 
     // Note: 1st param module name needed so MailManager will invoke hook_mail (!!this hook is required !!!)
@@ -140,7 +140,6 @@ class CourseNode {
       \Drupal::messenger()->addMessage("An email has been send to {$to}.");
     }
   }
-
   /**
    * IN : array(['target_id' => 1], ['target_id' => 2])
    * Out: array(1, 2)

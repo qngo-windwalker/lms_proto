@@ -17,7 +17,7 @@
     -webkit-font-smoothing: antialiased;
     font-size: 16px;
     color: #525F7f;
-    line-height: 1.4;
+    line-height: 1.6;
     margin: 0;
     padding: 0;
     -ms-text-size-adjust: 100%;
@@ -225,11 +225,13 @@
   <table border="0" cellspacing="0" cellpadding="0" align="center" width="100%" bgcolor="#f6f9fc" style="background: #f6f9fc; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; -ms-text-size-adjust: 100%;">
     <tr>
       <td bgcolor="#f6f9fc" style="background: #f6f9fc; padding: 30px;">
-        <table align="center" border="0" cellspacing="0" cellpadding="0" width="600" bgcolor="ffffff" style=" font-weight:300; width:600px; border-radius: 10px;">
+        <table align="center" border="0" cellspacing="0" cellpadding="0" width="700" bgcolor="ffffff" style=" font-weight:300; width:600px; border-radius: 10px;">
           <tr>
             <td cellpadding="50" style="padding: 30px; background: #ffffff; color: #525F7f!important; font-family: helvetica, Arial, sans;" bgcolor="#ffffff">
 
-              {{ body }}
+              <br />
+              {{ body | raw }}
+              <br />
 
               <!--
               <div style="border-top:1px solid #b9cdd7"></div>
@@ -237,8 +239,9 @@
             </td>
           </tr>
           <tr>
-            <td cellpadding="50" style="background-color:#e9eff2;">
+            <td cellpadding="50" style="padding: 30px; color: #4b4b4b; background-color:#e9eff2;">
               <!-- Footer -->
+              <a href="{{ site_link }}">{{ site_name }}</a>
             </td>
           </tr>
         </table>

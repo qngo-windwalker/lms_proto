@@ -38,14 +38,7 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
           'fullName' => $user->get('field_first_name')->value . ' ' . $user->get('field_last_name')->value,
           'created' => $user->get('created')->value,
           'login' => $user->get('login')->value,
-  //        'field_service_desk_account_id' => $user->get('field_service_desk_account_id')->value,
-  //        'jiraServiceDeskCustomerLink' => $this->getJiraServiceDeskCustomerLink($user->get('field_service_desk_account_id')->value),
-//          'licenseLink' => '',
-//          'field_paid' => '',
-  //        'field_subscription_type' => $licenseNode ? $licenseNode->get('field_subscription_type')->value : '',
           'field_clearinghouse_role' =>  '',
-  //        'field_payment_date' => $licenseNode ? $licenseNode->get('field_payment_date')->value : '',
-  //        'field_payment_amount' => $licenseNode ? $licenseNode->get('field_payment_amount')->value : '',
           'field_enroll_date' => '',
           'courseTitle' => $this->getCourseDataValue($course, 'title'),
           'courseTincanId' => $this->getCourseDataValue($course, 'tincan_course_id'),
@@ -85,7 +78,6 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
   }
 
   function getCourseDataValue($course, $key){
-    $end = end($coursesData);
     switch ($key) {
       case 'stored_date' :
         $statement = $course['statement'];

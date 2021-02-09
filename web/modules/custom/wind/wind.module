@@ -25,12 +25,57 @@ function wind_user_login($account) {
  * Implements hook_theme().
  */
 function wind_theme($existing, $type, $theme, $path) {
+  $site_name = \Drupal::config('system.site')->get('name');
+  $site_link = $_SERVER['HTTP_ORIGIN'];
   return [
     'wind_email' => [
-      'variables' => ['body' => ''],
+      'variables' => [
+        'body' => '',
+        'site_name' => $site_name,
+        'site_link' => $site_link,
+      ],
     ],
   ];
 }
+
+/**
+ * Make all mail use wind_theme: wind_email template.
+ *
+ * Implements hook_mail_alter().
+ */
+function wind_mail_alter(&$message) {
+  \Drupal::config('system.site')
+    ->get('name');
+  $renderable = [
+    '#theme' => 'wind_email',
+    '#body' => $message['body'][0],
+  ];
+  $rendered = \Drupal::service('renderer')->renderPlain($renderable);
+  // Todo: add notifications_optin feature for user whom want to unsubscribe to email notification.
+
+//    if (!example_notifications_optin($message['to'], $message['id'])) {
+//
+//      // If the recipient has opted to not receive such messages, cancel
+//      // sending.
+//      $message['send'] = FALSE;
+//      return;
+//    }
+  // Allows rich HTML email
+  $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
+  $message['body'] = [$rendered];
+}
+
+function _wind_get_greeting_time() {
+  $Hour = date('G');
+  if ( $Hour >= 5 && $Hour <= 11 ) {
+    return "Good Morning";
+  } else if ( $Hour >= 12 && $Hour <= 18 ) {
+    return "Good Afternoon";
+  } else if ( $Hour >= 19 || $Hour <= 4 ) {
+    return "Good Evening";
+  }
+}
+
 
 function wind_does_user_has_sudo($user) {
   if ($user->id() == 1) {
@@ -63,4 +108,16 @@ function _wind_array_compare($array_new, $array_origin) {
     'added' => array_diff($array_new, $array_origin),
     'removed' => array_diff($array_origin, $array_new)
   ];
+}
+
+/**
+ * Get HTML <a /> blue rouned corner button for emailing
+ * @param $label
+ * @param string $link
+ */
+function _wind_gen_button_for_email($label, $link) {
+  $markup =  '<a class=" btn " style="align-items:baseline; box-sizing:border-box; border-radius:3px; border-width:0; display:inline-flex; font-style:normal; font-size:inherit; height:2.28571429em; line-height:2.28571429em; margin:0; outline:none; padding:8px 10px; text-align:center; vertical-align:middle; white-space:nowrap; text-decoration:none; border:none; background:#007bff; color:#fff" href="'. $link .'">';
+  $markup .=  $label;
+  $markup .=  '</a>';
+  return $markup;
 }

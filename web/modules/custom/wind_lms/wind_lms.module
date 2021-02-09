@@ -40,6 +40,8 @@ function wind_lms_theme($existing, $type, $theme, $path){
 /**
  * Implements hook_mail().
  * Copied from sendgrid_integration_mail()
+ *
+ * Any mail $mailManager->mail() with the key of 'wind_lms' will pass thru here.
  */
 function wind_lms_mail($key, &$message, $params) {
   // Allows rich HTML email
