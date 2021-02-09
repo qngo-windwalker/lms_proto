@@ -440,7 +440,7 @@ function _wind_lms_get_course_package_definition(NodeInterface $node, $user) {
       $data[$key]['title'] = $title;
       $data[$key]['file_name'] = $file->label();
       $data[$key]['scorm_package'] = $scorm;
-      $data[$key]['activity_link'] = wind_scorm_get_lanuch_link_renable_array($scorm->id, $title);
+      $data[$key]['activity_link'] = wind_scorm_get_lanuch_link_rendable_array($scorm->id, $title);
       $data[$key]['course_data'] = array(
         'progress' => _wind_lms_load_user_scorm_package_progress($file, $user->id()),
       );
@@ -449,50 +449,16 @@ function _wind_lms_get_course_package_definition(NodeInterface $node, $user) {
       $tincan = _wind_lms_tincan_load_by_fid($file->id());
       if ($tincan) {
         $tincan_uri = $tincan_service::getExtractPath($file);
-        $path = file_url_transform_relative(file_create_url($tincan_uri));
-        $title = str_replace('http://', '', $tincan->activity_id);
+        $path = file_url_transform_relative(file_create_url($tincan_uri)) . '/' . $tincan->launch_filename;
         $data[$key]['type'] = 'tincan';
-        $data[$key]['title'] = $title;
+        $data[$key]['title'] = $node->label();
         $data[$key]['file_name'] = $file->label();
         $data[$key]['tincan_package'] = $tincan;
         $data[$key]['activity_link'] = _wind_lms_tincan_build_course_link($title, $path, $tincan);
-//        $data[$key]['activity_link'] = _wind_lms_tincan_build_course_link($title, $path);
         $data[$key]['course_data'] = _wind_lms_course_add_tincan_course_data($user, $tincan->activity_id);
       }
     }
   }
-  return $data;
-}
-
-/**
- * @param \Drupal\node\NodeInterface $node
- * @param $uid
- *
- * @return array
- */
-function _wind_lms_get_course_scorm_packages(NodeInterface $node, $uid) {
-  $data = array();
-  /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $zipFiles */
-  $zipFiles = $node->get('field_package_file');
-  /** @var \Drupal\file\Entity\File $file */
-  foreach ($zipFiles->referencedEntities() as $key => $file) {
-    $scorm = _wind_scorm_load_by_fid($file->id());
-    // todo: why it failed to find the file.
-    if (!$scorm) {
-      continue;
-    }
-    $title =  _wind_lms_get_scorm_package_title($scorm->id);
-    $data[$key] = array(
-      'title' => $title,
-      'file_name' => $file->label(),
-      'scorm_package' => $scorm,
-      'activity_link' => wind_scorm_get_lanuch_link_renable_array($scorm->id, $title),
-      'course_data' => [
-        'progress' => _wind_lms_load_user_scorm_package_progress($file, $uid),
-      ]
-    );
-  }
-
   return $data;
 }
 

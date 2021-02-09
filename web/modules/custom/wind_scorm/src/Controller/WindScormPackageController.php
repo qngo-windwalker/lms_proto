@@ -108,7 +108,7 @@ class WindScormPackageController extends ControllerBase{
         '#markup' => $markup
       ),
       'user_table' => $this->getUserTable($scorm->id),
-      'launch_link' => wind_scorm_get_lanuch_link_renable_array($scorm->id)
+      'launch_link' => wind_scorm_get_lanuch_link_rendable_array($scorm->id)
     ];
   }
 

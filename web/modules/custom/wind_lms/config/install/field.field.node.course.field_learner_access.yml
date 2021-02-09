@@ -15,9 +15,9 @@ required: false
 translatable: false
 default_value:
   -
-    value: 1
+    value: 0
 default_value_callback: ''
 settings:
-  on_label: 'Accessible To All'
-  off_label: Custom
+  on_label: 'Yes'
+  off_label: 'No'
 field_type: boolean

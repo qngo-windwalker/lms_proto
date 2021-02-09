@@ -67,7 +67,7 @@ function wind_scorm_getSCOTestPath(){
   return $GLOBALS['base_url'] .  '/' . $module_path . '/courses/RuntimeBasicCalls_SCORM20043rdEdition/shared/launchpage.html';
 }
 
-function wind_scorm_get_lanuch_link_renable_array($scorm_id, $label = 'Launch') {
+function wind_scorm_get_lanuch_link_rendable_array($scorm_id, $label = 'Launch') {
   $url = _wind_scorm_get_scorm_launch_url($scorm_id);
   $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . $label;
   $renderedAnchorContent = render($linkContent);
