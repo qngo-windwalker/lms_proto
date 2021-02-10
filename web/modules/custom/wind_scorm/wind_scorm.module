@@ -9,9 +9,9 @@ use Drupal\Core\Url;
  * @see opigno_scorm.module::opigno_scorm_opigno_scorm_commit()
  * @see Drupal\opigno_scorm\Controller\OpignoScormController::scormCommit
  */
-//function wind_scorm_opigno_scorm_commit($scorm, $sco_id, $data) {
-//  $account = Drupal::currentUser();
-//}
+function wind_scorm_opigno_scorm_commit($scorm, $sco_id, $data) {
+  $a = '';
+}
 
 function wind_scorm_getTestSCO() {
   $sco = new \stdClass();
@@ -72,12 +72,15 @@ function wind_scorm_get_lanuch_link_rendable_array($scorm_id, $label = 'Launch')
   $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . $label;
   $renderedAnchorContent = render($linkContent);
   return  [
-    '#markup' => Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString(),
-    '#attached' => array(
-      'library' => array(
-        'wind_scorm/course_popup'
+    'rendable_element' => array(
+      '#markup' => Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString(),
+      '#attached' => array(
+        'library' => array(
+          'wind_scorm/course_popup'
+        ),
       ),
-    )
+    ),
+    'url' => '/scorm-course/' . $scorm_id . '/take'
   ];
 }
 

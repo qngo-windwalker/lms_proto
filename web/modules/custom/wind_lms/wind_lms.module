@@ -75,43 +75,10 @@ function wind_lms_mail($key, &$message, $params) {
  */
 function wind_lms_node_insert(NodeInterface $node) {
   // Set the node title to the node ID and save.
-  if ($node->getType() != 'course') {
-    return;
-  }
-  $field_package_file = $node->get('field_package_file')->getValue();
-  if(empty($field_package_file)){
-    return;
-  }
-
-  $fids = array_map(function($value){
-    return $value['target_id'];
-  }, $field_package_file);
-
-  $files = \Drupal::entityTypeManager()->getStorage('file')->loadMultiple($fids);
-
-  /* @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
-  $scorm_controller = \Drupal::service('opigno_scorm.scorm');
-  /* @var \Drupal\wind_tincan\WindTincanService $tincan_service */
-  $tincan_service = \Drupal::service('wind_tincan.tincan');
-
-  foreach ($files as $file){
-    // Create SCORM package from file.
-    $result = $scorm_controller->scormExtract($file);
-
-    // If it's not SCORM zip, try Tincan
-    if (!$result) {
-      $tin_result = $tincan_service->saveTincanPackageInfo($file);
-
-      if(!$tin_result){
-        \Drupal::logger('wind_lms Course')->notice('Unable to process neither SCORM nor Tincan uploaded file for course %name id : %nid . File fid: %fid .',
-          [
-            '%nid' => $node->id(),
-            '%name' => $node->label(),
-            '%fid' => $file->id()
-          ]);
-      }
-    }
-
+  if ($node->getType() == 'course') {
+    /* @var \Drupal\wind_lms\CourseNode $course_node */
+    $course_node = \Drupal::service('wind_lms.course_node');
+    $course_node->onNodeInsert($node);
   }
 }
 
@@ -454,7 +421,7 @@ function _wind_lms_get_course_package_definition(NodeInterface $node, $user) {
         $title = $node->label();
         $path = file_url_transform_relative(file_create_url($tincan_uri)) . '/' . $tincan->launch_filename;
         $data[$key]['type'] = 'tincan';
-        $data[$key]['title'] = $title;
+        $data[$key]['title'] = str_replace('.zip', '', $file->label()); // Tincan XML doesn't contain any title. Resort to this for now.
         $data[$key]['file_name'] = $file->label();
         $data[$key]['tincan_package'] = $tincan;
         $data[$key]['activity_link'] = _wind_lms_tincan_build_course_link($title, $path, $tincan);

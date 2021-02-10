@@ -6,7 +6,7 @@ import Certificate from "./certificate";
 export default class CurrentUserCourseTable extends Component{
 	constructor(props) {
     super(props);
-    this.state = { tableRow: [], user : null };
+    this.state = { tableRow: [], user : null, loadCompleted : false };
     this.courseClickHandler = this.courseClickHandler.bind(this);
   };
 
@@ -42,8 +42,8 @@ export default class CurrentUserCourseTable extends Component{
   courseClickHandler(e){
     let elem = e.currentTarget;
     e.preventDefault();
-    if(elem.hasAttribute('data-coure-href')){
-      let href = elem.getAttribute('data-coure-href');
+    if(elem.hasAttribute('data-course-href')){
+      let href = elem.getAttribute('data-course-href');
       this.popup(href);
     }
   }
@@ -79,24 +79,30 @@ export default class CurrentUserCourseTable extends Component{
 		return (
 			<div className="section">
         <h3 className="mb-3">{this.isEnglishMode() ? 'My Training' : 'Mi Entrenamiento'}</h3>
-        <table className="table responsive-enabled mb-5" data-striping="1">
-          <thead className="thead-light">
-          <tr>
-            <th>{this.isEnglishMode() ? 'Name' : 'Nombre'}</th>
-            <th>{this.isEnglishMode() ? 'Status' : 'Estado'}</th>
-            <th>{this.isEnglishMode() ? 'Certificate' : 'Certificado'}</th>
-          </tr>
-          </thead>
-          <tbody>
-          {this.state.tableRow.map((obj, index) => {
-            return obj.Comp;
-            // return this.rendertBodyRow(obj.name, obj.rateFormatted, obj.hours, obj.priceCalculatedFormatted, index);
-          })}
-          </tbody>
-        </table>
+        { (!this.state.tableRow.length && this.state.loadCompleted) ? <p className="text-align-center my-5">You do not have any course assigned to you.</p> : this.getTable()}
 			</div>
 		);
 	}
+
+  getTable() {
+    return (
+      <table className="table responsive-enabled mb-5" data-striping="1">
+        <thead className="thead-light">
+        <tr>
+          <th>{this.isEnglishMode() ? 'Name' : 'Nombre'}</th>
+          <th>{this.isEnglishMode() ? 'Status' : 'Estado'}</th>
+          <th>{this.isEnglishMode() ? 'Certificate' : 'Certificado'}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {this.state.tableRow.map((obj, index) => {
+          return obj.Comp;
+          // return this.rendertBodyRow(obj.name, obj.rateFormatted, obj.hours, obj.priceCalculatedFormatted, index);
+        })}
+        </tbody>
+      </table>
+    )
+  }
 
   rendertBodyRow(dataObj, key, user){
     return(
@@ -170,7 +176,8 @@ export default class CurrentUserCourseTable extends Component{
     // const posts = res.data.data.children.map(obj => obj.data);
     this.setState({
       tableRow : collection,
-      user : user
+      user : user,
+      loadCompleted: true
     });
   }
 }
@@ -195,7 +202,15 @@ class CourseNameColumn extends React.Component {
     // If course has 1 zip file, make the title as a link
     // In case when a course node is created but zip file is no available. Show the title so it's easier to troubleshoot.
     if (this.props.packages.length == 1) {
-      return <span dangerouslySetInnerHTML={{__html: this.props.packages[0]['activity_link']['#markup']}}></span>
+      let zipPackage = this.props.packages[0];
+
+      if(zipPackage.type == 'tincan'){
+        return <ActivityLink className="wind-scorm-popup-link d-flex"  title={this.props.title} data-course-href={zipPackage.activity_link['data-course-href']} href={zipPackage.activity_link.url} />
+      }
+
+      if(zipPackage.type == 'scorm'){
+        return <ActivityLink className="wind-scorm-popup-link"  title={this.props.title} data-course-href={zipPackage.activity_link.url} href={zipPackage.activity_link.url} />
+      }
     }
 
     // If this course has more than 1 zip files, render the zip course as a list item.
@@ -204,10 +219,26 @@ class CourseNameColumn extends React.Component {
         <h6>{this.props.title}</h6>
         <ul className="list-unstyled ml-3">
           {this.props.packages.map((obj, index) => {
-            return (<li className="mb-3"  key={index} dangerouslySetInnerHTML={{__html: obj.activity_link['#markup']}}></li>);
+            let zipPackage = obj;
+            return (
+              <li className="mb-3" key={index}>
+                <ActivityLink className="wind-scorm-popup-link"  title={this.props.title} data-course-href={zipPackage.activity_link.url} href={zipPackage.activity_link.url} />
+              </li>
+            );
           })}
         </ul>
       </>
+    );
+  }
+}
+
+class ActivityLink extends React.Component {
+  render() {
+    return (
+      <a className="wind-scorm-popup-link d-flex" data-course-href={this.props['data-course-href']} href={this.props.href}>
+        <i className="fas fa-external-link-alt align-self-center pr-1"></i>
+        {this.props.title}
+      </a>
     );
   }
 }

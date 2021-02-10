@@ -19,6 +19,59 @@ class CourseNode {
     $this->database = $database;
   }
 
+  public function onNodeInsert(NodeInterface $node){
+    $field_package_file = $node->get('field_package_file')->getValue();
+    if(empty($field_package_file)){
+      return;
+    }
+
+    $fids = array_map(function($value){
+      return $value['target_id'];
+    }, $field_package_file);
+
+    $files = \Drupal::entityTypeManager()->getStorage('file')->loadMultiple($fids);
+
+    /* @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
+    $scorm_controller = \Drupal::service('opigno_scorm.scorm');
+    /* @var \Drupal\wind_tincan\WindTincanService $tincan_service */
+    $tincan_service = \Drupal::service('wind_tincan.tincan');
+
+    foreach ($files as $file){
+      // Create SCORM package from file.
+      $result = $scorm_controller->scormExtract($file);
+
+      // If it's not SCORM zip, try Tincan
+      if (!$result) {
+        $tin_result = $tincan_service->saveTincanPackageInfo($file);
+
+        if(!$tin_result){
+          \Drupal::logger('wind_lms Course')->notice('Unable to process neither SCORM nor Tincan uploaded file for course %name id : %nid . File fid: %fid .',
+            [
+              '%nid' => $node->id(),
+              '%name' => $node->label(),
+              '%fid' => $file->id()
+            ]);
+        }
+      }
+    }
+
+    // Next, we handle user notification of new course
+    $field_learner_access = $node->get('field_learner_access')->getString();
+    // Notify all user
+    if($field_learner_access == '1'){
+      $this->notifyAllUser($node);
+    }
+
+    // Notify selected users
+    if($field_learner_access == '0'){
+      $field_learner_ids = $this->array_get_target_id($node->get('field_learner')->getValue());
+      foreach ($field_learner_ids as $uid){
+        $this->sendEmail($node, $uid);
+      }
+    }
+
+  }
+
   public function onNodeUpdate(NodeInterface $node){
     // Check and process any changes to Package File upload field
     $this->onNodeUpdateProcessField_package_file($node);
@@ -72,6 +125,10 @@ class CourseNode {
     }
   }
 
+  /**
+   * Node Update: process field_learner_access AND field_learner
+   * @param \Drupal\node\NodeInterface $node
+   */
   private function onNodeUpdateProcessField_learner(NodeInterface $node) {
     /** @var  NodeInterface $originalNode */
     $originalNode = $node->original;
@@ -80,14 +137,9 @@ class CourseNode {
     $field_learner_access = $node->get('field_learner_access')->getString();
     // If user turns on "Accessible To All Leaners"
     if($originalNode_field_learner_access == '0' && $field_learner_access == '1'){
-      $userStorage = \Drupal::entityTypeManager()->getStorage('user');
-      $query = $userStorage->getQuery();
-      $uids = $query
-        ->condition('status', '1')
-        ->execute();
-      foreach ($uids as $uid){
-        $this->sendEmail($node, $uid);
-      }
+      $originalNode_field_learner_ids = $this->array_get_target_id($originalNode->get('field_learner')->getValue());
+      // Send email to all user, but exclude users from original $node field learner so they won't get duplicate email.
+      $this->notifyAllUser($node, $originalNode_field_learner_ids);
     } else {
 
       // If "Accessible To All Leaners" is turn off,
@@ -110,6 +162,33 @@ class CourseNode {
     }
   }
 
+  /**
+   * Send email to user
+   * @param $node
+   * @param array $uid_to_skip
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  private function notifyAllUser($node, $uid_to_skip) {
+    $userStorage = \Drupal::entityTypeManager()->getStorage('user');
+    $query = $userStorage->getQuery();
+    $uids = $query
+      ->condition('status', '1')
+      ->execute();
+    foreach ($uids as $uid){
+      if(in_array($uid, $uid_to_skip)){
+        continue;
+      }
+      $this->sendEmail($node, $uid);
+    }
+  }
+
+  /**
+   * Compose email and sent it
+   * @param \Drupal\node\NodeInterface $node
+   * @param $uid
+   */
   private function sendEmail(NodeInterface $node, $uid) {
     $site_name = \Drupal::config('system.site')->get('name');
     $site_mail = \Drupal::config('system.site')->get('mail');

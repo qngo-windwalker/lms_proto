@@ -128,7 +128,13 @@ function _wind_lms_tincan_build_link_of_static_course($title, $course_folder) {
       ]
     ]
   );
-  return array('#markup' => Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString());
+  return array(
+    'rendable_element' => [
+      '#markup' => Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString()
+    ],
+    'data-coure-href' => _wind_lms_tincan_gen_static_course_link($course_folder),
+    'url' => '/course/' . $course_folder,
+  );
 }
 
 /**
@@ -160,20 +166,26 @@ function _wind_lms_tincan_gen_static_course_link($course_folder) {
   return $link;
 }
 
-
 function _wind_lms_tincan_build_course_link($title, $path, $tincan) {
   $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . "<span> {$title}</span>";
   $renderedAnchorContent = render($linkContent);
+  $dataCourseHref = _wind_lms_tincan_gen_course_link($path);
   $url = Url::fromUserInput(
     $path,
     [
       'attributes' => [
-        'data-coure-href' => _wind_lms_tincan_gen_course_link($path),
+        'data-course-href' => $dataCourseHref,
         'class' => array('wind-scorm-popup-link', 'd-flex')
       ]
     ]
   );
-  return array('#markup' => Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString());
+  return array(
+    'rendable_element' => [
+      '#markup' => Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString()
+    ],
+    'data-course-href' => $dataCourseHref,
+    'url' => $path
+  );
 }
 
 function _wind_lms_tincan_gen_course_link($path) {
