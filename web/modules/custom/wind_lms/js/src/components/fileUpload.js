@@ -22,10 +22,12 @@ export default class FileUpload extends React.Component {
     super(props);
     this.state = {
       selectedFile: null,
-      loaded:0
+      loadedProgress:0,
+      uploadedFile : false
     };
     this.onChangeHandler = this.onChangeHandler.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
+    this.onFileRemoveClickHandler = this.onFileRemoveClickHandler.bind(this);
   }
 
   checkMimeType(event){
@@ -76,7 +78,7 @@ export default class FileUpload extends React.Component {
     console.log(event.target.files[0])
     this.setState({
       selectedFile: event.target.files[0],
-      loaded: 0,
+      loadedProgress: 0,
     });
   }
 
@@ -91,7 +93,7 @@ export default class FileUpload extends React.Component {
 
       onUploadProgress: ProgressEvent => {
         this.setState({
-          loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
+          loadedProgress: (ProgressEvent.loaded / ProgressEvent.total*100),
         })
       }
       // receive two parameter endpoint url ,form data
@@ -105,12 +107,41 @@ export default class FileUpload extends React.Component {
 
         if(res.data.hasOwnProperty('success') ){
           res.data.hasOwnProperty('message') && toast.success(res.data.message);
+          this.setState({uploadedFile: true});
         }
       }
     })
   }
 
+  onFileRemoveClickHandler(e) {
+    this.setState({
+      uploadedFile: false,
+      selectedFile : null,
+      loadedProgress: 0
+    });
+  }
+
   render() {
+    if(this.state.uploadedFile){
+      return (
+        <div>
+          <h4>File uploaded</h4>
+          <ul className="list-group">
+            <li className="list-group-item d-flex justify-content-between align-items-center">
+              <a href={'#'}><i className="fas fa-file mr-1"></i>  Very long long file Name.ext</a> <span className="file-size text-secondary text-monospace">23. MB </span>
+              <button className="btn btn-outline-secondary" onClick={this.onFileRemoveClickHandler}>
+                <i className="fas fa-minus-circle rm-1"></i> Remove
+              </button>
+            </li>
+            <li className="list-group-item d-flex justify-content-between align-items-center">
+              Verified Status
+              <span className="badge badge-warning">No</span>
+            </li>
+          </ul>
+
+        </div>
+      );
+    }
 
     return (
       <form>
@@ -121,7 +152,7 @@ export default class FileUpload extends React.Component {
 
         <div className="form-group">
           <ToastContainer/>
-          <Progress max="100" color="success" value={this.state.loaded}>{Math.round(this.state.loaded, 2)}%</Progress>
+          <Progress max="100" color="success" value={this.state.loadedProgress}>{Math.round(this.state.loadedProgress, 2)}%</Progress>
         </div>
 
         <div className="form-group text-align-center">

@@ -52,7 +52,6 @@ export default class SideModalContentCourseCertUpload extends React.Component {
         </div>
 
         <div className="modal-body">
-          <h4>Upload</h4>
           <FileUpload postURL={`course/${match.params.nid}/user/${match.params.uid}/cert/upload`} />
         </div>
       </>
