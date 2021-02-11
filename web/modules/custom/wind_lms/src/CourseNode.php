@@ -19,6 +19,10 @@ class CourseNode {
     $this->database = $database;
   }
 
+  /**
+   * Invoked by wind_lms_node_insert()
+   * @param \Drupal\node\NodeInterface $node
+   */
   public function onNodeInsert(NodeInterface $node){
     $field_package_file = $node->get('field_package_file')->getValue();
     if(empty($field_package_file)){
@@ -29,31 +33,8 @@ class CourseNode {
       return $value['target_id'];
     }, $field_package_file);
 
-    $files = \Drupal::entityTypeManager()->getStorage('file')->loadMultiple($fids);
-
-    /* @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
-    $scorm_controller = \Drupal::service('opigno_scorm.scorm');
-    /* @var \Drupal\wind_tincan\WindTincanService $tincan_service */
-    $tincan_service = \Drupal::service('wind_tincan.tincan');
-
-    foreach ($files as $file){
-      // Create SCORM package from file.
-      $result = $scorm_controller->scormExtract($file);
-
-      // If it's not SCORM zip, try Tincan
-      if (!$result) {
-        $tin_result = $tincan_service->saveTincanPackageInfo($file);
-
-        if(!$tin_result){
-          \Drupal::logger('wind_lms Course')->notice('Unable to process neither SCORM nor Tincan uploaded file for course %name id : %nid . File fid: %fid .',
-            [
-              '%nid' => $node->id(),
-              '%name' => $node->label(),
-              '%fid' => $file->id()
-            ]);
-        }
-      }
-    }
+    // Extract all of the files and process if it's SCORM or Tincan
+    $this->extractPackageFiles($fids, $node);
 
     // Next, we handle user notification of new course
     $field_learner_access = $node->get('field_learner_access')->getString();
@@ -72,6 +53,10 @@ class CourseNode {
 
   }
 
+  /**
+   * Invoked by wind_lms_node_update()
+   * @param \Drupal\node\NodeInterface $node
+   */
   public function onNodeUpdate(NodeInterface $node){
     // Check and process any changes to Package File upload field
     $this->onNodeUpdateProcessField_package_file($node);
@@ -92,28 +77,8 @@ class CourseNode {
       return $value['target_id'];
     }, $field_package_file);
 
-    /* @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
-    $scorm_controller = \Drupal::service('opigno_scorm.scorm');
-
-    /* @var \Drupal\wind_tincan\WindTincanService $tincan_service */
-    $tincan_service = \Drupal::service('wind_tincan.tincan');
-
-    if(!empty($fids)){
-      $files = \Drupal::entityTypeManager()->getStorage('file')->loadMultiple($fids);
-
-      foreach ($files as $file){
-        $scorm = $scorm_controller->scormLoadByFileEntity($file);
-        // If this scorm already extracted, skip it.
-        if ($scorm) {
-          continue;
-        }
-
-//        $tincan_service->saveTincanPackageInfo($file);
-
-        // Create SCORM package from file.
-        $scorm_controller->scormExtract($file);
-      }
-    }
+    // Extract all of the files and process if it's SCORM or Tincan
+    $this->extractPackageFiles($fids, $node);
 
     // array_diff will return $originalFids values that are not in $fids.
     $diff = array_diff($originalFids, $fids);
@@ -123,6 +88,43 @@ class CourseNode {
         // Todo: Remove file to save disc space.
       }
     }
+  }
+
+  /**
+   * @param $fids
+   * @param $node
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  private function extractPackageFiles($fids, $node) {
+    $files = \Drupal::entityTypeManager()->getStorage('file')->loadMultiple($fids);
+
+    /* @var \Drupal\opigno_scorm\OpignoScorm $scorm_controller */
+    $scorm_controller = \Drupal::service('opigno_scorm.scorm');
+    /* @var \Drupal\wind_tincan\WindTincanService $tincan_service */
+    $tincan_service = \Drupal::service('wind_tincan.tincan');
+
+    /** @var \Drupal\file\Entity\File $file */
+    foreach ($files as $file){
+      // Create SCORM package from file.
+      $result = $scorm_controller->scormExtract($file);
+
+      // If it's not SCORM zip, try Tincan
+      if (!$result) {
+        $tin_result = $tincan_service->saveTincanPackageInfo($file);
+
+        if(!$tin_result){
+          \Drupal::logger('wind_lms Course')->notice('Unable to process neither SCORM nor Tincan uploaded file for course %name id : %nid . File fid: %fid .',
+            [
+              '%nid' => $node->id(),
+              '%name' => $node->label(),
+              '%fid' => $file->id(),
+            ]);
+        }
+      }
+    }
+
   }
 
   /**
@@ -196,8 +198,8 @@ class CourseNode {
     $user = \Drupal\user\Entity\User::load($uid);
     $user_full_name = _wind_lms_get_user_full_name($user);
     $greeting = '<p><b>' . _wind_get_greeting_time() . ' ' . $user_full_name . ', </b><br /></p>';
+    $courseLink = '<p>' . _wind_gen_button_for_email($node->label(),  $_SERVER['HTTP_ORIGIN']  . '?destination=/dashboard') . '</p>';
     $closingStatment = '<p>Sincerely,<br /> ' . $site_name . ' team</p>';
-    $courseLink = _wind_gen_button_for_email($node->label(),  $_SERVER['HTTP_ORIGIN']  . '?destination=/dashboard');
     $debugInfo = '<p><!-- Course Id: ' . $node->id() . '- User Id: ' . $uid . ' --></p>';
     $mailManager = \Drupal::service('plugin.manager.mail');
     $to = $user->get('mail')->value;
@@ -208,7 +210,7 @@ class CourseNode {
     $params['reply_to'] = $site_mail;
     $params['message'] = 'New enrollment: ' . $node->label();
     $params['node_title'] = $node->label() ;
-    $params['body'] = $greeting . 'A new training course is available to you. Please click on the link below to login and take the course: <br /><br /> '  . $courseLink . '<br />' . $closingStatment . $debugInfo;
+    $params['body'] = $greeting . 'A new training course is available to you. Please click on the link below to login and take the course: <br /><br /> '  . $courseLink . '<br /><br />' . $closingStatment . $debugInfo;
     $langcode = \Drupal::currentUser()->getPreferredLangcode();
 
     // Note: 1st param module name needed so MailManager will invoke hook_mail (!!this hook is required !!!)
