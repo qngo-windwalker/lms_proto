@@ -77,8 +77,12 @@ class CourseNode {
       return $value['target_id'];
     }, $field_package_file);
 
-    // Extract all of the files and process if it's SCORM or Tincan
-    $this->extractPackageFiles($fids, $node);
+    // Find out if there's any new file has been added on this edit session.
+    $result = _wind_array_compare($fids, $originalFids);
+    if (!empty($result['added'])) {
+      // Extract all of the files and process if it's SCORM or Tincan
+      $this->extractPackageFiles($result['added'], $node);
+    }
 
     // array_diff will return $originalFids values that are not in $fids.
     $diff = array_diff($originalFids, $fids);

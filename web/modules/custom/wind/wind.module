@@ -26,7 +26,7 @@ function wind_user_login($account) {
  */
 function wind_theme($existing, $type, $theme, $path) {
   $site_name = \Drupal::config('system.site')->get('name');
-  $site_link = $_SERVER['HTTP_ORIGIN'];
+  $site_link = isset($_SERVER['HTTP_ORIGIN']) ?  $_SERVER['HTTP_ORIGIN'] : $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] ;
   return [
     'wind_email' => [
       'variables' => [

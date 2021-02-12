@@ -765,12 +765,15 @@ class OpignoScorm {
               'satisfied_by_measure' => $satisfied_by_measure,
             ];
 
-            foreach ($child_objective['children'] as $primary_obj_child) {
-              if ($primary_obj_child['name'] == 'IMSSS:MINNORMALIZEDMEASURE') {
-                $objective['min_normalized_measure'] = $primary_obj_child['tagData'];
-              }
-              elseif ($primary_obj_child['name'] == 'IMSSS:MAXNORMALIZEDMEASURE') {
-                $objective['max_normalized_measure'] = $primary_obj_child['tagData'];
+            //QN added this if statement to prevent error displaying, Gerhart zip file may have xml structure oddities.
+            if(isset($child_objective['children'])){
+              foreach ($child_objective['children'] as $primary_obj_child) {
+                if ($primary_obj_child['name'] == 'IMSSS:MINNORMALIZEDMEASURE') {
+                  $objective['min_normalized_measure'] = $primary_obj_child['tagData'];
+                }
+                elseif ($primary_obj_child['name'] == 'IMSSS:MAXNORMALIZEDMEASURE') {
+                  $objective['max_normalized_measure'] = $primary_obj_child['tagData'];
+                }
               }
             }
 
