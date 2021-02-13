@@ -4,6 +4,7 @@ namespace Drupal\wind_lms\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\file\FileInterface;
 use Drupal\node\NodeInterface;
 use Drupal\user\Entity\User;
 use Drupal\Core\Link;
@@ -24,7 +25,17 @@ class WindLMSCourseUserCertUploadController extends ControllerBase{
    * @return string[]
    */
   public function getContent(NodeInterface $node, UserInterface $user){
+    // Get files information.
+    if(\Drupal::request()->get('getAllFiles') == 'true') {
+      return $this->getAllFiles($node, $user);
+    }
 
+    // Remove a file from certificate node field 'field_attachment'
+    if(\Drupal::request()->get('remove-fid') && \Drupal::request()->get('cert-nid')) {
+      return $this->removeFileFromCertificate(\Drupal::request()->get('cert-nid'), \Drupal::request()->get('remove-fid'));
+    }
+
+    // Upload file
     if (!\Drupal::request()->files->get('file')) {
       \Drupal::logger('wind_lms Certificate Upload')->warning('Unable to find file at the request level.', []);
       return new JsonResponse([
@@ -81,7 +92,7 @@ class WindLMSCourseUserCertUploadController extends ControllerBase{
       'file' => array(
         'fid' => $file_saved->id(),
         'filename' => $file_saved->label(),
-        'uri' => $file_saved->get('uri')->getString(),
+        'uri' => file_create_url($file_saved->getFileUri()),
         'filesize' => $file_saved->get('filesize')->getString(),
       )
     ]);
@@ -98,6 +109,87 @@ class WindLMSCourseUserCertUploadController extends ControllerBase{
     ));
     $node->save();
     return $node;
+  }
+
+  private function getAllFiles(NodeInterface $node, UserInterface $user) {
+    $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+    $query->condition('type', 'certificate');
+    $query->condition('field_activity', $node->id());
+    $query->condition('field_learner', $user->id());
+    $result = $query->execute();
+    $files = [];
+    if($result){
+      $certificate_nodes = \Drupal\node\Entity\Node::loadMultiple($result);
+      foreach ($certificate_nodes as $cert_node) {
+        /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $file */
+        $field_attachment_ref_entities = $cert_node->get('field_attachment')->referencedEntities();
+        if(empty($field_attachment_ref_entities)){
+          continue;
+        }
+        /** @var \Drupal\file\Entity\File $field_attachment_ref_entities_file */
+        $field_attachment_ref_entities_file = $field_attachment_ref_entities[0];
+        $files[] = [
+          'fid' => $field_attachment_ref_entities_file->id(),
+          'filename' => $field_attachment_ref_entities_file->label(),
+          'uri' => file_create_url($field_attachment_ref_entities_file->getFileUri()),
+          'filesize' => $field_attachment_ref_entities_file->get('filesize')->getString(),
+          'nid' => $cert_node->id(),
+          'certificate_nid' => $cert_node->id()
+        ];
+      }
+    }
+
+    return new JsonResponse([
+      'code' => 200,
+      'success' => 1,
+      'message' => 'Success',
+      'files' => $files
+    ]);
+  }
+
+  private function removeFileFromCertificate($nid, $fid) {
+    $certificate_node = \Drupal\node\Entity\Node::load($nid);
+    if(!$certificate_node){
+      return new JsonResponse([
+        'code' => 500,
+        'error' => 1,
+        'message' => 'Unable to find certificate node - Node Nid = .' . $nid,
+      ]);
+    }
+    // Set and empty array to remove the file reference.
+    $certificate_node->field_attachment->setValue(array());
+    $saveResult = $certificate_node->save();
+    if(!$saveResult){
+      return new JsonResponse([
+        'code' => 500,
+        'error' => 1,
+        'message' => 'Unable to unlink file from reference node - Node Nid = .' . $nid,
+      ]);
+    }
+
+    $file = \Drupal\file\Entity\File::load($fid);
+    if(!$file){
+      return new JsonResponse([
+        'code' => 500,
+        'error' => 1,
+        'message' => 'Unable to find file - fid = ' . $fid,
+      ]);
+    }
+
+    // If there are no more remaining usages of this file, mark it as temporary,
+    // which result in a delete through system_cron().
+    $usage = \Drupal::service('file.usage')->listUsage($file);
+    if (empty($usage)) {
+      $file->setTemporary();
+      $file->save();
+    }
+
+    // Once we've reached the end of the line, it's safe to say we didn't encounter any issue.
+    return new JsonResponse([
+      'code' => 200,
+      'success' => 1,
+      'message' => 'File removed successfully',
+    ]);
   }
 
 }

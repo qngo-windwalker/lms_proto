@@ -76,7 +76,6 @@ function _wind_get_greeting_time() {
   }
 }
 
-
 function wind_does_user_has_sudo($user) {
   if ($user->id() == 1) {
     return true;

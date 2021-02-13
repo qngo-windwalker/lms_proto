@@ -1,12 +1,12 @@
 
 'use strict';
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   HashRouter,
-  Link
+  Link, useHistory, useParams
 } from "react-router-dom";
 import axios from 'axios';
 import { createPortal } from "react-dom";
@@ -23,11 +23,26 @@ export default class FileUpload extends React.Component {
     this.state = {
       selectedFile: null,
       loadedProgress:0,
-      uploadedFile : false
+      uploadedFile : false,
+      uploadedFiles : []
     };
     this.onChangeHandler = this.onChangeHandler.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
     this.onFileRemoveClickHandler = this.onFileRemoveClickHandler.bind(this);
+  }
+
+  componentDidMount() {
+    this.load(`${this.props.postURL}?getAllFiles=true`);
+  }
+
+  async load(url) {
+    axios.get(url)
+      .then(res => {
+        this.setState({
+          uploadedFile : true,
+          uploadedFiles : res.data.files
+        });
+      });
   }
 
   checkMimeType(event){
@@ -75,7 +90,6 @@ export default class FileUpload extends React.Component {
     }
   }
   onChangeHandler(event){
-    console.log(event.target.files[0])
     this.setState({
       selectedFile: event.target.files[0],
       loadedProgress: 0,
@@ -100,14 +114,17 @@ export default class FileUpload extends React.Component {
     }).then(res => { // then print response status
       // If server doesn't crash
       if(res.statusText == 'OK'){
-        // console.log(res.data.message);
+        console.log(res.data);
         if(res.data.hasOwnProperty('error') ){
           res.data.hasOwnProperty('message') && toast.error(res.data.message);
         }
 
         if(res.data.hasOwnProperty('success') ){
           res.data.hasOwnProperty('message') && toast.success(res.data.message);
-          this.setState({uploadedFile: true});
+          this.setState({
+            uploadedFile: true,
+            uploadedFiles: [res.data.file]
+          });
         }
       }
     })
@@ -122,23 +139,15 @@ export default class FileUpload extends React.Component {
   }
 
   render() {
-    if(this.state.uploadedFile){
+    if(this.state.uploadedFile && this.state.uploadedFiles.length){
       return (
         <div>
           <h4>File uploaded</h4>
-          <ul className="list-group">
-            <li className="list-group-item d-flex justify-content-between align-items-center">
-              <a href={'#'}><i className="fas fa-file mr-1"></i>  Very long long file Name.ext</a> <span className="file-size text-secondary text-monospace">23. MB </span>
-              <button className="btn btn-outline-secondary" onClick={this.onFileRemoveClickHandler}>
-                <i className="fas fa-minus-circle rm-1"></i> Remove
-              </button>
-            </li>
-            <li className="list-group-item d-flex justify-content-between align-items-center">
-              Verified Status
-              <span className="badge badge-warning">No</span>
-            </li>
-          </ul>
-
+            {this.state.uploadedFiles.map((obj, index) => {
+              return (
+                <FileListItem file={obj} url={this.props.postURL} key={index} />
+              );
+            })}
         </div>
       );
     }
@@ -161,4 +170,72 @@ export default class FileUpload extends React.Component {
       </form>
     );
   }
+}
+
+function FileListItem(props) {
+  // Define variable and it's setFunction
+  const [className, setClassName] = useState('');
+
+  let onFileRemoveClickHandler = e => {
+    e.stopPropagation();
+
+    axios.get(`${props.url}?remove-fid=${props.file.fid}&cert-nid=${props.file.certificate_nid}`)
+      .then(res => {
+        if(res.statusText == 'OK'){
+          if(res.data.hasOwnProperty('success') ){
+            res.data.hasOwnProperty('message') && toast.success(res.data.message);
+            // Set the class to display none to hide this element
+            setClassName('d-none');
+          }
+        }
+      });
+  };
+
+  let formatBytes = (bytes, decimals = 2)  => {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  /**
+   * Note: we have passed empty array [] as a second argument
+   * to the useEffect hook so that it only runs when a App functional component
+   * is initially rendered into the dom,
+   * it is similar like componentDidMount in class components.
+   * @see https://reactgo.com/settimeout-in-react-hooks/
+   */
+  useEffect(() => {
+    const timer  = setTimeout(() => {
+      // Delayed set class to use transition
+      setClassName('');
+    }, 100);
+    // returning a function inside useEffect hook is like using a componentWillUnmount()
+    // lifecycle method inside class-based react components.
+    return () => clearTimeout(timer);
+  },[]);
+
+  return (
+    <ul className={`list-group mb-4 ${className}`}>
+      <li className="list-group-item d-flex justify-content-between align-items-center">
+        <a href={props.file.uri} download><i className="fas fa-file mr-1"></i> {props.file.filename}</a>
+        <button className="btn btn-outline-secondary" onClick={onFileRemoveClickHandler}>
+          <i className="fas fa-minus-circle rm-1"></i> Remove
+        </button>
+      </li>
+      <li className="list-group-item d-flex justify-content-between align-items-center">
+        File Size
+        <span className="file-size text-secondary text-monospace">{formatBytes(props.file.filesize)}</span>
+      </li>
+      <li className="list-group-item d-flex justify-content-between align-items-center">
+        Verified Status
+        <span className="badge badge-warning">No</span>
+      </li>
+    </ul>
+  );
 }
