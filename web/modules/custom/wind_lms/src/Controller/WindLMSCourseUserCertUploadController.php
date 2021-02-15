@@ -94,6 +94,8 @@ class WindLMSCourseUserCertUploadController extends ControllerBase{
         'filename' => $file_saved->label(),
         'uri' => file_create_url($file_saved->getFileUri()),
         'filesize' => $file_saved->get('filesize')->getString(),
+        'nid' => $certNode->id(),
+        'certificate_nid' => $certNode->id()
       )
     ]);
   }

@@ -13,6 +13,7 @@ import { createPortal } from "react-dom";
 import {Progress} from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
+import _ from 'lodash';
 
 /**
  * Required file_upload.css
@@ -28,7 +29,7 @@ export default class FileUpload extends React.Component {
     };
     this.onChangeHandler = this.onChangeHandler.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
-    this.onFileRemoveClickHandler = this.onFileRemoveClickHandler.bind(this);
+    this.onFileRemove = this.onFileRemove.bind(this);
   }
 
   componentDidMount() {
@@ -116,36 +117,52 @@ export default class FileUpload extends React.Component {
       if(res.statusText == 'OK'){
         console.log(res.data);
         if(res.data.hasOwnProperty('error') ){
-          res.data.hasOwnProperty('message') && toast.error(res.data.message);
+          // res.data.hasOwnProperty('message') && toast.error(res.data.message);
         }
 
         if(res.data.hasOwnProperty('success') ){
-          res.data.hasOwnProperty('message') && toast.success(res.data.message);
+          // res.data.hasOwnProperty('message') && toast.success(res.data.message);
           this.setState({
             uploadedFile: true,
-            uploadedFiles: [res.data.file]
+            uploadedFiles: [res.data.file],
+            loadedProgress:0,
+            selectedFile: null,
           });
         }
       }
     })
   }
 
-  onFileRemoveClickHandler(e) {
-    this.setState({
-      uploadedFile: false,
-      selectedFile : null,
-      loadedProgress: 0
-    });
+  onFileRemove(e) {
+    // e.props is available b/c we added as a property of the event
+    let fileListItemProps = e.props;
+    axios.get(`${this.props.postURL}?remove-fid=${fileListItemProps.file.fid}&cert-nid=${fileListItemProps.file.certificate_nid}`)
+      .then(res => {
+        if(res.statusText == 'OK'){
+          if(res.data.hasOwnProperty('success') ){
+            // res.data.hasOwnProperty('message') && toast.success(res.data.message);
+            let uploadedFiles = this.state.uploadedFiles;
+            _.remove(uploadedFiles, function(currentObject) {
+              return currentObject.fid == fileListItemProps.file.fid;
+            });
+
+            this.setState({
+              uploadedFiles: uploadedFiles,
+            });
+          }
+        }
+      });
   }
 
   render() {
-    if(this.state.uploadedFile && this.state.uploadedFiles.length){
+    console.log(this.state.uploadedFiles);
+    if(this.state.uploadedFiles.length){
       return (
         <div>
           <h4>File uploaded</h4>
             {this.state.uploadedFiles.map((obj, index) => {
               return (
-                <FileListItem file={obj} url={this.props.postURL} key={index} />
+                <FileListItem file={obj} key={index} onFileRemove={this.onFileRemove} />
               );
             })}
         </div>
@@ -179,16 +196,10 @@ function FileListItem(props) {
   let onFileRemoveClickHandler = e => {
     e.stopPropagation();
 
-    axios.get(`${props.url}?remove-fid=${props.file.fid}&cert-nid=${props.file.certificate_nid}`)
-      .then(res => {
-        if(res.statusText == 'OK'){
-          if(res.data.hasOwnProperty('success') ){
-            res.data.hasOwnProperty('message') && toast.success(res.data.message);
-            // Set the class to display none to hide this element
-            setClassName('d-none');
-          }
-        }
-      });
+    if(props.hasOwnProperty('onFileRemove')){
+      e.props = props;
+      props.onFileRemove(e);
+    }
   };
 
   let formatBytes = (bytes, decimals = 2)  => {
@@ -213,7 +224,7 @@ function FileListItem(props) {
   useEffect(() => {
     const timer  = setTimeout(() => {
       // Delayed set class to use transition
-      setClassName('');
+      setClassName('show');
     }, 100);
     // returning a function inside useEffect hook is like using a componentWillUnmount()
     // lifecycle method inside class-based react components.
