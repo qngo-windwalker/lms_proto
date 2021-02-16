@@ -10,11 +10,11 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 import { createPortal } from "react-dom";
-import {Progress} from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import _ from 'lodash';
 
+const MAX_FILE_SIZE = 5242880;
 /**
  * Required file_upload.css
  */
@@ -52,16 +52,17 @@ export default class FileUpload extends React.Component {
     //define message container
     let err = []
     // list allow mime type
-    const types = ['image/png', 'image/jpeg', 'image/gif']
+    const types = ['image/png', 'image/jpeg', 'image/gif', 'application/pdf']
     // loop access array
-    for(var x = 0; x<files.length; x++) {
+    for(let i = 0; i < files.length; i++) {
       // compare file type find doesn't matach
-      if (types.every(type => files[x].type !== type)) {
+      if (types.every(type => files[i].type !== type)) {
         // create error message and assign to container
-        err[x] = files[x].type+' is not a supported format\n';
+        err[i] = files[i].type+' is not a supported format\n';
       }
     };
-    for(var z = 0; z<err.length; z++) {// if message not same old that mean has error
+
+    for(let z = 0; z < err.length; z++) {// if message not same old that mean has error
       // discard selected file
       toast.error(err[z])
       event.target.value = null
@@ -71,10 +72,9 @@ export default class FileUpload extends React.Component {
 
   maxSelectFile(event){
     let files = event.target.files
-    if (files.length > 3) {
-      const msg = 'Only 3 images can be uploaded at a time'
+    if (files.length > 1) {
       event.target.value = null
-      toast.warn(msg)
+      toast.warn('Only 1 file can be uploaded at a time')
       return false;
     }
     return true;
@@ -82,19 +82,29 @@ export default class FileUpload extends React.Component {
 
   checkFileSize(event) {
     let files = event.target.files
-    let size = 2000000
+    let size = MAX_FILE_SIZE
     let err = [];
-    for (var x = 0; x < files.length; x++) {
-      if (files[x].size > size) {
-        err[x] = files[x].type + 'is too large, please pick a smaller file\n';
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].size > size) {
+        err[i] = files[i].type + 'is too large, please pick a smaller file\n';
       }
     }
+
+    if (err.length) {
+      toast.warn(`The file size exceeded the maximum allowed of ${formatBytes(MAX_FILE_SIZE)}. Please pick a smaller file.`)
+      return false;
+    } else {
+      return true;
+    }
   }
+
   onChangeHandler(event){
-    this.setState({
-      selectedFile: event.target.files[0],
-      loadedProgress: 0,
-    });
+    if(this.maxSelectFile(event) && this.checkMimeType(event) && this.checkFileSize(event)){
+      this.setState({
+        selectedFile: event.target.files[0],
+        loadedProgress: 0,
+      });
+    }
   }
 
   onClickHandler(e){
@@ -155,7 +165,6 @@ export default class FileUpload extends React.Component {
   }
 
   render() {
-    console.log(this.state.uploadedFiles);
     if(this.state.uploadedFiles.length){
       return (
         <div>
@@ -169,16 +178,21 @@ export default class FileUpload extends React.Component {
       );
     }
 
+    let uploadProgress = Math.round(this.state.loadedProgress, 2);
     return (
       <form>
         <div className="form-group files">
           <label htmlFor="file">Drag & Drop or <span className={`filepond--label-action`}>Browse</span></label>
-          <input type="file" className="form-control form-control-file" id="file-upload" name="file" onChange={this.onChangeHandler}/>
+          <input type="file" className="form-control form-control-file" id="file-upload" name="file" onChange={this.onChangeHandler} aria-describedby="fileUploadHelp"/>
+          <small id="fileUploadHelp" className="form-text text-muted">One file only. {formatBytes(MAX_FILE_SIZE)} limit.  Allowed types: pdf jpeg jpg png gif.</small>
         </div>
 
         <div className="form-group">
-          <ToastContainer/>
-          <Progress max="100" color="success" value={this.state.loadedProgress}>{Math.round(this.state.loadedProgress, 2)}%</Progress>
+          <ToastContainer autoClose={false}/>
+
+          <div className="progress">
+            <div className="progress-bar" role="progressbar" style={{width: uploadProgress + '%'}} aria-valuenow={uploadProgress} aria-valuemin="0" aria-valuemax="100">{uploadProgress}%</div>
+          </div>
         </div>
 
         <div className="form-group text-align-center">
@@ -187,6 +201,25 @@ export default class FileUpload extends React.Component {
       </form>
     );
   }
+}
+
+/**
+ * This function is outside of any class so both FileUpload class and
+ * FileListItem hook can utilize it.
+ * @param bytes
+ * @param decimals
+ * @returns {string}
+ */
+function formatBytes(bytes, decimals = 2){
+  if (bytes === 0) return '0 Bytes';
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 function FileListItem(props) {
@@ -201,18 +234,6 @@ function FileListItem(props) {
       props.onFileRemove(e);
     }
   };
-
-  let formatBytes = (bytes, decimals = 2)  => {
-    if (bytes === 0) return '0 Bytes';
-
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-  }
 
   /**
    * Note: we have passed empty array [] as a second argument
