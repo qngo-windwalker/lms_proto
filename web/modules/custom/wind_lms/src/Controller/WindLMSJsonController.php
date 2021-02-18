@@ -89,10 +89,46 @@ class WindLMSJsonController extends ControllerBase {
     ]);
   }
 
+  /**
+   * wind_lms.json.all_users_progress:
+   *   path: 'wl-json/all-users-progress'
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   */
   public function getAllUsersProgress() {
-    return new JsonResponse([
+    $collection = [];
+    $result = \Drupal::entityQuery('user')
+      ->execute();
 
-    ]);
+    foreach ($result as $uid) {
+      if($uid == 0 ){
+        continue;
+      }
+      $user = User::load($uid);
+      //      $licenseNode = $this->getUserLicense($uid);
+      //      $coursesData = _wind_tincan_get_user_all_assigned_course_data($user);
+      $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
+      foreach ($coursesData as $course){
+
+        $collection[] = [
+          'uid' => $uid,
+          'username' => $user->label(),
+          'user_link' => $this->getUserNameLink($user),
+          'status' => $user->get('status')->value,
+          'mail' => $user->get('mail')->value,
+          'fullName' => $user->get('field_first_name')->value . ' ' . $user->get('field_last_name')->value,
+          'created' => $user->get('created')->value,
+          'login' => $user->get('login')->value,
+          'field_clearinghouse_role' =>  '',
+          'field_enroll_date' => '',
+          'courseTitle' => $this->getCourseDataValue($course, 'title'),
+          'courseTincanId' => $this->getCourseDataValue($course, 'tincan_course_id'),
+          'courseProgress' => $this->getCourseDataValue($course, 'progress'),
+          'stored_date' => '',
+          'package_files' => $course['package_files']
+        ];
+      }
+    }
+    return new JsonResponse(['data' => $collection]);
   }
 
   private function getUserData(User $user) {
@@ -233,5 +269,37 @@ class WindLMSJsonController extends ControllerBase {
     );
 
     return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
+  }
+
+  function getCourseDataValue($course, $key){
+    switch ($key) {
+      case 'stored_date' :
+        $statement = $course['statement'];
+        if (!$statement) {
+          return '';
+        }
+        $stored_date = $statement->get('stored_date')->value;
+        return $this->formatTime($stored_date);
+        break;
+      default:
+        return isset($course[$key]) ? $course[$key] : '';
+    }
+    return '';
+  }
+
+  private function formatTime($timestamp) {
+    if ($timestamp) {
+      return date('m-d-Y', $timestamp);
+    } else {
+      // If the $timestamp is 0
+      return 'Never';
+    }
+  }
+
+  private function getUserNameLink(\Drupal\Core\Entity\EntityInterface $user) {
+    $URL = Url::fromUserInput("/user/{$user->id()}");
+    $linkContent = $user->label();
+    $renderedAnchorContent = render($linkContent);
+    return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $URL)->toString();
   }
 }

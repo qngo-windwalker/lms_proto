@@ -24,7 +24,7 @@ export default class AllUserProgressTable extends Component{
     let url = new URL(window.location.href);
     let testParam = url.searchParams.get('test') ? 'test=true' : '';
     let langParam = this.isEnglishMode() ? 'en' : 'es';
-    this.initDataTable(`/wind-tincan-course/course-progress-datatable/?lang=${langParam}&${testParam}`);
+    this.initDataTable(`/wl-json/all-users-progress/?lang=${langParam}&${testParam}`);
   }
 
   componentDidUpdate(){
