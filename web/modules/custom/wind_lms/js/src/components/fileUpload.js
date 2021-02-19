@@ -14,7 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import _ from 'lodash';
 
-const MAX_FILE_SIZE = 5242880;
+const MAX_FILE_SIZE = 10485760;
 /**
  * Required file_upload.css
  */

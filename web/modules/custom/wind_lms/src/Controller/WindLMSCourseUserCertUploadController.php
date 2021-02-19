@@ -47,8 +47,8 @@ class WindLMSCourseUserCertUploadController extends ControllerBase{
 
     $file = $_FILES['file'];
 
-    // Checking File Size (Max Size - 5MB)
-    if($file['size'] > 5242880){
+    // Checking File Size (Max Size - 10 MB)
+    if($file['size'] > 10485760){
       return new JsonResponse([
         'code' => 500,
         'error' => 1,
