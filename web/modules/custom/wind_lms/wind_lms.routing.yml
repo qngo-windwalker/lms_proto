@@ -29,10 +29,22 @@ wind_lms.cert.id:
         type: entity:node
       user:
         type: entity:user
+wind_lms.cert.edit:
+  path: cert/{node}/edit
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSCertEditController::getContent
+    _title: 'Certificate'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+  options:
+    parameters:
+      node:
+        type: entity:node
+
 wind_lms.course.user.cert.upload:
   path: course/{node}/user/{user}/cert/upload
   defaults:
-    _controller: \Drupal\wind_lms\Controller\WindLMSCourseUserCertUploadController::getContent
+    _controller: \Drupal\wind_lms\Controller\WindLMSCourseUserCertController::getUploadContent
     _title: 'Certificate Upload'
   requirements:
     _role: 'authenticated'
@@ -42,6 +54,21 @@ wind_lms.course.user.cert.upload:
         type: entity:node
       user:
         type: entity:user
+
+wind_lms.course.user.cert.verify:
+  path: course/{node}/user/{user}/cert/verify
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSCourseUserCertController::getVerifyContent
+    _title: 'Certificate Upload'
+  requirements:
+    _role: 'authenticated'
+  options:
+    parameters:
+      node:
+        type: entity:node
+      user:
+        type: entity:user
+
 # Generates Certificate PDF
 wind_lms.certificate.user:
   path: certificate/{certificateId}/{user}
@@ -243,60 +270,60 @@ wind_lms.admin_people.user:
       user:
         type: entity:user
 
-wind_lms.admin_people.user_group:
-  path: 'admin/people/learner-score/{user}/group/{group}'
-  defaults:
-    _controller: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupController::getContent'
-    _title_callback: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupController::getTitle'
-  requirements:
-    _permission: 'administer site configuration'
-    user: \d+
-  options:
-    parameters:
-      user:
-        type: entity:user
-      group:
-        type: entity:group
-
-wind_lms.admin_people.user_group_step:
-  path: 'admin/people/learner-score/{user}/group/{group}/step/{opigno_module}'
-  defaults:
-    _controller: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupStepController::getContent'
-    _title_callback: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupStepController::getTitle'
-  requirements:
-    _permission: 'administer site configuration'
-    user: \d+
-  options:
-    parameters:
-      user:
-        type: entity:user
-      group:
-        type: entity:group
-      opigno_module:
-        type: entity:opigno_module
-
-wind_lms.admin_people.user_group_step_activity:
-  path: 'admin/people/learner-score/{user}/group/{group}/step/{opigno_module}/activity/{opigno_activity}'
-  defaults:
-    _controller: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupStepActivityController::getContent'
-    _title_callback: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupStepActivityController::getTitle'
-  requirements:
-    _permission: 'administer site configuration'
-    user: \d+
-  options:
-    parameters:
-      user:
-        type: entity:user
-      group:
-        type: entity:group
-      opigno_module:
-        type: entity:opigno_module
-      opigno_activity:
-        type: entity:opigno_activity
-wind_lms.group.group_users:
-  path: admin/group/group-users
-  defaults:
-    _controller: \Drupal\wind_lms\Controller\WindLMSAdminGroupUsersController::getContent
-    title: 'Group Users'
-  requirements:
-    _permission: 'administer site configuration'
+#wind_lms.admin_people.user_group:
+#  path: 'admin/people/learner-score/{user}/group/{group}'
+#  defaults:
+#    _controller: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupController::getContent'
+#    _title_callback: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupController::getTitle'
+#  requirements:
+#    _permission: 'administer site configuration'
+#    user: \d+
+#  options:
+#    parameters:
+#      user:
+#        type: entity:user
+#      group:
+#        type: entity:group
+#
+#wind_lms.admin_people.user_group_step:
+#  path: 'admin/people/learner-score/{user}/group/{group}/step/{opigno_module}'
+#  defaults:
+#    _controller: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupStepController::getContent'
+#    _title_callback: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupStepController::getTitle'
+#  requirements:
+#    _permission: 'administer site configuration'
+#    user: \d+
+#  options:
+#    parameters:
+#      user:
+#        type: entity:user
+#      group:
+#        type: entity:group
+#      opigno_module:
+#        type: entity:opigno_module
+#
+#wind_lms.admin_people.user_group_step_activity:
+#  path: 'admin/people/learner-score/{user}/group/{group}/step/{opigno_module}/activity/{opigno_activity}'
+#  defaults:
+#    _controller: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupStepActivityController::getContent'
+#    _title_callback: '\Drupal\wind_lms\Controller\WindLMSAdminLearnerUserGroupStepActivityController::getTitle'
+#  requirements:
+#    _permission: 'administer site configuration'
+#    user: \d+
+#  options:
+#    parameters:
+#      user:
+#        type: entity:user
+#      group:
+#        type: entity:group
+#      opigno_module:
+#        type: entity:opigno_module
+#      opigno_activity:
+#        type: entity:opigno_activity
+#wind_lms.group.group_users:
+#  path: admin/group/group-users
+#  defaults:
+#    _controller: \Drupal\wind_lms\Controller\WindLMSAdminGroupUsersController::getContent
+#    title: 'Group Users'
+#  requirements:
+#    _permission: 'administer site configuration'

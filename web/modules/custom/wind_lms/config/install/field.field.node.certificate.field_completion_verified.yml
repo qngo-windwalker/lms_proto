@@ -1,0 +1,23 @@
+uuid: c693e8e4-e1d8-4a92-bb0e-a34492e0a8cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_completion_verified
+    - node.type.certificate
+id: node.certificate.field_completion_verified
+field_name: field_completion_verified
+entity_type: node
+bundle: certificate
+label: 'Completion Verified'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

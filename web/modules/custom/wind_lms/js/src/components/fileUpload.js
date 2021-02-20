@@ -1,15 +1,8 @@
 
 'use strict';
+
 import React, {useEffect, useState} from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  HashRouter,
-  Link, useHistory, useParams
-} from "react-router-dom";
 import axios from 'axios';
-import { createPortal } from "react-dom";
 import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import _ from 'lodash';
@@ -263,10 +256,6 @@ function FileListItem(props) {
       <li className="list-group-item d-flex justify-content-between align-items-center">
         File Size
         <span className="file-size text-secondary text-monospace">{formatBytes(props.file.filesize)}</span>
-      </li>
-      <li className="list-group-item d-flex justify-content-between align-items-center">
-        Verified Status
-        <span className="badge badge-warning">No</span>
       </li>
     </ul>
   );

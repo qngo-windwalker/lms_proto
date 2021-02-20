@@ -19,7 +19,10 @@ import SideModalContentCertUpload from "./sideModalContentCourseCertUpload";
 export default class  DashboardPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { currentUser : null };
+    this.state = {
+      dataLoaded: false,
+      currentUser : null
+    };
   }
 
   componentDidMount() {
@@ -31,12 +34,20 @@ export default class  DashboardPanel extends React.Component {
       .then(res => {
         // const posts = res.data.data.children.map(obj => obj.data);
         this.setState({
+          dataLoaded : true,
           currentUser : res.data
         });
       });
   }
 
   render() {
+    if (!this.state.dataLoaded) {
+      return (
+        <div className="spinner-border text-primary" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      );
+    }
     return(
       <>
         {this.state.currentUser ? <CurrentUserCourseTable /> : <p>Loading...</p>}
@@ -45,7 +56,7 @@ export default class  DashboardPanel extends React.Component {
         <Route path={["/user/:id", "/course/:nid/user/:uid/cert/upload"]} render={routeProps => { return (
           <Modala>
             {routeProps.match.path == '/user/:id' && <SideModalContentUser {...routeProps}/>}
-            {routeProps.match.path == '/course/:nid/user/:uid/cert/upload' && <SideModalContentCertUpload {...routeProps}/>}
+            {routeProps.match.path == '/course/:nid/user/:uid/cert/upload' && <SideModalContentCertUpload currentUser={this.state.currentUser} {...routeProps}/>}
           </Modala>
         );}}/>
       </>

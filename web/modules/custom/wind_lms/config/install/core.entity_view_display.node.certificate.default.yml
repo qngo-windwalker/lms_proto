@@ -6,9 +6,12 @@ dependencies:
     - field.field.node.certificate.body
     - field.field.node.certificate.field_activity
     - field.field.node.certificate.field_attachment
+    - field.field.node.certificate.field_completion_date
+    - field.field.node.certificate.field_completion_verified
     - field.field.node.certificate.field_learner
     - node.type.certificate
   module:
+    - datetime
     - file
     - text
     - user
@@ -39,6 +42,25 @@ content:
       use_description_as_link_text: true
     third_party_settings: {  }
     type: file_default
+    region: content
+  field_completion_date:
+    weight: 105
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_completion_verified:
+    weight: 106
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
     region: content
   field_learner:
     weight: 103

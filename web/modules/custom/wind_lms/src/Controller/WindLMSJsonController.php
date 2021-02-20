@@ -108,8 +108,8 @@ class WindLMSJsonController extends ControllerBase {
       //      $coursesData = _wind_tincan_get_user_all_assigned_course_data($user);
       $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
       foreach ($coursesData as $course){
-
         $collection[] = [
+          'course_nid' => $course['nid'],
           'uid' => $uid,
           'username' => $user->label(),
           'user_link' => $this->getUserNameLink($user),
@@ -124,7 +124,8 @@ class WindLMSJsonController extends ControllerBase {
           'courseTincanId' => $this->getCourseDataValue($course, 'tincan_course_id'),
           'courseProgress' => $this->getCourseDataValue($course, 'progress'),
           'stored_date' => '',
-          'package_files' => $course['package_files']
+          'package_files' => $course['package_files'],
+          'certificateLink' => $this->getCourseCertificate($course, $user),
         ];
       }
     }

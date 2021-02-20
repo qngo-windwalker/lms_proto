@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import ReactDOMServer from "react-dom/server";
+import Certificate from "./certificate";
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
 // Needed for DataTable export buttons
@@ -108,6 +110,11 @@ export default class AllUserProgressTable extends Component{
         title: 'Progress',
         className : "text-capitalize",
         data: this.getProgressOutput
+      },
+      {
+        title: 'Certificate',
+        className : "text-capitalize",
+        data: this.getCertificateOutput
       }
     ];
     $(this.refs.main).DataTable({
@@ -185,6 +192,20 @@ export default class AllUserProgressTable extends Component{
     // At this point, incomlete with cover these scenarios:
     // ["completed", "Not Started"]
     return 'incomplete';
+  }
 
+  getCertificateOutput(row, type, val, meta) {
+    let user ={
+      uid : row.uid
+    }
+    let courseData = {
+      nid : row.course_nid,
+      certificateLink : row.certificateLink
+    }
+    return ReactDOMServer.renderToString(
+      <>
+        <Certificate user={user} course-data={courseData} />
+      </>
+    );
   }
 }

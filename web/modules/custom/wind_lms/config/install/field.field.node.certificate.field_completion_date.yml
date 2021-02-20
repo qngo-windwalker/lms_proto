@@ -1,0 +1,21 @@
+uuid: 129cd907-1387-466c-80bd-6dd7354a669e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_completion_date
+    - node.type.certificate
+  module:
+    - datetime
+id: node.certificate.field_completion_date
+field_name: field_completion_date
+entity_type: node
+bundle: certificate
+label: 'Completion Date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -6,9 +6,12 @@ dependencies:
     - field.field.node.certificate.body
     - field.field.node.certificate.field_activity
     - field.field.node.certificate.field_attachment
+    - field.field.node.certificate.field_completion_date
+    - field.field.node.certificate.field_completion_verified
     - field.field.node.certificate.field_learner
     - node.type.certificate
   module:
+    - datetime
     - file
     - path
     - text
@@ -49,6 +52,19 @@ content:
       progress_indicator: throbber
     third_party_settings: {  }
     type: file_generic
+    region: content
+  field_completion_date:
+    weight: 125
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_completion_verified:
+    weight: 126
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
     region: content
   field_learner:
     weight: 123
