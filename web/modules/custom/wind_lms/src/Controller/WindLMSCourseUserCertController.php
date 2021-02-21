@@ -83,7 +83,7 @@ class WindLMSCourseUserCertController extends ControllerBase{
         'message' => 'Unable to find file.',
       ]);
     }
-    $certNode = $this->createNewCertNode($result->id(), $node, $user->id());
+    $certNode = $this->createNewCertNode($node, $user->id(), $result->id());
     return new JsonResponse([
       'code' => 200,
       'success' => 1,
@@ -150,15 +150,22 @@ class WindLMSCourseUserCertController extends ControllerBase{
     )]);
   }
 
-  private function createNewCertNode($fid, NodeInterface $courseNode, $uid) {
-    $node = Node::create(array(
+  private function createNewCertNode(NodeInterface $courseNode, $uid, $fid = null) {
+    $nodeData = array(
       'title' => 'Certificate Upload',
       'body' => 'Node body content',
       'type' => 'certificate',
       'field_attachment' => ['target_id' => $fid, 'description' => 'Course certificate upload'],
       'field_learner' => ['target_id' => $uid],
       'field_activity' => ['target_id' => $courseNode->id()]
-    ));
+    );
+
+    // Certificate doesn't need any file if it's for ILT (Instructor Lead Training) course.
+    if ($fid) {
+      $nodeData['field_attachment'] = ['target_id' => $fid, 'description' => 'Course certificate upload'];
+    }
+
+    $node = Node::create($nodeData);
     $node->save();
     return $node;
   }
@@ -199,7 +206,8 @@ class WindLMSCourseUserCertController extends ControllerBase{
           'uri' => file_create_url($field_attachment_ref_entities_file->getFileUri()),
           'filesize' => $field_attachment_ref_entities_file->get('filesize')->getString(),
           'nid' => $cert_node->id(),
-          'certificate_nid' => $cert_node->id()
+          'certificate_nid' => $cert_node->id(),
+          'field_completion_verified' => $cert_node->get('field_completion_verified')->getString()
         ];
       }
     }

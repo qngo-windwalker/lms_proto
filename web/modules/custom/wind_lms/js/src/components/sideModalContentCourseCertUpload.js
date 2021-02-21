@@ -1,6 +1,6 @@
 'use strict';
 
-import React from "react";
+import React, { useEffect, useState  } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,37 +9,61 @@ import {
   Link
 } from "react-router-dom";
 import axios from 'axios';
-import { createPortal } from "react-dom";
 import FileUpload from "./fileUpload";
-import {toast} from "react-toastify";
 
 export default class SideModalContentCourseCertUpload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ajaxRespondData : null,
-      courseVerifyStatus : false
+      courseVerifyStatus : false,
+      isFileVerified : false
     };
     this.allowFileVerification = this.doesCurrentUserHasAdminAccess();
+    this.onFileVerificationSwitchChange = this.onFileVerificationSwitchChange.bind(this);
   }
 
   componentDidMount() {
-    let match = this.props.match;
-    let query = `query {
-      course(id: ${match.params.nid}){
-        id
-        title
-      }
-    }`;
-    this.load(`/graphql/?query=${query}`)
+    this.load(`/jsonapi/node/certificate?filter[field_activity.nid]=${this.props.match.params.nid}&filter[field_learner.uid]=${this.props.match.params.uid}`)
   }
 
   async load(url) {
     axios.get(url)
       .then(res => {
-        this.setState({
-          ajaxRespondData : res.data
-        });
+        console.log(res.data);
+        let newState = {
+          ajaxRespondData : res.data,
+        };
+
+        if (res.data.data.length) {
+          newState.isFileVerified = res.data.data[0].attributes.field_completion_verified
+        }
+        this.setState(newState);
+      });
+  }
+
+  onFileVerificationSwitchChange(e){
+    let match = this.props.match;
+    // @see https://reactjs.org/docs/forms.html
+    const target = e.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+
+    // Save the data on the server
+    axios.get(`course/${match.params.nid}/user/${match.params.uid}/cert/verify?field_completion_verified=${value}`)
+      .then(res => {
+        if(res.statusText != 'OK'){
+          console.log( '%c' +'Ajax error.', 'color: #ff0000');
+        }
+
+        if(res.statusText == 'OK' && res.data.hasOwnProperty('error')){
+          console.log( '%c' +'The server returned an error.', 'color: #ff0000');
+          console.log( '%c' +res.data.message, 'color: #ff0000');
+        }
       });
   }
 
@@ -53,28 +77,10 @@ export default class SideModalContentCourseCertUpload extends React.Component {
     }
     let match = this.props.match;
 
-    let onFileVerificationSwitchChange = e => {
-      let value = e.currentTarget.checked;
-      this.setState({
-        courseVerifyStatus : value
-      });
-      axios.get(`course/${match.params.nid}/user/${match.params.uid}/cert/verify?field_completion_verified=${value}`)
-        .then(res => {
-          if(res.statusText != 'OK'){
-            console.log( '%c' +'Ajax error.', 'color: #ff0000');
-          }
-
-          if(res.statusText == 'OK' && res.data.hasOwnProperty('error')){
-            console.log( '%c' +'The server returned an error.', 'color: #ff0000');
-            console.log( '%c' +res.data.message, 'color: #ff0000');
-          }
-        });
-    }
-
     return (
       <>
         <div className="modal-header">
-          <h3 className="modal-title">Verification for <small className="text-muted">{this.getCourseData('title')}</small></h3>
+          <h3 className="modal-title">Verification for <small className="text-muted"><NodeTitle nid={match.params.nid}/></small></h3>
         </div>
 
         <div className="modal-body">
@@ -83,38 +89,16 @@ export default class SideModalContentCourseCertUpload extends React.Component {
           <h4>Verify Status</h4>
           <ul className={`list-group mb-4`}>
             <li className="list-group-item d-flex justify-content-between align-items-center">
-              {this.state.courseVerifyStatus ? <span className="text-success">Completion Verified</span> : <span className="text-warning">Need Manager Verification</span>}
+              {this.state.isFileVerified ? <span className="text-success">Completion Verified</span> : <span className="text-warning">Need Verification</span>}
               <div className="custom-control custom-switch custom-switch-md text-success">
-                <input id="fileVerificationSwitch" className="custom-control-input" type="checkbox" disabled={!this.allowFileVerification} onChange={onFileVerificationSwitchChange} />
-                <label className="custom-control-label mt-0" htmlFor="fileVerificationSwitch"></label>
+                <input id="isFileVerified" name="isFileVerified" className="custom-control-input" type="checkbox" disabled={!this.allowFileVerification} checked={this.state.isFileVerified} onChange={this.onFileVerificationSwitchChange} />
+                <label className="custom-control-label mt-0" htmlFor="isFileVerified"></label>
               </div>
             </li>
           </ul>
         </div>
       </>
     );
-  }
-
-  getCourseData(property) {
-    if (!this.state.ajaxRespondData) {
-      return '';
-    }
-
-    if (this.state.ajaxRespondData.hasOwnProperty('errors') && this.state.ajaxRespondData.errors.length) {
-      console.log('%c' + this.state.ajaxRespondData.errors[0].message, 'color: #ff0000');
-      return '';
-    }
-
-    // Unable to find node with a certain id
-    if (!this.state.ajaxRespondData.data.course) {
-      return '';
-    }
-
-    if (!this.state.ajaxRespondData.data.course.hasOwnProperty(property)) {
-      return '';
-    }
-
-    return this.state.ajaxRespondData.data.course[property];
   }
 
   doesCurrentUserHasAdminAccess() {
@@ -129,5 +113,51 @@ export default class SideModalContentCourseCertUpload extends React.Component {
     }
 
     return false;
+  }
+}
+
+function NodeTitle(props) {
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [respondData, setRespondData] = useState({});
+
+  let query = `query {
+      course(id: ${props.nid}){
+        id
+        title
+      }
+    }`;
+
+  // Note: the empty deps array [] means
+  // this useEffect will run once
+  // similar to componentDidMount()
+  useEffect(() => {
+    fetch(`/graphql/?query=${query}`)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          setRespondData(result.data);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      )
+  }, [])
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  } else if (!isLoaded) {
+    return <div>Loading...</div>;
+  } else {
+    return (
+      <>
+        {respondData.hasOwnProperty('course') && respondData.course.title}
+      </>
+    );
   }
 }

@@ -1,3 +1,4 @@
+import ReactDOM from "react-dom";
 import React, {Component} from 'react';
 import axios from "axios";
 import ReactDOMServer from "react-dom/server";
@@ -114,10 +115,13 @@ export default class AllUserProgressTable extends Component{
       {
         title: 'Certificate',
         className : "text-capitalize",
-        data: this.getCertificateOutput
+        data: function ( row, type, val, meta ) {
+          // Create a container so we can attach ReactJS component later. @see onDataTableInitComplete()
+          return `<div id="cert-reactjs-container-course-nid-${row.course_nid}-uid-${row.uid}"></div>`;
+        }
       }
     ];
-    $(this.refs.main).DataTable({
+    let $datatable = $(this.refs.main).DataTable({
       ajax : {
         url : url,
       },
@@ -127,9 +131,6 @@ export default class AllUserProgressTable extends Component{
       // columnDefs: [ {
       //   "targets": 3,
       //   "data": function ( row, type, val, meta ) {
-      //     console.log(row)
-      //     console.log(type)
-      //     console.log(val)
       //     return ;
       //   }
       // } ],
@@ -165,9 +166,38 @@ export default class AllUserProgressTable extends Component{
         // For every row, add another row underneath it.
         // rows.each(function(row, i){
         // });
-      }
+      },
+      // rowCallback : function ( row, data ) {
+      // }
     });
+
+    // Fires on every page and fires after 'initComplete'
+    // @see https://datatables.net/reference/event/draw
+    $datatable.on('draw', function (e, settings) {
+      // var info = $datatable.page.info();
+      _.forEach(settings.json.data, function(row) {
+        let user ={
+          uid : row.uid
+        }
+        let courseData = {
+          nid : row.course_nid,
+          certificateLink : row.certificateLink
+        }
+        let elem = document.getElementById(`cert-reactjs-container-course-nid-${row.course_nid}-uid-${row.uid}`);
+        if (!elem) {
+          return;
+        }
+        ReactDOM.render(
+          <>
+            <Certificate user={user} course-data={courseData} />
+          </>,
+          elem
+        );
+      });
+    } );
   }
+
+  // Only fires on the first page
   onDataTableInitComplete(settings, json){
     // Add some magic.
     $('#user-progress-tbl thead').addClass('thead-light');
@@ -192,20 +222,5 @@ export default class AllUserProgressTable extends Component{
     // At this point, incomlete with cover these scenarios:
     // ["completed", "Not Started"]
     return 'incomplete';
-  }
-
-  getCertificateOutput(row, type, val, meta) {
-    let user ={
-      uid : row.uid
-    }
-    let courseData = {
-      nid : row.course_nid,
-      certificateLink : row.certificateLink
-    }
-    return ReactDOMServer.renderToString(
-      <>
-        <Certificate user={user} course-data={courseData} />
-      </>
-    );
   }
 }

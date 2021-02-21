@@ -62,13 +62,17 @@ export default class Certificate extends React.Component {
       );
     }
 
+    if (this.state.certificateUploadedFiles.length) {
+      // The Add button will open the Side Modal. @see ./sideModalContentCourseCertUpload.js
+      return(
+        <a className="btn btn-outline-secondary btn-sm" href={this.openModalURN}><i className={`fas fa-file mr-1 ${this.state.certificateUploadedFiles[0].field_completion_verified == '0' ? 'text-warning' : 'text-success' }`}></i> View </a>
+      );
+    }
+
     // The Add button will open the Side Modal. @see ./sideModalContentCourseCertUpload.js
     return (
       <>
-        {this.state.certificateUploadedFiles.length
-          ? <a className="btn btn-outline-secondary btn-sm" href={this.openModalURN}><i className="fas fa-file mr-1"></i>View</a>
-          : <a className="btn btn-outline-secondary btn-sm" href={this.openModalURN}><i className="fas fa-plus-circle mr-1"></i> Add </a>
-        }
+        <a className="btn btn-outline-secondary btn-sm" href={this.openModalURN}><i className="fas fa-plus-circle mr-1"></i> Add </a>
       </>
     );
   }
