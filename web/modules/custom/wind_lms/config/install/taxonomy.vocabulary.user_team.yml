@@ -1,0 +1,8 @@
+uuid: adfc3dce-63b0-4042-85e8-49ae239f7024
+langcode: en
+status: true
+dependencies: {  }
+name: 'User Team'
+vid: user_team
+description: ''
+weight: 0
