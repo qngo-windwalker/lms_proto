@@ -118,7 +118,6 @@ export default class FileUpload extends React.Component {
     }).then(res => { // then print response status
       // If server doesn't crash
       if(res.statusText == 'OK'){
-        console.log(res.data);
         if(res.data.hasOwnProperty('error') ){
           // res.data.hasOwnProperty('message') && toast.error(res.data.message);
         }

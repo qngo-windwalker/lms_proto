@@ -72,9 +72,8 @@ export default class Certificate extends React.Component {
         // If admin has verified the certificate information
         // or admin verified learner completed ILT course
         if(this.state.ajaxRespondData.hasOwnProperty('field_completion_verified') && this.state.ajaxRespondData.field_completion_verified == '1'){
-          verifiedElem = <span className="badge badge-pill badge-light text-success"><i className="fas fa-check-circle  mr-1"></i>Verified</span>;
+          verifiedElem = <span className="badge badge-pill badge-outline badge-success"><i className="fas fa-check-circle  mr-1"></i>Verified</span>;
         }
-
       }
 
       // If there's any propety that has been created.
@@ -87,7 +86,6 @@ export default class Certificate extends React.Component {
       if (fileElem == null && verifiedElem == null) {
         button = <a className="btn btn-outline-secondary btn-sm" href={this.openModalURN}><i className="fas fa-plus-circle mr-1"></i> Add </a>;
       }
-
     }
 
     return (

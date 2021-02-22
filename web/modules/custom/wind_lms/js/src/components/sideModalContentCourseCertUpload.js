@@ -30,7 +30,6 @@ export default class SideModalContentCourseCertUpload extends React.Component {
   async load(url) {
     axios.get(url)
       .then(res => {
-        console.log(res.data);
         let newState = {
           ajaxRespondData : res.data,
         };

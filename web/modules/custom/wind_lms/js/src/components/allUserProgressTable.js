@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom";
 import React, {Component} from 'react';
+import _ from 'lodash';
 import axios from "axios";
 import ReactDOMServer from "react-dom/server";
 import Certificate from "./certificate";
@@ -93,6 +94,17 @@ export default class AllUserProgressTable extends Component{
         title: 'User Status',
         data: function ( row, type, val, meta ) {
           return (row.status) ? '<span class="text-success">&#9679;</span>  Active' : '<span class="text-danger">&#9679;</span> Inactive';
+        }
+      },
+      {
+        title: 'Team',
+        data: function ( row, type, val, meta ) {
+          let markup = '';
+          _.forEach(row.user.field_team, (term) => {
+          console.log(term);
+            markup += '<span class="badge badge-pill badge-outline badge-secondary mr-1 mb-1" data-tid="' + term.tid + '">' + term.label + '</span>';
+          });
+          return markup;
         }
       },
       {

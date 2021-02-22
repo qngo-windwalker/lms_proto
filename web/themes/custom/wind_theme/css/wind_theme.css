@@ -21,7 +21,7 @@ label{margin-top: 10px;}
 h2{color: rgb(117,121,137); }
 /*label.form-required::after{ content: ' *'; color: red;}*/
 
-.badge.badge-outline.badge-secondary{ background: none; border: 1px solid #6c757d; color: inherit;}
+.badge.badge-outline.badge-secondary{ background: none; border: 1px solid #d2d2d2; color: inherit;}
 .badge.badge-outline.badge-success{ background: none; border: 1px solid #28a745; color: #28a745;}
 
 #site-top-header{padding: 20px 0; background: #1a1a1a; color: white;}
@@ -29,16 +29,8 @@ h2{color: rgb(117,121,137); }
   #site-header-left-nav {display: inline-block;}
 .page-course-activity #site-header{margin-bottom: 0px; }
 #block-wind-theme-branding a{display: block; padding: 0px 20px 20px; }
-.alert {
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-}
-.alert-success {
-  color: #657838;
-  background-color: #f3fae1;
-  border-color: #eef8d6;
-}
+.alert {  padding: 0.75rem 1.25rem;  margin-bottom: 1rem;  border: 1px solid transparent;}
+.alert-success {  color: #657838;  background-color: #f3fae1;  border-color: #eef8d6;}
 
 /*#block-wind-theme-content,*/
 #main.container-fluid{ width: 90%;}

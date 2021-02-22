@@ -109,6 +109,7 @@ class WindLMSJsonController extends ControllerBase {
       $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
       foreach ($coursesData as $course){
         $collection[] = [
+          'user' => \Drupal\wind_lms\WindLMSJSONStructure::getUser($user),
           'course_nid' => $course['nid'],
           'uid' => $uid,
           'username' => $user->label(),
