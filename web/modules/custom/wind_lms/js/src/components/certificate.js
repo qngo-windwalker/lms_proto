@@ -46,14 +46,6 @@ export default class Certificate extends React.Component {
   render(){
     let courseData = this.props['course-data'];
 
-    if(courseData.certificateLink != 'N/A'){
-      return (
-        <>
-          <span className="mr-2" dangerouslySetInnerHTML={{__html: courseData.certificateLink}}></span>
-        </>
-      )
-    }
-
     if (this.state.fetchingData) {
       return(
         <div className="spinner-border text-secondary" role="status">
@@ -62,19 +54,51 @@ export default class Certificate extends React.Component {
       );
     }
 
-    if (this.state.certificateUploadedFiles.length) {
-      // The Add button will open the Side Modal. @see ./sideModalContentCourseCertUpload.js
-      return(
-        <a className="btn btn-outline-secondary btn-sm" href={this.openModalURN}><i className={`fas fa-file mr-1 ${this.state.certificateUploadedFiles[0].field_completion_verified == '0' ? 'text-warning' : 'text-success' }`}></i> View </a>
-      );
+    // The button will open the Side Modal. @see ./sideModalContentCourseCertUpload.js
+    let button;
+    let verifiedElem;
+    let fileElem;
+    // If leaner has not completed the course via SCORM or Tincan
+    // and certificate node exist
+    if (courseData.certificateLink == 'N/A' && this.state.ajaxRespondData) {
+
+      // 'certificate_nid' means certificate node has been created for this course with this learner
+      if(this.state.ajaxRespondData.hasOwnProperty('certificate_nid')){
+
+        if(this.state.ajaxRespondData.files.length){
+          fileElem = <span className="badge badge-pill badge-secondary" ><i className={`fas fa-file mr-1`}></i> File Uploaded </span>;
+        }
+
+        // If admin has verified the certificate information
+        // or admin verified learner completed ILT course
+        if(this.state.ajaxRespondData.hasOwnProperty('field_completion_verified') && this.state.ajaxRespondData.field_completion_verified == '1'){
+          verifiedElem = <span className="badge badge-pill badge-light text-success"><i className="fas fa-check-circle  mr-1"></i>Verified</span>;
+        }
+
+      }
+
+      // If there's any propety that has been created.
+      if (fileElem != null || verifiedElem != null) {
+        button = <a className="btn btn-outline-secondary btn-sm" href={this.openModalURN}><i className="fas fa-pen mr-1"></i> Edit </a>;
+      }
+
+      // If leaner has NOT uploaded any file
+      // If admin has NOT verify, even if ILT course
+      if (fileElem == null && verifiedElem == null) {
+        button = <a className="btn btn-outline-secondary btn-sm" href={this.openModalURN}><i className="fas fa-plus-circle mr-1"></i> Add </a>;
+      }
+
     }
 
-    // The Add button will open the Side Modal. @see ./sideModalContentCourseCertUpload.js
     return (
       <>
-        <a className="btn btn-outline-secondary btn-sm" href={this.openModalURN}><i className="fas fa-plus-circle mr-1"></i> Add </a>
+        {courseData.certificateLink != 'N/A' && <span className="mr-2" dangerouslySetInnerHTML={{__html: courseData.certificateLink}}></span> }
+        {button}
+        {fileElem}
+        {verifiedElem}
       </>
     );
+
   }
 
   onWindowHashchange(e) {

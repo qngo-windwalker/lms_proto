@@ -113,7 +113,7 @@ class WindLMSCourseUserCertController extends ControllerBase{
     // This scenario can happen when admin enrolls learner to ILT course and learner does NOT need to upload certificate.
     // We create certificate node to save data
     if (!$certNode) {
-      $certNode = $this->createNewCertNode($node, $user);
+      $certNode = $this->createNewCertNode($node, $user->id());
     }
 
     $field_completion_verified = \Drupal::request()->get('field_completion_verified');
@@ -189,7 +189,9 @@ class WindLMSCourseUserCertController extends ControllerBase{
     $query->condition('field_activity', $node->id());
     $query->condition('field_learner', $user->id());
     $result = $query->execute();
-    $files = [];
+    $reponse = [
+      'files' => array(),
+    ];
     if($result){
       $certificate_nodes = \Drupal\node\Entity\Node::loadMultiple($result);
       foreach ($certificate_nodes as $cert_node) {
@@ -200,7 +202,7 @@ class WindLMSCourseUserCertController extends ControllerBase{
         }
         /** @var \Drupal\file\Entity\File $field_attachment_ref_entities_file */
         $field_attachment_ref_entities_file = $field_attachment_ref_entities[0];
-        $files[] = [
+        $reponse['files'][] = [
           'fid' => $field_attachment_ref_entities_file->id(),
           'filename' => $field_attachment_ref_entities_file->label(),
           'uri' => file_create_url($field_attachment_ref_entities_file->getFileUri()),
@@ -210,14 +212,15 @@ class WindLMSCourseUserCertController extends ControllerBase{
           'field_completion_verified' => $cert_node->get('field_completion_verified')->getString()
         ];
       }
+
+      $reponse['certificate_nid'] = $cert_node->id();
+      $reponse['field_completion_verified'] = $cert_node->get('field_completion_verified')->getString();
     }
 
-    return new JsonResponse([
-      'code' => 200,
-      'success' => 1,
-      'message' => 'Success',
-      'files' => $files
-    ]);
+    $reponse['code'] = 200;
+    $reponse['success'] = 1;
+    $reponse['message'] = 'Success';
+    return new JsonResponse($reponse);
   }
 
   private function removeFileFromCertificate($nid, $fid) {

@@ -90,7 +90,7 @@ export default class AllUserProgressTable extends Component{
         data: 'mail'
       },
       {
-        title: 'Status',
+        title: 'User Status',
         data: function ( row, type, val, meta ) {
           return (row.status) ? '<span class="text-success">&#9679;</span>  Active' : '<span class="text-danger">&#9679;</span> Inactive';
         }
