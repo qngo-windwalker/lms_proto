@@ -12,7 +12,7 @@
 /********************************
   Site wide styles
 ********************************/
-body{background: url('../img/backgroundEcover.png') center  no-repeat;}
+body{background: url('../img/backgroundEcover.png') center ;}
 body.page-group-manager{background: none;}
 a{color: #077c94;}
 input{ margin-bottom: 10px; padding: 5px 10px; border-radius: 1px; border: 1px solid #ccc;  }
@@ -45,8 +45,9 @@ h2{color: rgb(117,121,137); }
 
 #content{padding-bottom: 30px;}
 .wind-opigno-iframe iframe{width: 100%; height: 800px;}
-#site-footer{ display: none; padding-top: 90px; background: #333; color: white; }
+#site-footer{  padding: 50px 0; background: #333; color: white; }
 #site-footer a{color: white;}
+#site-footer .contextual-links *{ color: rgb(117,121,137);} /* Quick Edit*/
 #block-wind-theme-footer ul{ list-style: none; }
 #block-wind-theme-footer a{ font-size: 16px; }
 
