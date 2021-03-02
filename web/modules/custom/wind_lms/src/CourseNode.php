@@ -222,7 +222,7 @@ class CourseNode {
     if ($result['result'] !== TRUE) {
       \Drupal::messenger()->addError('There was a problem sending your message and it was not sent.');
     } else {
-      \Drupal::messenger()->addMessage("An email has been send to {$to}.");
+      \Drupal::messenger()->addMessage("An enrollment notification  email has been send to {$to}.");
     }
   }
   /**

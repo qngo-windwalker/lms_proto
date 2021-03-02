@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: wind_lms_enroll_user_to_course_action
+label: 'Enroll the selected user(s) to course'
+type: user
+plugin: wind_lms_enroll_user_to_course_action
+configuration: {  }

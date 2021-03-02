@@ -199,6 +199,7 @@ class CurriculumNameColumn extends React.Component {
 
 class CourseNameColumn extends React.Component {
   render() {
+    console.log(this.props);
     // If course has 1 zip file, make the title as a link
     // In case when a course node is created but zip file is no available. Show the title so it's easier to troubleshoot.
     if (this.props.packages.length == 1) {
@@ -221,8 +222,8 @@ class CourseNameColumn extends React.Component {
           {this.props.packages.map((obj, index) => {
             let zipPackage = obj;
             return (
-              <li className="mb-3" key={index}>
-                <ActivityLink className="wind-scorm-popup-link"  title={this.props.title} data-course-href={zipPackage.activity_link.url} href={zipPackage.activity_link.url} />
+              <li className="mt-4" key={index}>
+                <ActivityLink className="wind-scorm-popup-link" progress={zipPackage.course_data.progress}  title={this.props.title} data-course-href={zipPackage.activity_link.url} href={zipPackage.activity_link.url} />
               </li>
             );
           })}
@@ -234,11 +235,26 @@ class CourseNameColumn extends React.Component {
 
 class ActivityLink extends React.Component {
   render() {
+
+    let progressBadge;
+
+    // Only applies to multiple zip files course.
+    if(this.props.hasOwnProperty('progress')){
+      if (this.props.progress == 'completed') {
+        progressBadge = <span className={`ml-2 text-success`} title={this.props.progress}><i className="fas fa-check mr-1"></i></span>;
+      } else {
+        // progressBadge = <span className={`badge badge-pill badge-outline badge-secondary ml-2 text-capitalize`}><i className="fas fa-exclamation-circle"></i>{this.props.progress}</span>;
+      }
+
+    }
     return (
-      <a className="wind-scorm-popup-link d-flex" data-course-href={this.props['data-course-href']} href={this.props.href}>
-        <i className="fas fa-external-link-alt align-self-center pr-1"></i>
-        {this.props.title}
-      </a>
+      <>
+        <a className="wind-scorm-popup-link" data-course-href={this.props['data-course-href']} href={this.props.href}>
+          <i className="fas fa-external-link-alt align-self-center pr-1"></i>
+          {this.props.title}
+        </a>
+        {progressBadge}
+      </>
     );
   }
 }

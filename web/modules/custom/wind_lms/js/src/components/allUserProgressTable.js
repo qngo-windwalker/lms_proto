@@ -101,7 +101,6 @@ export default class AllUserProgressTable extends Component{
         data: function ( row, type, val, meta ) {
           let markup = '';
           _.forEach(row.user.field_team, (term) => {
-          console.log(term);
             markup += '<span class="badge badge-pill badge-outline badge-secondary mr-1 mb-1" data-tid="' + term.tid + '">' + term.label + '</span>';
           });
           return markup;

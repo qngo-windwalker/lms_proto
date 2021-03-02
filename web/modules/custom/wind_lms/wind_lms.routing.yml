@@ -235,6 +235,15 @@ wind_lms.datatable.courses:
 #################################################
 ## Admin
 #################################################
+# confirmation route from WindLMSEnrollCourseAction.php
+wind_lms.multiple_user_enroll:
+  path: '/admin/people/user-enroll'
+  defaults:
+    _form: '\Drupal\wind_lms\Form\WindLMSUserMultipleEnroll'
+    _title: 'Enroll user'
+  requirements:
+    _permission: 'administer users'
+
 wind_lms.admin_people:
   path: admin/people/learner-score
   menu:
