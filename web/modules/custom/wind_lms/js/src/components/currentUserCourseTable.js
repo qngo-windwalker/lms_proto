@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOMServer from "react-dom/server";
 import axios from "axios";
 import Certificate from "./certificate";
+import _ from 'lodash';
 
 export default class CurrentUserCourseTable extends Component{
 	constructor(props) {
@@ -128,22 +129,39 @@ export default class CurrentUserCourseTable extends Component{
     if(dataObj.data.type == 'curriculum'){
       return '';
     }
-    // If this course has more than 1 zip files, render the zip course as a list item.
-    if(dataObj.data['package_files'].length > 1){
-      return ReactDOMServer.renderToString(
-        <>
-          <h6> &nbsp; </h6>
-          <ul className="list-unstyled">
-            {dataObj.data['package_files'].map((obj, index) => {
-              return (<li className="mb-3" key={index} dangerouslySetInnerHTML={{__html: obj['course_data']['progress']}}></li>);
-            })}
-          </ul>
-        </>
-      );
+    // If course node only has 1 zip file
+    if(dataObj.data['package_files'].length == 1) {
+      return this.colorizedText(dataObj.data['package_files'][0]['course_data']['progress']);
     }
 
-    // If course node only has 1 zip file
-    return dataObj.data['package_files'][0]['course_data']['progress'];
+    let statusCollection = [];
+    _.forEach(dataObj.data['package_files'], (obj) => {
+      // Only add if it doesnt exist
+      if (!statusCollection.includes(obj['course_data']['progress'])) {
+        statusCollection.push(obj['course_data']['progress'])
+      }
+    });
+
+    if (statusCollection.length == 1) {
+      return this.colorizedText(statusCollection[0]);
+    }
+
+    // If there's more than one type of status
+    if (statusCollection.length > 1) {
+      return 'Incomplete';
+    }
+
+    return '';
+  }
+
+  colorizedText(text) {
+    switch (text) {
+      case 'completed':
+        return  `<span class="text-success">${text}</span>`
+        break;
+      default :
+        return text;
+    }
   }
 
   getColumnStatusCurriculumnContent(dataObj) {
@@ -199,7 +217,6 @@ class CurriculumNameColumn extends React.Component {
 
 class CourseNameColumn extends React.Component {
   render() {
-    console.log(this.props);
     // If course has 1 zip file, make the title as a link
     // In case when a course node is created but zip file is no available. Show the title so it's easier to troubleshoot.
     if (this.props.packages.length == 1) {
