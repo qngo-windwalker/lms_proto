@@ -83,11 +83,11 @@ class WindLMSCourseUserCertController extends ControllerBase{
         'message' => 'Unable to find file.',
       ]);
     }
-    $certNode = $this->createNewCertNode($node, $user->id(), $result->id());
-    return new JsonResponse([
-      'code' => 200,
-      'success' => 1,
-      'message' => 'Success',
+
+    $certNode = $this->getCertNode($node, $user);
+    $certNode->field_attachment->setValue( ['target_id' =>  $result->id(), 'description' => 'Course certificate upload']);
+    $saveResult = $certNode->save();
+    $jsonResponse = [
       'nodeId' => $certNode->id(),
       'file' => array(
         'fid' => $file_saved->id(),
@@ -97,7 +97,19 @@ class WindLMSCourseUserCertController extends ControllerBase{
         'nid' => $certNode->id(),
         'certificate_nid' => $certNode->id()
       )
-    ]);
+    ];
+
+    if(!$saveResult){
+      $jsonResponse['code'] = 500;
+      $jsonResponse['error'] = 1;
+      $jsonResponse['message'] = 'Unable to unlink file from reference node - Node Nid = .' . $certNode->id();
+      return new JsonResponse($jsonResponse);
+    }
+
+    $jsonResponse['code'] = 200;
+    $jsonResponse['success'] = 1;
+    $jsonResponse['message'] = 'Success';
+    return new JsonResponse($jsonResponse);
   }
 
   /**
@@ -109,12 +121,6 @@ class WindLMSCourseUserCertController extends ControllerBase{
    */
   public function getVerifyContent(NodeInterface $node, UserInterface $user){
     $certNode = $this->getCertNode($node, $user);
-
-    // This scenario can happen when admin enrolls learner to ILT course and learner does NOT need to upload certificate.
-    // We create certificate node to save data
-    if (!$certNode) {
-      $certNode = $this->createNewCertNode($node, $user->id());
-    }
 
     $field_completion_verified = \Drupal::request()->get('field_completion_verified');
     if ($field_completion_verified === null) {
@@ -150,30 +156,28 @@ class WindLMSCourseUserCertController extends ControllerBase{
     )]);
   }
 
-  private function createNewCertNode(NodeInterface $courseNode, $uid, $fid = null) {
-    $nodeData = array(
-      'title' => 'Certificate Upload',
-      'body' => 'Node body content',
-      'type' => 'certificate',
-      'field_attachment' => ['target_id' => $fid, 'description' => 'Course certificate upload'],
-      'field_learner' => ['target_id' => $uid],
-      'field_activity' => ['target_id' => $courseNode->id()]
-    );
+  /**
+   * @param \Drupal\node\NodeInterface $courseNode
+   * @param \Drupal\user\UserInterface $user
+   *
+   * @return \Drupal\Core\Entity\EntityBase|\Drupal\Core\Entity\EntityInterface|false|null
+   */
+  private function getCertNode(NodeInterface $courseNode, UserInterface $user) {
+    $certNode = $this->loadCertNode($courseNode, $user);
 
-    // Certificate doesn't need any file if it's for ILT (Instructor Lead Training) course.
-    if ($fid) {
-      $nodeData['field_attachment'] = ['target_id' => $fid, 'description' => 'Course certificate upload'];
+    // This scenario can happen when admin enrolls learner to ILT course and learner does NOT need to upload certificate.
+    // We create certificate node to save data
+    if (!$certNode) {
+      $certNode = $this->createNewCertNode($courseNode, $user->id());
     }
 
-    $node = Node::create($nodeData);
-    $node->save();
-    return $node;
+    return $certNode;
   }
 
-  private function getCertNode(NodeInterface $course_node, UserInterface $user) {
+  private function loadCertNode(NodeInterface $courseNode, UserInterface $user) {
     $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
     $query->condition('type', 'certificate');
-    $query->condition('field_activity', $course_node->id());
+    $query->condition('field_activity', $courseNode->id());
     $query->condition('field_learner', $user->id());
     $result = $query->execute();
     if($result) {
@@ -181,6 +185,20 @@ class WindLMSCourseUserCertController extends ControllerBase{
     }
 
     return false;
+  }
+
+  private function createNewCertNode(NodeInterface $courseNode, $uid, $fid = null) {
+    $nodeData = array(
+      'title' => 'Certificate Upload',
+      'body' => 'Node body content',
+      'type' => 'certificate',
+      'field_learner' => ['target_id' => $uid],
+      'field_activity' => ['target_id' => $courseNode->id()]
+    );
+
+    $node = Node::create($nodeData);
+    $node->save();
+    return $node;
   }
 
   private function getAllFiles(NodeInterface $node, UserInterface $user) {
