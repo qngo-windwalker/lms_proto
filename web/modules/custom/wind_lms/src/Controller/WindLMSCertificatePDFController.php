@@ -2,7 +2,7 @@
 
 namespace Drupal\wind_lms\Controller;
 
-use Drupal\wind_tincan\CertificatePDF;
+use Drupal\wind_lms\CertificatePDF;
 use Drupal\wind_tincan\Entity\TincanState;
 use Drupal\wind_tincan\Entity\TincanStatement;
 use Drupal\Component\Serialization\Json;
@@ -17,17 +17,20 @@ class WindLMSCertificatePDFController extends ControllerBase{
 
   public function getContent($certificateId,  \Drupal\user\Entity\User $user) {
     $fullName = $this->getUserFullName($user);
+    $site_name = \Drupal::config('system.site')->get('name');
+    $idDecoded = _wind_lms_decode_certificate_id($certificateId);
+    $courseNode = \Drupal\node\Entity\Node::load($idDecoded['node_nid']);
 
     // Include the main TCPDF library (search for installation path).
     // create new PDF document
     // L = landscape
     $pdf = new CertificatePDF('L', PDF_UNIT, 'LETTER', true, 'UTF-8', false);
     // set document information
-    $pdf->SetCreator('ClearinghouseNavigator.com');
-    $pdf->SetAuthor('ClearinghouseNavigator.com');
-    $pdf->SetTitle('Clearinghouse Navigator Certificate of Completion');
+    $pdf->SetCreator($site_name);
+    $pdf->SetAuthor('Windwalkerlearning');
+    $pdf->SetTitle('Certificate of Completion');
     $pdf->SetSubject('Course Name');
-    $pdf->SetKeywords('Clearinghouse Navigator, Certificate, Course, PDF');
+    $pdf->SetKeywords("{$site_name}, Certificate, Course, PDF");
 
     // set margins
     $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
@@ -78,14 +81,19 @@ class WindLMSCertificatePDFController extends ControllerBase{
 
     // Print text
     $fullNameMarkup = '<span style="text-align:center;font-size:24pt;">'. $fullName . '</span>';
-    $pdf->writeHTMLCell(0, 0, 0, '108', $fullNameMarkup, 0, 1, 0, true, '', true);
+    $pdf->writeHTMLCell(0, 0, 0, '100', $fullNameMarkup, 0, 1, 0, true, '', true);
+
+    $courseTitle = '<span style="font-size:28pt;">' . $courseNode->label() . '</span>';
+//    $courseTitle = '<span style="font-size:28pt;">Very very merry berry cherry carry hairry long title 20120</span>';
+    $pdf->writeHTMLCell(0, 0, 0, '145', $courseTitle, 0, 1, 0, true, 'C', true);
+
     //Todo Add real completion date.
 //    $completionData = '<span style="font-size:12pt;">'. date('m/d/Y', strtotime($json_array['timestamp'] )) . '</span>';
     $completionData = '<span style="font-size:12pt;">'. date('m/d/Y') . '</span>';
-    $pdf->writeHTMLCell(0, 0, '45', '185', $completionData, 0, 1, 0, true, '', true);
+    $pdf->writeHTMLCell(0, 0, '105', '185', $completionData, 0, 1, 0, true, '', true);
 
     $statementIdMarkup = '<span style="font-size:12pt;">' . $certificateId . '</span>';
-    $pdf->writeHTMLCell(0, 0, '98', '185', $statementIdMarkup, 0, 1, 0, true, '', true);
+    $pdf->writeHTMLCell(0, 0, '158', '185', $statementIdMarkup, 0, 1, 0, true, '', true);
 //    $pdf->writeHTML($html, true, false, true, false, '');
     // Close and output PDF document
     // This method has several options, check the source code documentation for more information.

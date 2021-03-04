@@ -466,3 +466,33 @@ function _wind_lms_get_user_full_name( \Drupal\user\Entity\User $user) {
 
   return $firstName . ' ' . $lastName;
 }
+
+function _wind_lms_encode_certificate_id($courseData) {
+  // Create an Id that can be decoded to lookup.
+  // CN = Course Node
+  $code_ids = ['CN' . $courseData['nid'] ];
+  foreach ($courseData['package_files'] as $package_file) {
+
+    if($package_file['type'] == 'scorm'){
+      // SM = SCORM
+      $code_ids[] = 'SM' . $package_file['scorm_package']->id;
+    }
+
+    if($package_file['type'] == 'tincan'){
+      // TC = Tincan
+      $code_ids[] = 'TC' .  $package_file['course_data']['statement']->get('statement_id')->value;
+    }
+  }
+
+  // Separate each structure with 00.
+  return implode('AA', $code_ids);
+}
+
+function _wind_lms_decode_certificate_id($id) {
+  $codes = explode('AA', $id);
+  $nid = str_replace('CN', '', $codes[0]);
+  return [
+    'node_nid' => $nid,
+    'data' => $codes
+  ];
+}

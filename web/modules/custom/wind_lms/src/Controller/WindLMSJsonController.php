@@ -244,24 +244,8 @@ class WindLMSJsonController extends ControllerBase {
     $linkContent = '<img width="26" src="/' . $module_path . '/img/certificate_icon.png">';
     $renderedAnchorContent = render($linkContent);
 
-    // Create an Id that can be decoded to lookup.
-    // CN = Course Node
-    $code_ids = ['CN' . $courseData['nid'] ];
-    foreach ($courseData['package_files'] as $package_file) {
-
-      if($package_file['type'] == 'scorm'){
-        // SM = SCORM
-        $code_ids[] = 'SM' . $package_file['scorm_package']->id;
-      }
-
-      if($package_file['type'] == 'tincan'){
-        // TC = Tincan
-        $code_ids[] = 'TC' .  $package_file['course_data']['statement']->get('statement_id')->value;
-      }
-    }
-
     // Separate each structure with 00.
-    $transaction_id = implode('00', $code_ids);
+    $transaction_id = _wind_lms_encode_certificate_id($courseData);
 
     $url = Url::fromUserInput(
       '/certificate/' . $transaction_id . '/' . $user->id(),
