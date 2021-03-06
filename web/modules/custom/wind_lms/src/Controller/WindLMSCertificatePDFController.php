@@ -85,7 +85,7 @@ class WindLMSCertificatePDFController extends ControllerBase{
 
     $courseTitle = '<span style="font-size:28pt;">' . $courseNode->label() . '</span>';
 //    $courseTitle = '<span style="font-size:28pt;">Very very merry berry cherry carry hairry long title 20120</span>';
-    $pdf->writeHTMLCell(0, 0, 0, '145', $courseTitle, 0, 1, 0, true, 'C', true);
+    $pdf->writeHTMLCell(0, 0, 0, '135', $courseTitle, 0, 1, 0, true, 'C', true);
 
     //Todo Add real completion date.
 //    $completionData = '<span style="font-size:12pt;">'. date('m/d/Y', strtotime($json_array['timestamp'] )) . '</span>';
