@@ -51,17 +51,3 @@ wind_tincan.certificate.id:
     _title: 'Certificate'
   requirements:
     _permission: 'access content'
-wind_tincan.user.course_progresses:
-  path: '/admin/people/course-progresses'
-  defaults:
-    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminUserCourseProgressesController::getContent'
-    _title: 'Course Progresses'
-  requirements:
-    _permission: 'administer users'
-wind_tincan.user.course_progress_datatable:
-  path: '/wind-tincan-course/course-progress-datatable'
-  defaults:
-    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminUserCourseProgressesDatatableController::getContent'
-    _title: 'User Course Progresses'
-  requirements:
-    _custom_access: '\Drupal\wind_tincan\Controller\WindTincanAdminUserCourseProgressesDatatableController::getAccess'

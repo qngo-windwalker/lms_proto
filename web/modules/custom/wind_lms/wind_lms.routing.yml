@@ -342,3 +342,17 @@ wind_lms.admin_people.user:
 #    title: 'Group Users'
 #  requirements:
 #    _permission: 'administer site configuration'
+wind_lms.user.course_progresses:
+  path: '/admin/people/course-progresses'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSAdminUserCourseProgressesController::getContent'
+    _title: 'Course Progresses'
+  requirements:
+    _permission: 'administer users'
+wind_lms.user.course_progress_datatable:
+  path: '/wind-lms-course/course-progress-datatable'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSAdminUserCourseProgressesDatatableController::getContent'
+    _title: 'User Course Progresses'
+  requirements:
+    _custom_access: '\Drupal\wind_lms\Controller\WindLMSAdminUserCourseProgressesDatatableController::getAccess'

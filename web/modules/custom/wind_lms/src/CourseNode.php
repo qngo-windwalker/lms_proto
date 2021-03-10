@@ -20,6 +20,32 @@ class CourseNode {
   }
 
   /**
+   * @param array $courseData
+   *
+   * @return mixed|bool|string
+   */
+  static function isCourseCompleted($courseData) {
+    // If there's no package_files, we treat this as a ILT course.
+    if (!count($courseData['package_files'])) {
+      // return Not Applicable will allow learner to upload their own certificate.
+      return 'N/A';
+    }
+
+    $allCompleted = true;
+    foreach ($courseData['package_files'] as $package_file) {
+      // Scorm is completed, Tincan is Completed (uppercase)
+      // strtolower to make it all lowercase.
+      $progress = strtolower($package_file['course_data']['progress']);
+      if($progress != 'completed'){
+        $allCompleted = false;
+        // will leave the foreach loop, if an item is not completed.
+        break;
+      }
+    }
+    return $allCompleted;
+  }
+
+  /**
    * Invoked by wind_lms_node_insert()
    * @param \Drupal\node\NodeInterface $node
    */
@@ -237,5 +263,4 @@ class CourseNode {
       return $value['target_id'];
     }, $array);
   }
-
 }

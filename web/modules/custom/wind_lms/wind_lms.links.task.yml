@@ -2,3 +2,7 @@ wind_lms.group.group_users:
   title: 'Group Users'
   base_route: 'entity.group.collection'
   route_name: 'wind_lms.group.group_users'
+wind_lms.user.course_progresses:
+  title: 'Course Progress'
+  route_name: wind_lms.user.course_progresses
+  base_route: entity.user.collection

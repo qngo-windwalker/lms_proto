@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\wind_tincan\Controller;
+namespace Drupal\wind_lms\Controller;
 
 use Drupal\Component\Utility\Xss;
 use Drupal\Component\Utility\Html;
@@ -13,7 +13,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\Core\Access\AccessResult;
 
-class WindTincanAdminUserCourseProgressesDatatableController extends ControllerBase{
+class WindLMSAdminUserCourseProgressesDatatableController extends ControllerBase{
   public function getContent() {
     $collection = [];
     $result = \Drupal::entityQuery('user')
@@ -24,27 +24,15 @@ class WindTincanAdminUserCourseProgressesDatatableController extends ControllerB
         continue;
       }
       $user = User::load($uid);
+      $userArr = \Drupal\wind_lms\WindLMSJSONStructure::getUser($user);
 //      $licenseNode = $this->getUserLicense($uid);
 //      $coursesData = _wind_tincan_get_user_all_assigned_course_data($user);
       $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
       foreach ($coursesData as $course){
-
+        $courseArr = \Drupal\wind_lms\WindLMSJSONStructure::getCourse($course, $user);
         $collection[] = [
-          'uid' => $uid,
-          'username' => $user->label(),
-          'user_link' => $this->getUserNameLink($user),
-          'status' => $user->get('status')->value,
-          'mail' => $user->get('mail')->value,
-          'fullName' => $user->get('field_first_name')->value . ' ' . $user->get('field_last_name')->value,
-          'created' => $user->get('created')->value,
-          'login' => $user->get('login')->value,
-          'field_clearinghouse_role' =>  '',
-          'field_enroll_date' => '',
-          'courseTitle' => $this->getCourseDataValue($course, 'title'),
-          'courseTincanId' => $this->getCourseDataValue($course, 'tincan_course_id'),
-          'courseProgress' => $this->getCourseDataValue($course, 'progress'),
-          'stored_date' => '',
-          'package_files' => $course['package_files']
+          'user' => $userArr,
+          'course' => $courseArr
         ];
       }
     }

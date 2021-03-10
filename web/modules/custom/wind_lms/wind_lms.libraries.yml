@@ -16,3 +16,8 @@ dashboard:
     js/dist/wind_lms.dashboard.bundle.js: {}
   dependencies:
     - wind/datatable_css
+admin_user_course_progresses:
+  js:
+    js/wind_lms.admin_user_course_progresses.js: {}
+  dependencies:
+    - wind/datatable
