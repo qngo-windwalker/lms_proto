@@ -217,6 +217,12 @@ class WindLMSJsonController extends ControllerBase {
    * @return \Drupal\Core\GeneratedLink|string
    */
   private function getCourseCertificate($courseData, $user) {
+    // If there's no package_files, we treat this as a ILT course.
+    if (!count($courseData['package_files'])) {
+      // return Not Applicable will allow learner to upload their own certificate.
+      return 'N/A';
+    }
+
     $allCompleted = true;
     foreach ($courseData['package_files'] as $package_file) {
       // Scorm is completed, Tincan is Completed (uppercase)
