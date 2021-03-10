@@ -46,7 +46,9 @@ class WindLMSAdminUserCourseProgressesDatatableController extends ControllerBase
     $user = \Drupal::currentUser();
 
     $userRoles = $user->getRoles();
-    if (in_array('administrator', $userRoles)) {
+    if (in_array('administrator', $userRoles)
+    || in_array('company_admin', $userRoles)
+    ) {
       return AccessResult::allowed();
     }
 
