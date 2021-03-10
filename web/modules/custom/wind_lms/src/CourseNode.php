@@ -202,7 +202,7 @@ class CourseNode {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  private function notifyAllUser($node, $uid_to_skip) {
+  private function notifyAllUser($node, $uid_to_skip = []) {
     $userStorage = \Drupal::entityTypeManager()->getStorage('user');
     $query = $userStorage->getQuery();
     $uids = $query
