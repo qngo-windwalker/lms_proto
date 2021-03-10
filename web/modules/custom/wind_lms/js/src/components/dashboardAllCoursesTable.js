@@ -77,9 +77,9 @@ export default class DashboardAllCoursesTable extends Component{
       <div className="section">
         <h3 className="mb-3">{this.isEnglishMode() ? 'Courses' : 'Cursos'}</h3>
         <table id="courses-tbl" ref="main" className="table table-curriculum responsive-enabled mb-5" data-striping="1" />
-        <a className="btn btn-primary " href="/node/add/course?destination=/dashboard">
-          <i className="fas fa-plus-circle mr-1"></i> Add Course
-        </a>
+        <div className="clear-both">
+          <a className="btn btn-primary " href="/node/add/course?destination=/dashboard"><i className="fas fa-plus-circle mr-1"></i> Add Course</a>
+        </div>
       </div>
     );
   }

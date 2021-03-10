@@ -49,9 +49,9 @@ export default class AllUserProgressTable extends Component{
       <div className="section">
         <h3 className="mb-3">{this.isEnglishMode() ? 'User Progress' : 'Progreso De Los Usuarios'}</h3>
         <table id="user-progress-tbl" ref="main" className="table table-user-progress responsive-enabled mb-5" data-striping="1" />
-        <a className="btn btn-primary " href="/admin/people/create?destination=/dashboard">
-          <i className="fas fa-plus-circle mr-1"></i> Add User
-        </a>
+        <div className="clear-both">
+          <a className="btn btn-primary " href="/admin/people/create?destination=/dashboard"><i className="fas fa-plus-circle mr-1"></i> Add User</a>
+        </div>
       </div>
     );
   }

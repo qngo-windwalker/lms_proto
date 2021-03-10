@@ -20,7 +20,8 @@ input.form-email{ display: block;}
 label{margin-top: 10px;}
 h2{color: rgb(117,121,137); }
 /*label.form-required::after{ content: ' *'; color: red;}*/
-
+.clear-both{clear: both;}
+.table{border-bottom: 1px solid #ccc;}
 .badge.badge-outline.badge-secondary{ background: none; border: 1px solid #d2d2d2; color: inherit;}
 .badge.badge-outline.badge-success{ background: none; border: 1px solid #28a745; color: #28a745;}
 
@@ -63,7 +64,6 @@ h2{color: rgb(117,121,137); }
 .modal.side-modal .close{ color: #bd2130;}
 /*.modal.side-modal:hover{background-color: red !important;}*/
 /*.modal.side-modal .modal-dialog:hover{background-color: blue !important;}*/
-
 
 @media (min-width: 576px){
   .modal-dialog {
