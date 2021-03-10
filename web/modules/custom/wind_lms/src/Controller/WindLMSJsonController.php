@@ -27,7 +27,7 @@ class WindLMSJsonController extends ControllerBase {
   }
 
   /**
-   * Render Json for userCourseTable.js ajax
+   * Render Json for currentUserCourseTable.js ajax
    * Path: [domain]/wind-lms/json/dashboard
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    */

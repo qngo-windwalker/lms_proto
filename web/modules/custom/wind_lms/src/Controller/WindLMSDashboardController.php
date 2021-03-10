@@ -21,8 +21,8 @@ class WindLMSDashboardController extends ControllerBase {
     }
     return 'Welcome To Your Dashboard';
   }
+
   /**
-   * @see \Drupal\opigno_learning_path\Plugin\Block\StepsBlock.
    * @return array
    */
   public function getContent() {
@@ -38,8 +38,7 @@ class WindLMSDashboardController extends ControllerBase {
         'drupalSettings' => [
           'myvar' => 'todo. find out why it is not working.'
         ]
-      ],
-      '#suffix' => '<div id="modal_root"></div>'
+      ]
     ];
     return $response;
   }

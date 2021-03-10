@@ -3,6 +3,9 @@ course:
     js/wind_lms.course.js: {}
   dependencies:
     - wind/datatable
+course_node:
+  js:
+    js/dist/wind_lms.courseNode.bundle.js: {}
 datatable_users:
   js:
     js/wind_lms.users.js: {}

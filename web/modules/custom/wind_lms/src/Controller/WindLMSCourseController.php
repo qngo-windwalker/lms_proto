@@ -8,16 +8,12 @@ use Drupal\group\Entity\Group;
 use Drupal\opigno_group_manager\OpignoGroupContext;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-
-use Drupal\opigno_group_manager\Entity\OpignoGroupManagedContent;
-use Drupal\opigno_module\Entity\OpignoModule;
-use Drupal\opigno_module\Entity\OpignoActivity;
-use Drupal\opigno_group_manager\OpignoGroupContentTypesManager;
 use Drupal\user\UserInterface;
+use Drupal\node\Entity\Node;
 
 class WindLMSCourseController extends ControllerBase{
 
-  public function getContent($group){
+  public function getContent(){
     $header = [
       array('data' => 'First Name', 'class' => 'node-first-name-header'),
       array('data' => 'Last Name', 'class' => 'node-last-name-header'),
@@ -42,13 +38,11 @@ class WindLMSCourseController extends ControllerBase{
         ),
         'drupalSettings' => array(
           'wind_lms' => array(
-            'datatableURL' => '/wl-datatable/course/' . $group->id() .'/users'
           )
         )
       )
     ];
     $markup = '<div class="col-12-md">';
-    $markup .= '<p>Total Licenses: 9 | Used Licences: 6</p>';
     $markup .= '</div>';
     $markup .= '<div class="col-12-md">';
     $markup .= '<h3>Users</h3>';
@@ -61,12 +55,16 @@ class WindLMSCourseController extends ControllerBase{
     ];
   }
 
-  public function getTitle($group) {
-    return  $group->label();
+  public function getNodeContent(Node $node) {
+    return [
+      'content' => [
+        '#markup' => $node->get('body')->value
+      ]
+    ];
+    return $response;
   }
 
-  private function getAllUsersForGroup(){
-
+  public function getTitle(Node $node) {
+    return  $node->label();
   }
-
 }

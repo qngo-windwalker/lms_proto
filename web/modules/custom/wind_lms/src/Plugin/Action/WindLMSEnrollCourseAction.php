@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * To create a new View bulk action:
  *    Copy system.action.enroll_course_action.yml
- *    Import in admin/config/development/configuration/full/import > select system
+ *    Import in admin/config/development/configuration/single/import > select Action
  *    Create a class like this one
  *    config 'confirm_form_route_name' if needed
  *

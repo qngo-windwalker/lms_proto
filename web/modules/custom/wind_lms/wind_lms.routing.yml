@@ -13,34 +13,16 @@ wind_lms.course:
   path: 'course'
   defaults:
     _controller: '\Drupal\wind_lms\Controller\WindLMSCourseController::getContent'
-    _title: 'Windwalker'
+    _title: 'Course'
   requirements:
     _permission: 'access content'
-wind_lms.cert.id:
-  path: cert/{node}/user/{user}
+wind_lms.course.node:
+  path: 'course/{node}'
   defaults:
-    _controller: \Drupal\wind_lms\Controller\WindLMSCertUserController::getContent
-    _title: 'Certificate'
+    _controller: '\Drupal\wind_lms\Controller\WindLMSCourseController::getNodeContent'
+    _title_callback: \Drupal\wind_lms\Controller\WindLMSCourseController::getTitle
   requirements:
     _permission: 'access content'
-  options:
-    parameters:
-      node:
-        type: entity:node
-      user:
-        type: entity:user
-wind_lms.cert.edit:
-  path: cert/{node}/edit
-  defaults:
-    _controller: \Drupal\wind_lms\Controller\WindLMSCertEditController::getContent
-    _title: 'Certificate'
-  requirements:
-    _user_is_logged_in: 'TRUE'
-  options:
-    parameters:
-      node:
-        type: entity:node
-
 wind_lms.course.user.cert.upload:
   path: course/{node}/user/{user}/cert/upload
   defaults:
@@ -81,6 +63,30 @@ wind_lms.certificate.user:
     parameters:
       user:
         type: entity:user
+wind_lms.cert.id:
+  path: cert/{node}/user/{user}
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSCertUserController::getContent
+    _title: 'Certificate'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      node:
+        type: entity:node
+      user:
+        type: entity:user
+wind_lms.cert.edit:
+  path: cert/{node}/edit
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSCertEditController::getContent
+    _title: 'Certificate'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+  options:
+    parameters:
+      node:
+        type: entity:node
 # Old SCORM course URL
 # Need to streamline to /course
 #wind_lms.course:

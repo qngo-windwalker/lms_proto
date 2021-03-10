@@ -9,9 +9,8 @@ use Drupal\Core\Url;
  * @see opigno_scorm.module::opigno_scorm_opigno_scorm_commit()
  * @see Drupal\opigno_scorm\Controller\OpignoScormController::scormCommit
  */
-function wind_scorm_opigno_scorm_commit($scorm, $sco_id, $data) {
-  $a = '';
-}
+//function wind_scorm_opigno_scorm_commit($scorm, $sco_id, $data) {
+//}
 
 function wind_scorm_getTestSCO() {
   $sco = new \stdClass();

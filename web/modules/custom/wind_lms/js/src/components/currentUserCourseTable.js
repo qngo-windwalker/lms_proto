@@ -121,7 +121,7 @@ export default class CurrentUserCourseTable extends Component{
     }
 
     if(dataObj.data.type == 'course'){
-      return (<CourseNameColumn title={dataObj.data.title} packages={dataObj.data.package_files} />)
+      return (<CourseNameColumn title={dataObj.data.title} nid={dataObj.data.nid} packages={dataObj.data.package_files} />)
     }
   }
 
@@ -217,17 +217,22 @@ class CurriculumNameColumn extends React.Component {
 
 class CourseNameColumn extends React.Component {
   render() {
+    // ILT course does NOT have any package
+    if (this.props.packages.length == 0 && this.props.hasOwnProperty('nid')) {
+      return <ActivityLink className="wind-scorm-popup-link d-flex" title={this.props.title} data-course-href={`course/${this.props.nid}`} href={`course/${this.props.nid}`} />
+    }
+
     // If course has 1 zip file, make the title as a link
     // In case when a course node is created but zip file is no available. Show the title so it's easier to troubleshoot.
     if (this.props.packages.length == 1) {
       let zipPackage = this.props.packages[0];
 
       if(zipPackage.type == 'tincan'){
-        return <ActivityLink className="wind-scorm-popup-link d-flex"  title={this.props.title} data-course-href={zipPackage.activity_link['data-course-href']} href={zipPackage.activity_link.url} />
+        return <ActivityLink className="wind-scorm-popup-link d-flex" title={this.props.title} data-course-href={zipPackage.activity_link['data-course-href']} href={zipPackage.activity_link.url} />
       }
 
       if(zipPackage.type == 'scorm'){
-        return <ActivityLink className="wind-scorm-popup-link"  title={this.props.title} data-course-href={zipPackage.activity_link.url} href={zipPackage.activity_link.url} />
+        return <ActivityLink className="wind-scorm-popup-link" title={this.props.title} data-course-href={zipPackage.activity_link.url} href={zipPackage.activity_link.url} />
       }
     }
 

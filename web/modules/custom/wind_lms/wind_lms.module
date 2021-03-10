@@ -375,17 +375,24 @@ function _wind_lms_get_all_courses($nids, $user){
   $courses = [];
   foreach ($nodes as $nid => $node){
     $field_package_file = $node->get('field_package_file')->getValue();
-    // If there's no zip package attached to this node, skip it - nothing to launch.
+    // If there's no zip package attached to this node,
+    // declare it as ILT (Instructor Lead Training)
     if (empty($field_package_file)) {
-      continue;
+      $courses[] = [
+        'title' => $node->label(),
+        'type' => 'course',
+        'nid' => $node->id(),
+        'package_files' => [],
+      ];
+    } else {
+      $courses[] = [
+        'title' => $node->label(),
+        'type' => 'course',
+        'nid' => $node->id(),
+        'package_files' => _wind_lms_get_course_package_definition($node, $user),
+      ];
     }
 
-    $courses[] = [
-      'title' => $node->label(),
-      'type' => 'course',
-      'nid' => $node->id(),
-      'package_files' => _wind_lms_get_course_package_definition($node, $user),
-    ];
   }
 
   return $courses;
@@ -494,5 +501,36 @@ function _wind_lms_decode_certificate_id($id) {
   return [
     'node_nid' => $nid,
     'data' => $codes
+  ];
+}
+
+function _wind_scorm_get_ilt_launch_url($nid){
+  return Url::fromRoute(
+    'wind_scorm.scorm_launcher',
+    array('id' => $nid),
+    array(
+      'query' => ['dest' =>  \Drupal::service('path.current')->getPath()],
+      'attributes' => array(
+        'class' => 'wind-scorm-popup-link',
+        'data-coure-href' => '/node/' . $nid,
+      )
+    )
+  );
+}
+
+function _wind_lms_get_ilt_lanuch_link_rendable_array( \Drupal\node\Entity\Node $node) {
+  $url = _wind_scorm_get_ilt_launch_url($node->id());
+  $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . $node->label();
+  $renderedAnchorContent = render($linkContent);
+  return  [
+    'rendable_element' => array(
+      '#markup' => Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString(),
+      '#attached' => array(
+        'library' => array(
+          'wind_scorm/course_popup'
+        ),
+      ),
+    ),
+    'url' => '/node/' . $node->id()
   ];
 }
