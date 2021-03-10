@@ -346,13 +346,13 @@ wind_lms.user.course_progresses:
   path: '/admin/people/course-progresses'
   defaults:
     _controller: '\Drupal\wind_lms\Controller\WindLMSAdminUserCourseProgressesController::getContent'
-    _title: 'Course Progresses'
+    _title: 'Course Progress'
   requirements:
     _permission: 'administer users'
 wind_lms.user.course_progress_datatable:
   path: '/wind-lms-course/course-progress-datatable'
   defaults:
     _controller: '\Drupal\wind_lms\Controller\WindLMSAdminUserCourseProgressesDatatableController::getContent'
-    _title: 'User Course Progresses'
+    _title: 'User Course Progress'
   requirements:
     _custom_access: '\Drupal\wind_lms\Controller\WindLMSAdminUserCourseProgressesDatatableController::getAccess'

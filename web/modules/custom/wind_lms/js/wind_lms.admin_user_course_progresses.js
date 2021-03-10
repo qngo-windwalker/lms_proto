@@ -72,7 +72,6 @@
 
   Drupal.WindLMSAdminUserProgresses.init = function(Drupal, settings){
 
-
     Drupal.WindLMSAdminUserProgresses.$table = $(settings.windLMS.datatableElementId).DataTable({
       ajax : {
         url : settings.windLMS.datatableURL,
@@ -80,9 +79,11 @@
       initComplete: function(settings, json){
         // Add some magic.
       },
-      paging : false,
+      lengthMenu: [[20, 40, 100, -1], [20, 40, 100, "All"]],
+      // paging : true,
       columns: columns,
       rowId : 'rowUid',
+
       // Dom positioning: https://datatables.net/examples/basic_init/dom.html
       // f - Filtering input
       // t - The Table!
