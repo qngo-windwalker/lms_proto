@@ -6,6 +6,11 @@
   border-color: #a2ddb0; background-color: rgba(40,167,69,.2);
 }
 
+input, select, textarea {  margin-bottom: 10px;  padding: 5px 10px;  border-radius: 4px;  border: 1px solid #78909c;  background-color: rgba(255,255,255,.03);}
+input.btn{margin-bottom: inherit;} /* Fix Drupal and Bootstrap conflict */
+input.form-email{ display: block;}
+label{margin-top: 10px;}
+
   /* for sm */
 
 .custom-switch.custom-switch-sm .custom-control-label {

@@ -117,6 +117,7 @@ function wind_theme_preprocess_page(&$variables){
     $form['pass']['#attributes']['placeholder'] = $form['pass']['#title'];
     $form['name']['#title'] = $form['name']['#description'] = null;
     $form['pass']['#title'] = $form['pass']['#description'] = null;
+    $form['actions']['submit']['#attributes']['class'] = ['btn', 'btn-primary'];
     $variables['login_form'] = $render->renderPlain($form);
   }
 

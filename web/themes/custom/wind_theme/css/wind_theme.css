@@ -15,9 +15,6 @@
 body{background: url('../img/backgroundEcover.png') center ;}
 body.page-group-manager{background: none;}
 a{color: #077c94;}
-input{ margin-bottom: 10px; padding: 5px 10px; border-radius: 1px; border: 1px solid #ccc;  }
-input.form-email{ display: block;}
-label{margin-top: 10px;}
 h2{color: rgb(117,121,137); }
 /*label.form-required::after{ content: ' *'; color: red;}*/
 .clear-both{clear: both;}
@@ -37,12 +34,6 @@ h2{color: rgb(117,121,137); }
 #main.container-fluid{ width: 90%;}
 #main{ margin-top: 100px; margin-bottom: 85px; box-shadow: 0px 0px 0px 20px rgba(0, 0, 0, 0.3); border-radius: 3px; background: #fff;}
 #page-title{width: 100%; margin-bottom: 20px; padding: 20px 0px 15px; color: white; background: #000;}
-
-/* Common Drupal submit button. */
-#seven-login-wrapper #edit-submit,
-#edit-submit{ padding: .6rem .7rem; color: white; background: #077c94; border: none; border-radius: 3px; }
-#edit-submit:hover { background: #044b59;}
-#edit-submit:focus { outline: #044b59;}
 
 #content{padding-bottom: 30px;}
 .wind-opigno-iframe iframe{width: 100%; height: 800px;}
@@ -81,7 +72,7 @@ body.page-front.user-not-logged-in #main{width: 700px; margin: 100px auto;}
 /*body.page-frontpage #block-wind-theme-content,*/
 /*body.page-frontpage #main{background: transparent;}*/
 body.page-front #block-wind-theme-page-title h1{text-align: center;}
-body.page-front.user-not-logged-in .form-wrapper.user-login input{width: 100%; margin-bottom: 20px; border: 1px solid #ccc; border-radius: unset;}
+body.page-front.user-not-logged-in .form-wrapper.user-login input{width: 100%; margin-bottom: 20px; }
 body.page-front.user-not-logged-in .form-wrapper.user-login .col-md-6{width: 100%; max-width: 100%; flex: 0 0 100%; }
 body.page-front.user-not-logged-in .form-wrapper.user-login{margin-bottom: 80px; padding: 53px; }
 
@@ -93,6 +84,15 @@ body.page-user-login .password-strength { margin-bottom: 20px;}
 body.page-user.page-user-login #block-wind-theme-local-tasks,
 body.page-user.page-user-password #block-wind-theme-local-tasks,
 body.page-user.page-user-register #block-wind-theme-local-tasks{ display: none;}
+/* Hide the Team field on the 'Create new account' page */
+body.page-user-register .field--name-field-team.form-wrapper{display: none;}
+/* Drupal submit button. */
+#seven-login-wrapper #edit-submit,
+.page-user-login    #edit-submit,
+.page-user-password  #edit-submit, /* Reset your password page */
+.page-user-register #edit-submit{ padding: .6rem .7rem; color: white; background: #007bff; border: #007bff; border-radius: .25rem; }
+.page-user-register #edit-submit:hover { background: #0062cc; border: #005cbf;}
+.page-user-register #edit-submit:focus { box-shadow: 0 0 0 0.2rem rgba(38 143 255 .5);}
 
 /*** [site]/node/{nid} ***/
 body.path-node article div:last-child > div:last-child  {margin-bottom: 1rem;}

@@ -64,3 +64,10 @@ wind.handoff:
     _controller: '\Drupal\wind\Controller\WindHandoffController::getContent'
   requirements:
     _permission: 'access content'
+wind.technical:
+  path: technical-support
+  defaults:
+    _controller: \Drupal\wind\Controller\WindTechnicalSupportController::getContent
+    _title: 'Technical Support'
+  requirements:
+    _role: 'authenticated'
