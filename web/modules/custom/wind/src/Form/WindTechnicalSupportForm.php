@@ -2,6 +2,7 @@
 
 namespace Drupal\wind\Form;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -30,17 +31,23 @@ class WindTechnicalSupportForm extends FormBase{
       '#type' => 'select',
       '#title' => $this->t('Subject'),
       '#options' => array(
-        'Unable to Upload Certificate' => 'Unable to Upload Certificate',
+        'Unable to upload certificate' => 'Unable to upload certificate',
+        'Unable to open course' => 'Unable to open course',
+        'Course progress not saving' => 'Course progress not saving',
         'Other' => 'Other',
       ),
       '#attributes' => array(
-        'class' => ['d-block'] // Bootstrap display block class
+        'class' => ['w-100', 'd-block'] // Bootstrap display block class
       )
     ];
     $form['description'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Description'),
+      '#description' => $this->t("If you are having problem with a course, please include the course's name in your description."),
       '#required' => true,
+      '#attributes' => array(
+        'class' => ['w-100']
+      )
     ];
 
     $form['submit'] = [
@@ -67,9 +74,8 @@ class WindTechnicalSupportForm extends FormBase{
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $messenger = \Drupal::messenger();
-    $currentUser = \Drupal::currentUser();
 
-    $result = false;
+    $result = $this->sendEmail($form_state->getValue('subject'), $form_state->getValue('description'));
     if ($result) {
       $messenger->addMessage(t('Your ticket has been submitted.', []), $messenger::TYPE_STATUS);
     } else {
@@ -87,5 +93,34 @@ class WindTechnicalSupportForm extends FormBase{
         $form_state->setRedirectUrl(Url::fromUserInput('/technical-support'));
       }
     }
+  }
+
+  private function sendEmail($subject, $desc) {
+    $site_name = \Drupal::config('system.site')->get('name');
+    $site_mail = \Drupal::config('system.site')->get('mail');
+    /** @var \Drupal\user\Entity\User $user */
+    $user = \Drupal\user\Entity\User::load($this->currentUser()->id());
+    $user_full_name = _wind_lms_get_user_full_name($user);
+    $greeting = '<p><b>' . _wind_get_greeting_time() . ' ' . $site_mail . ', </b><br /></p>';
+//    $closingStatment = '<p>Sincerely,<br /> ' . $site_name . ' team</p>';
+    $mailManager = \Drupal::service('plugin.manager.mail');
+    $to = $site_mail;
+    $from = $user->getEmail();
+    $params['to'] = $to;
+    $params['subject'] = 'Technical Support New Ticket';
+    $params['from_name'] = $site_mail;
+    $params['to_name'] = $site_name;
+    $params['Reply-To'] = $from;
+    $params['message'] = 'Technical Support New Ticket';
+    $params['body'] = $greeting;
+    $params['body'] .= '<p>Subject: '  . Html::escape($subject) . '<br /></p>';
+    $params['body'] .= '<p>Description: '  . Html::escape($desc) . '<br /></p>';
+    $params['body'] .= '<p>User Full Name: '  . $user_full_name . '<br /></p>';
+    $params['body'] .= '<p>User Uid: '  . $user->id() . '<br /></p>';
+    $params['body'] .= '<p>User Email: '  . $user->getEmail() . '<br /></p>';
+    $langcode = \Drupal::currentUser()->getPreferredLangcode();
+
+    // Note: 1st param module name needed so MailManager will invoke hook_mail (!!this hook is required !!!)
+    return $mailManager->mail('wind_lms', $params['subject'] , $params['to'], $langcode, $params, $params['reply_to']);
   }
 }

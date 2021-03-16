@@ -11,6 +11,8 @@ input.btn{margin-bottom: inherit;} /* Fix Drupal and Bootstrap conflict */
 input.form-email{ display: block;}
 label{margin-top: 10px;}
 
+.form-item .description{font-size: .9rem; color:#6c757d; margin-top: -10px; margin-bottom: 1.2rem; }
+
   /* for sm */
 
 .custom-switch.custom-switch-sm .custom-control-label {
