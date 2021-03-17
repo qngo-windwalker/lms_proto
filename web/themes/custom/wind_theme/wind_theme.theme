@@ -1,5 +1,9 @@
 <?php
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Entity\File;
+use Drupal\Component\Utility\Xss;
+
 /**
  * Implements hook_theme_suggestions_alter().
  */
@@ -66,7 +70,7 @@ function wind_theme_preprocess_html(&$variables){
     if (!empty($alias)) {
       $name = str_replace('/', '-', $alias);
       $variables['attributes']['class'][] = 'page-' . $name;
-      list($section, ) = explode('/', $alias, 2);
+      [$section, ] = explode('/', $alias, 2);
       if (!empty($section)) {
         $variables['attributes']['class'][] = 'path-' . $section;
       }
@@ -95,6 +99,22 @@ function wind_theme_preprocess_html(&$variables){
     || $routeName == 'opigno_group_manager.manager.get_item_form'
   ) {
     $variables['attributes']['class'][] = 'lp-iframe';
+  }
+
+  $wind_theme_use_default_body_background = theme_get_setting('wind_theme_use_default_body_background');
+  // For custom background instead of the default
+  if (!$wind_theme_use_default_body_background) {
+    $wind_theme_body_image_path = Xss::filter(theme_get_setting('wind_theme_body_image_path'));
+    if($wind_theme_body_image_path){
+      $background_image_uri = 'public://' . $wind_theme_body_image_path;
+      $background_image_url = file_create_url($background_image_uri);
+      $variables['attributes']['style'][] = "background-image: url({$background_image_url});";
+    }
+
+    $wind_theme_body_css_styles =  Xss::filterAdmin(theme_get_setting('wind_theme_body_css_styles'));
+    if($wind_theme_body_css_styles){
+      $variables['attributes']['style'][] = $wind_theme_body_css_styles;
+    }
   }
 }
 
@@ -177,4 +197,133 @@ function wind_theme_preprocess_page(&$variables){
 //  $variables['page']['content'] = [
 //    '#theme' => 'wind_theme__login_front',
 //  ];
+}
+
+/**
+ * Implements hook_form_system_theme_settings_alter().
+ *
+ * Form override for theme settings.
+ */
+function wind_theme_form_system_theme_settings_alter(&$form, FormStateInterface &$form_state, $form_id = NULL) {
+  // Work-around for a core bug affecting admin themes. See issue #943212.
+  if (isset($form_id)) {
+    return;
+  }
+
+  $moduleHandler = \Drupal::service('module_handler');
+  // Backgroung settings, only available when file.module is enabled.
+  if (!$moduleHandler->moduleExists('file')) {
+    return;
+  }
+
+  // Platon header settings.
+  $form['wind_theme_body_settings'] = [
+    '#type' => 'details',
+    '#title' => t('Body background'),
+    '#open' => TRUE,
+  ];
+
+  $form['wind_theme_body_settings']['wind_theme_use_default_body_background'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Use the background supplied by the theme'),
+    '#description' => t('Uncheck here if you want the theme to use a custom image for the body background.'),
+    '#default_value' => theme_get_setting('wind_theme_use_default_body_background'),
+  ];
+
+  $form['wind_theme_body_settings']['image'] = [
+    '#type' => 'container',
+    '#states' => [
+      'invisible' => [
+        'input[name="wind_theme_use_default_body_background"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+
+  $form['wind_theme_body_settings']['image']['wind_theme_body_image_path'] = [
+    '#type' => 'textfield',
+    '#title' => t('The path to the body background image'),
+    '#description' => t('The path to the image file you would like to use as your custom header background (relative to sites/default/files). The suggested size for the header background is 3000x134.'),
+    '#default_value' => theme_get_setting('wind_theme_body_image_path'),
+  ];
+
+  $form['wind_theme_body_settings']['image']['wind_theme_body_image_upload'] = [
+    '#type' => 'managed_file',
+    '#upload_location' => 'public://',
+    '#upload_validators' => [
+      'file_validate_is_image' => ['gif png jpg jpeg'],
+    ],
+    '#title' => t('Upload an image'),
+    '#description' => t("If you don't have direct file access to the server, use this field to upload your body background image."),
+  ];
+
+  $form['wind_theme_body_settings']['css'] = [
+    '#type' => 'container',
+    '#states' => [
+      'invisible' => [
+        'input[name="wind_theme_use_default_body_background"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+
+  $form['wind_theme_body_settings']['css']['wind_theme_body_css_styles'] = [
+    '#type' => 'textfield',
+    '#title' => t('Body CSS styles'),
+    '#description' => t("Custom CSS styles you would like to apply to the body. Example: background-repeat: no-repeat;  background-position: center;"),
+    '#default_value' => theme_get_setting('wind_theme_body_css_styles'),
+    '#attributes' => array('style' => ['width: 100%;'])
+  ];
+
+  // Validate and submit.
+  $form['#validate'][] = 'wind_theme_form_system_theme_settings_alter_validate';
+  $form['#submit'][] = 'wind_theme_form_system_theme_settings_alter_submit';
+
+  $form_state->setCached(FALSE);
+}
+
+/**
+ * Validation callback for wind_theme_form_system_theme_settings_alter().
+ */
+function wind_theme_form_system_theme_settings_alter_validate($form, &$form_state) {
+  if (in_array('file_managed_file_submit', $form_state->getSubmitHandlers())) {
+    return;
+  }
+
+  $new_storage = [];
+
+  $fid = $form_state->getValue('wind_theme_body_image_upload');
+  if (!empty($fid) && $fid[0]) {
+    $file = File::load($fid[0]);
+    if ($file) {
+      $file->setPermanent();
+      $file->save();
+      $file_usage = \Drupal::service('file.usage');
+      $file_usage->add($file, 'wind_theme', 'user', \Drupal::currentUser()->id());
+      $new_storage['wind_theme_body_image_path'] = $file;
+    }
+    else {
+      $form_state->setErrorByName('wind_theme_body_image_upload', t("Couldn't upload file."));
+    }
+  }
+
+  $form_state->setStorage($new_storage);
+}
+
+/**
+ * Submission callback for wind_theme_form_system_theme_settings_alter().
+ */
+function wind_theme_form_system_theme_settings_alter_submit($form, &$form_state) {
+  $storage = $form_state->getStorage();
+
+  if (isset($storage['wind_theme_body_image_path']) && $storage['wind_theme_body_image_path']) {
+    $file = $storage['wind_theme_body_image_path'];
+    $form_state->setValue('wind_theme_body_image_path', str_replace('public://', '', $file->getFileUri()));
+  }
+
+  if (isset($storage['wind_theme_home_page_image_path']) && $storage['wind_theme_home_page_image_path']) {
+    foreach ($storage['wind_theme_home_page_image_path'] as $key => $file) {
+      $wind_theme_home_page_settings = $form_state->getValue('wind_theme_home_page_settings');
+      $wind_theme_home_page_settings['wind_theme_home_page_slides'][$key]['wind_theme_home_page_image_path'] = str_replace('public://', '', $file->getFileUri());
+      $form_state->setValue('wind_theme_home_page_settings', $wind_theme_home_page_settings);
+    }
+  }
 }
