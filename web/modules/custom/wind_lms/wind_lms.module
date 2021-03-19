@@ -346,11 +346,11 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
       'title' => $curriculum_node->label(),
       'type' => 'curriculum',
       'nid' => $nid,
-      'courses' => _wind_lms_get_all_courses($curriculum_course_nids, $user),
+      'courses' => _wind_lms_load_course_packages($curriculum_course_nids, $user),
     );
   }
   // Load all of the nid(s) to get course data
-  $courses = _wind_lms_get_all_courses($course_nids, $user);
+  $courses = _wind_lms_load_course_packages($course_nids, $user);
   $all_activities =  array_merge($test_courses, $courses);
   return array_merge($all_activities, $curriculums);
 }
@@ -364,13 +364,15 @@ function _wind_lms_get_all_curriculums_by_user($user) {
 
 function _wind_lms_get_all_courses_by_user($user) {
   // Get all of the course nid(s) assigned to $user
-  $scorm_course_nids = _wind_lms_load_all_courses_assigned_to_user($user);
+  $scorm_course_nids = _wind_lms_load_all_courses_assigned_to_user_by_field_learner($user);
   // Combined with of course nid(s) that are available to everyone - "Accessible To All Leaners" field checked
-  $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_load_all_courses_by_access_to_all_user());
+  $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_load_all_courses_accessiable_to_user_by_field_learner_access());
+  // Combined with of course nid(s) that are available to user's team  - "User Team" field checked
+  $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_load_all_courses_accessiable_to_user_by_field_user_team($user));
   return $scorm_course_nids;
 }
 
-function _wind_lms_get_all_courses($nids, $user){
+function _wind_lms_load_course_packages($nids, $user){
   $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids);
   $courses = [];
   foreach ($nodes as $nid => $node){
@@ -392,7 +394,6 @@ function _wind_lms_get_all_courses($nids, $user){
         'package_files' => _wind_lms_get_course_package_definition($node, $user),
       ];
     }
-
   }
 
   return $courses;

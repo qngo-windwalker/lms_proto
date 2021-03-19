@@ -55,7 +55,7 @@ function _wind_lms_load_all_curriculum_by_access_to_all_user(){
   return $result;
 }
 
-function _wind_lms_load_all_courses_assigned_to_user($user){
+function _wind_lms_load_all_courses_assigned_to_user_by_field_learner($user){
   // https://www.drupal.org/docs/drupal-apis/entity-api/working-with-the-entity-api
   $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
   $query->condition('type', 'course');
@@ -70,11 +70,34 @@ function _wind_lms_load_all_courses_assigned_to_user($user){
   return $result;
 }
 
-function _wind_lms_load_all_courses_by_access_to_all_user(){
+function _wind_lms_load_all_courses_accessiable_to_user_by_field_learner_access(){
   $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
   $query->condition('type', 'course');
   $query->condition('status', 1);
   $query->condition('field_learner_access', '1');
+  $result = $query->execute();
+
+  // If no result, return empty array.
+  if (empty($result)) {
+    return [];
+  }
+  return $result;
+}
+
+function _wind_lms_load_all_courses_accessiable_to_user_by_field_user_team(\Drupal\user\Entity\User $user) {
+  // Gets all of the term tid from user
+  $tids = array_map (function($item){
+      return $item['target_id'];
+  }, $user->get('field_team')->getValue());
+
+  if (empty($tids)) {
+    return [];
+  }
+
+  $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+  $query->condition('type', 'course');
+  $query->condition('status', 1);
+  $query->condition('field_user_team', $tids, 'IN');
   $result = $query->execute();
 
   // If no result, return empty array.
@@ -107,4 +130,16 @@ function _wind_lms_load_user_scorm_package_progress($file, $uid) {
   }
 
   return 'Not Started';
+}
+
+function _wind_lms_get_all_users_in_teams_by_tids($tids) {
+  $result = \Drupal::entityQuery('user')
+    ->condition('status', 1)
+    ->condition('field_team', $tids, 'IN')
+    ->execute();
+  // If no result, return empty array.
+  if (empty($result)) {
+    return [];
+  }
+  return $result;
 }

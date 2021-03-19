@@ -50,7 +50,13 @@ wind_lms.course.user.cert.verify:
         type: entity:node
       user:
         type: entity:user
-
+wind_lms.course.node.bulk_edit:
+  path: 'course/{node}/bulk-edit'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSCourseController::getNodeBulkEditContent'
+    _title_callback: \Drupal\wind_lms\Controller\WindLMSCourseController::getTitle
+  requirements:
+    _permission: 'edit any course content'
 # Generates Certificate PDF
 wind_lms.certificate.user:
   path: certificate/{certificateId}/{user}

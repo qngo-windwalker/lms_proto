@@ -77,6 +77,16 @@ class CourseNode {
       }
     }
 
+    // Notify User Team.
+    // Get all of the Team (taxonomy) in the course
+    $tids = array_map (function($item){
+      return $item['target_id'];
+    }, $node->get('field_user_team')->getValue());
+    // Find all users belong in all the teams
+    $uids = _wind_lms_get_all_users_in_teams_by_tids($tids);
+    foreach ($uids as $uid){
+      $this->sendEmail($node, $uid);
+    }
   }
 
   /**

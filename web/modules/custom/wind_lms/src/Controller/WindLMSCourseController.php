@@ -64,6 +64,16 @@ class WindLMSCourseController extends ControllerBase{
     return $response;
   }
 
+  public function getNodeBulkEditContent(Node $node) {
+    return [
+      'content' => [
+        '#markup' => $node->get('body')->value
+      ],
+      'form' => \Drupal::formBuilder()->getForm(\Drupal\wind_lms\Form\WindLMSCourseBulkEditForm::class, $node)
+    ];
+    return $response;
+  }
+
   public function getTitle(Node $node) {
     return  $node->label();
   }
