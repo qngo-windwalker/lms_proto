@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.course.field_learner
     - field.field.node.course.field_learner_access
     - field.field.node.course.field_package_file
+    - field.field.node.course.field_user_team
     - node.type.course
   module:
     - file
@@ -58,6 +59,14 @@ content:
       use_description_as_link_text: true
     third_party_settings: {  }
     type: file_default
+    region: content
+  field_user_team:
+    weight: 6
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
     region: content
   links:
     weight: 0

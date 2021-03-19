@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.course.field_learner
     - field.field.node.course.field_learner_access
     - field.field.node.course.field_package_file
+    - field.field.node.course.field_user_team
     - node.type.course
   module:
     - file
@@ -28,7 +29,7 @@ content:
     third_party_settings: {  }
     region: content
   field_category:
-    weight: 6
+    weight: 7
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -60,6 +61,12 @@ content:
       progress_indicator: throbber
     third_party_settings: {  }
     type: file_generic
+    region: content
+  field_user_team:
+    weight: 6
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
     region: content
   status:
     type: boolean_checkbox
