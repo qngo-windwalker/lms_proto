@@ -69,23 +69,25 @@ class CourseNode {
       $this->notifyAllUser($node);
     }
 
-    // Notify selected users
+    // Notify selected users and/or selected teams
     if($field_learner_access == '0'){
-      $field_learner_ids = $this->array_get_target_id($node->get('field_learner')->getValue());
-      foreach ($field_learner_ids as $uid){
+      $field_learner_ids = $this->array_map_get_target_id($node->get('field_learner')->getValue());
+
+      // Get all of the Team (taxonomy) in the course
+      $tids = array_map(function($item){
+        return $item['target_id'];
+      }, $node->get('field_user_team')->getValue());
+      // Find all users belong in all the teams
+      $user_team_uids = _wind_lms_get_all_users_in_teams_by_tids($tids);
+      $user_team_uids = $this->array_key_same_as_value($user_team_uids);
+
+      // Combine uids of field_team and field_learner
+      $uids = array_merge($user_team_uids, $field_learner_ids);
+
+      // Send email so user won't get duplicate
+      foreach ($uids as $uid){
         $this->sendEmail($node, $uid);
       }
-    }
-
-    // Notify User Team.
-    // Get all of the Team (taxonomy) in the course
-    $tids = array_map (function($item){
-      return $item['target_id'];
-    }, $node->get('field_user_team')->getValue());
-    // Find all users belong in all the teams
-    $uids = _wind_lms_get_all_users_in_teams_by_tids($tids);
-    foreach ($uids as $uid){
-      $this->sendEmail($node, $uid);
     }
   }
 
@@ -96,8 +98,8 @@ class CourseNode {
   public function onNodeUpdate(NodeInterface $node){
     // Check and process any changes to Package File upload field
     $this->onNodeUpdateProcessField_package_file($node);
-    // Check and process any changes to the combination of Accessible To All Leaners and Learner fields
-    $this->onNodeUpdateProcessField_learner($node);
+    // Check and process any changes to the combination of Accessible To All Leaners, Learner fields, field_user_team
+    $this->onNodeUpdateProcessUsers($node);
   }
 
   private function onNodeUpdateProcessField_package_file(NodeInterface $node) {
@@ -164,14 +166,13 @@ class CourseNode {
         }
       }
     }
-
   }
 
   /**
    * Node Update: process field_learner_access AND field_learner
    * @param \Drupal\node\NodeInterface $node
    */
-  private function onNodeUpdateProcessField_learner(NodeInterface $node) {
+  private function onNodeUpdateProcessUsers(NodeInterface $node) {
     /** @var  NodeInterface $originalNode */
     $originalNode = $node->original;
     $originalNode_field_learner_access = $originalNode->get('field_learner_access')->getString();
@@ -179,25 +180,35 @@ class CourseNode {
     $field_learner_access = $node->get('field_learner_access')->getString();
     // If user turns on "Accessible To All Leaners"
     if($originalNode_field_learner_access == '0' && $field_learner_access == '1'){
-      $originalNode_field_learner_ids = $this->array_get_target_id($originalNode->get('field_learner')->getValue());
+      $originalNode_field_learner_ids = $this->array_map_get_target_id($originalNode->get('field_learner')->getValue());
       // Send email to all user, but exclude users from original $node field learner so they won't get duplicate email.
       $this->notifyAllUser($node, $originalNode_field_learner_ids);
-    } else {
+    }
 
-      // If "Accessible To All Leaners" is turn off,
-      // process the custom list of users
-      if($field_learner_access == '0'){
-        // Get all of the IDs nested in the array
-        $originalNode_field_learner_ids = $this->array_get_target_id($originalNode->get('field_learner')->getValue());
-        $field_learner = $node->get('field_learner')->getValue();
-        $field_learner_ids = $this->array_get_target_id($field_learner);
+    // If "Accessible To All Leaners" is turn off,
+    // process the custom list of users
+    if($field_learner_access == '0'){
+      // Get all of the IDs nested in the array
+      $originalNode_field_learner_ids = $this->array_map_get_target_id($originalNode->get('field_learner')->getValue());
+      $field_learner_ids = $this->array_map_get_target_id($node->get('field_learner')->getValue());
+      $result = _wind_array_compare($field_learner_ids, $originalNode_field_learner_ids);
+      $user_uids = [];
+      if (!empty($result['added'])) {
+        $user_uids = $result['added'];
+      }
 
-        $result = _wind_array_compare($field_learner_ids, $originalNode_field_learner_ids);
-        if (empty($result['added'])) {
-          return;
-        }
+      // Check if there's any change in field_user_team values
+      $originalNode_field_user_team_ids = $this->array_map_get_target_id($originalNode->get('field_user_team')->getValue());
+      $field_user_team_ids = $this->array_map_get_target_id($node->get('field_user_team')->getValue());
+      $field_user_team_comparedResult = _wind_array_compare($field_user_team_ids, $originalNode_field_user_team_ids);
+      if (!empty($field_user_team_comparedResult['added'])) {
+        $team_uids = _wind_lms_get_all_users_in_teams_by_tids($field_user_team_comparedResult['added']);
+        $user_uids = array_merge($user_uids, $team_uids);
+      }
+
+      if(!empty($user_uids)){
         // Send email to each user.
-        foreach ($result['added'] as $uid){
+        foreach ($user_uids as $uid){
           $this->sendEmail($node, $uid);
         }
       }
@@ -268,9 +279,39 @@ class CourseNode {
    *
    * @return array
    */
-  private function array_get_target_id($array){
-    return array_map(function($value){
-      return $value['target_id'];
-    }, $array);
+  private function array_map_get_target_id($array){
+    $newArray = [];
+    // We use foreach loop instead of array_map so the key is the same as value
+    // key same as value is useful when combining with array_merge to make sure NO duplicates.
+    foreach ($array as $value) {
+      $id = $value['target_id'];
+      $newArray[$id] = $id;
+    }
+    return $newArray;
   }
+
+  /**
+   * Unsure the key value pair is the same.
+   * Good for prepping before array_merge
+   *
+   * @param $arr
+   */
+  private function array_key_same_as_value($arr){
+    $newArray = [];
+    foreach ($arr as $value) {
+      $newArray[$value] = $value;
+    }
+    return $newArray;
+  }
+
+  private function getUidsFromFromTeamTids(NodeInterface $node) {
+    // Get all of the Team (taxonomy) in the course
+    $tids = array_map(function($item){
+      return $item['target_id'];
+    }, $node->get('field_user_team')->getValue());
+    // Find all users belong in all the teams
+    $user_team_uids = _wind_lms_get_all_users_in_teams_by_tids($tids);
+    $user_team_uids = $this->array_key_same_as_value($user_team_uids);
+  }
+
 }
