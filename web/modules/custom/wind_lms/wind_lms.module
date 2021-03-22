@@ -98,6 +98,28 @@ function wind_lms_node_update(NodeInterface $node) {
   }
 }
 
+/**
+ * Implements hook_entity_insert().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ */
+function wind_lms_entity_insert(Drupal\Core\Entity\EntityInterface $entity) {
+  /* @var \Drupal\wind_lms\UserEntity $user_entity */
+  $user_entity = \Drupal::service('wind_lms.user_entity');
+  $user_entity->onUserInsert($entity);
+}
+
+/**
+ * Implements hook_entity_update().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ */
+function wind_lms_user_update(Drupal\Core\Entity\EntityInterface $entity) {
+  /* @var \Drupal\wind_lms\UserEntity $user_entity */
+  $user_entity = \Drupal::service('wind_lms.user_entity');
+  $user_entity->onUserUpdate($entity);
+}
+
 function _wind_lms_cleanup_package_files($originalFids, $fids){
   // Todo: Housekeeping for deleted course node or removal of package.
 }

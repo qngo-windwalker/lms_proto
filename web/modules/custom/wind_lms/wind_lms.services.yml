@@ -6,3 +6,6 @@ services:
   wind_lms.course_node:
     class: Drupal\wind_lms\CourseNode
     arguments: ['@database']
+  wind_lms.user_entity:
+    class: Drupal\wind_lms\UserEntity
+    arguments: ['@database']
