@@ -22,7 +22,7 @@ class UserEntity {
   }
 
   /**
-   * Invoked by wind_lms_entity_insert()
+   * Invoked by wind_lms_user_insert()
    * @param \Drupal\Core\Entity\EntityInterface $user
    */
   public function onUserInsert(EntityInterface $user){
@@ -36,7 +36,7 @@ class UserEntity {
   }
 
   /**
-   * Invoked by hook_entity_update()
+   * Invoked by wind_lms_user_update()
    * @param \Drupal\Core\Entity\EntityInterface $user
    */
   public function onUserUpdate(EntityInterface $user){
