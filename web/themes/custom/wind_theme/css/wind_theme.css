@@ -23,7 +23,7 @@ h2{color: rgb(117,121,137); }
 .badge.badge-outline.badge-success{ background: none; border: 1px solid #28a745; color: #28a745;}
 
 #site-top-header{padding: 20px 0; background: #1a1a1a; color: white;}
-#site-top-header a {font-size: 1.3rem;}
+#site-top-header a {font-size: 1.3rem; margin: 0 10px;}
   #site-logo{display: inline-block;}
   #site-header-left-nav {display: inline-block;}
 .page-course-activity #site-header{margin-bottom: 0px; }

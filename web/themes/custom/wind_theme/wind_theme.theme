@@ -216,7 +216,6 @@ function wind_theme_form_system_theme_settings_alter(&$form, FormStateInterface 
     return;
   }
 
-  // Platon header settings.
   $form['wind_theme_body_settings'] = [
     '#type' => 'details',
     '#title' => t('Body background'),
@@ -242,18 +241,18 @@ function wind_theme_form_system_theme_settings_alter(&$form, FormStateInterface 
   $form['wind_theme_body_settings']['image']['wind_theme_body_image_path'] = [
     '#type' => 'textfield',
     '#title' => t('The path to the body background image'),
-    '#description' => t('The path to the image file you would like to use as your custom header background (relative to sites/default/files). The suggested size for the header background is 3000x134.'),
+    '#description' => t('The path to the image file you would like to use as your custom body background (relative to sites/default/files). The suggested size for the body background is 3000x934.'),
     '#default_value' => theme_get_setting('wind_theme_body_image_path'),
   ];
 
   $form['wind_theme_body_settings']['image']['wind_theme_body_image_upload'] = [
-    '#type' => 'managed_file',
+    '#type' => 'file',
+    '#title' => t('Upload an image'),
+    '#description' => t("If you don't have direct file access to the server, use this field to upload your body background image."),
     '#upload_location' => 'public://',
     '#upload_validators' => [
       'file_validate_is_image' => ['gif png jpg jpeg'],
     ],
-    '#title' => t('Upload an image'),
-    '#description' => t("If you don't have direct file access to the server, use this field to upload your body background image."),
   ];
 
   $form['wind_theme_body_settings']['css'] = [
@@ -290,19 +289,16 @@ function wind_theme_form_system_theme_settings_alter_validate($form, &$form_stat
 
   $new_storage = [];
 
-  $fid = $form_state->getValue('wind_theme_body_image_upload');
-  if (!empty($fid) && $fid[0]) {
-    $file = File::load($fid[0]);
-    if ($file) {
-      $file->setPermanent();
-      $file->save();
-      $file_usage = \Drupal::service('file.usage');
-      $file_usage->add($file, 'wind_theme', 'user', \Drupal::currentUser()->id());
-      $new_storage['wind_theme_body_image_path'] = $file;
-    }
-    else {
-      $form_state->setErrorByName('wind_theme_body_image_upload', t("Couldn't upload file."));
-    }
+  $file = _file_save_upload_from_form($form['wind_theme_body_settings']['image']['wind_theme_body_image_upload'], $form_state, 0);
+  if ($file) {
+    $file->setPermanent();
+    $file->save();
+    $file_usage = \Drupal::service('file.usage');
+    $file_usage->add($file, 'wind_theme', 'user', \Drupal::currentUser()->id());
+    $new_storage['wind_theme_body_image_path'] = $file;
+    // Put the temporary file in form_values so we can save it on submit.
+  } else {
+    $form_state->setErrorByName('wind_theme_body_image_upload', t("Couldn't upload file."));
   }
 
   $form_state->setStorage($new_storage);
@@ -317,13 +313,5 @@ function wind_theme_form_system_theme_settings_alter_submit($form, &$form_state)
   if (isset($storage['wind_theme_body_image_path']) && $storage['wind_theme_body_image_path']) {
     $file = $storage['wind_theme_body_image_path'];
     $form_state->setValue('wind_theme_body_image_path', str_replace('public://', '', $file->getFileUri()));
-  }
-
-  if (isset($storage['wind_theme_home_page_image_path']) && $storage['wind_theme_home_page_image_path']) {
-    foreach ($storage['wind_theme_home_page_image_path'] as $key => $file) {
-      $wind_theme_home_page_settings = $form_state->getValue('wind_theme_home_page_settings');
-      $wind_theme_home_page_settings['wind_theme_home_page_slides'][$key]['wind_theme_home_page_image_path'] = str_replace('public://', '', $file->getFileUri());
-      $form_state->setValue('wind_theme_home_page_settings', $wind_theme_home_page_settings);
-    }
   }
 }
