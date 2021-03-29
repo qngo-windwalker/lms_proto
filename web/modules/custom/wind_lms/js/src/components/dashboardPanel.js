@@ -51,8 +51,8 @@ export default class  DashboardPanel extends React.Component {
     return(
       <>
         {this.state.currentUser ? <CurrentUserCourseTable /> : <p>Loading...</p>}
-        {this.doesCurrentUserHasAdminAccess() && <AllUserProgressTable />}
-        {this.doesCurrentUserHasAdminAccess() && <DashboardAllCoursesTable />}
+        {this.doesCurrentUserHasManagerAccess() && <AllUserProgressTable />}
+        {this.doesCurrentUserHasManagerAccess() && <DashboardAllCoursesTable />}
         <Route path={["/user/:id", "/course/:nid/user/:uid/cert/upload"]} render={routeProps => { return (
           <Modala>
             {routeProps.match.path == '/user/:id' && <SideModalContentUser {...routeProps}/>}
@@ -63,13 +63,14 @@ export default class  DashboardPanel extends React.Component {
     );
   }
 
-  doesCurrentUserHasAdminAccess() {
+  doesCurrentUserHasManagerAccess() {
     if(!this.state.currentUser){
       return false;
     }
 
     if(this.state.currentUser.roles.includes('administrator')
       || this.state.currentUser.roles.includes('company_admin')
+      || this.state.currentUser.roles.includes('manager')
     ) {
       return true
     }
