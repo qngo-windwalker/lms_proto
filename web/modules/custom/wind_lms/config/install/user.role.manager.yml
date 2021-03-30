@@ -16,6 +16,7 @@ permissions:
   - 'access toolbar'
   - 'access user profiles'
   - 'administer nodes'
+  - 'administer users'
   - 'bypass node access'
   - 'change own username'
   - 'create article content'

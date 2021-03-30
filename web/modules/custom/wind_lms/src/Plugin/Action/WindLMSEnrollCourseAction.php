@@ -20,6 +20,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *    Create a class like this one
  *    config 'confirm_form_route_name' if needed
  *
+ *    Troubleshhoot: If this action does NOT appear in the list, check the following:
+ *      Check Views: People (User) @ /admin/structure/views/view/user_admin_people > Field > User: Bulk update (Bulk update)
+ *
  *    example: Drupal\user\Plugin\Action\CancelUser
  *    more info: https://www.drupal.org/node/2892204
  */
