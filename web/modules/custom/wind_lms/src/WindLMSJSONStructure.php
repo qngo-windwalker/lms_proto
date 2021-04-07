@@ -79,12 +79,12 @@ class WindLMSJSONStructure {
    *
    * @return \Drupal\Core\GeneratedLink|string
    */
-  private function getCourseCertificate($courseData, $user) {
+  public static function getCourseCertificate($courseData, $user) {
     $courseCompleted = \Drupal\wind_lms\CourseNode::isCourseCompleted($courseData);
-    return $courseCompleted === true ? self::buildCourseCertificateLink($courseData, $user) : $courseCompleted;
+    return $courseCompleted === true ? self::buildCourseCertificateLink($courseData, $user) : 'N/A';
   }
 
-  private function buildCourseLink($title, $courseData) {
+  public static function buildCourseLink($title, $courseData) {
     if(!isset($courseData['folder'])){
       return '';
     }
@@ -110,7 +110,7 @@ class WindLMSJSONStructure {
    *
    * @return \Drupal\Core\GeneratedLink
    */
-  private function buildCourseCertificateLink($courseData, User $user) {
+  public static function buildCourseCertificateLink($courseData, User $user) {
     $module_handler = \Drupal::service('module_handler');
     $module_path = $module_handler->getModule('wind_lms')->getPath();
     $linkContent = '<img width="26" src="/' . $module_path . '/img/certificate_icon.png">';

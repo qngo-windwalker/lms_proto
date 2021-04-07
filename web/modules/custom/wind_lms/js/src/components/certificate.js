@@ -43,9 +43,11 @@ export default class Certificate extends React.Component {
       });
   }
 
+  // TODO: Find out why render twice on the User Progress table?
   render(){
     let courseData = this.props['course-data'];
 
+    console.log(courseData);
     if (this.state.fetchingData) {
       return(
         <div className="spinner-border text-secondary" role="status">

@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 import CurrentUserCourseTable from './currentUserCourseTable';
-import AllUserProgressTable from './allUserProgressTable';
+import DashboardAllUserProgressTable from './dashboardAllUserProgressTable';
 import DashboardAllCoursesTable from './dashboardAllCoursesTable';
 import SideModalContentUser from "./sideModalContentUser";
 import SideModalContentCertUpload from "./sideModalContentCourseCertUpload";
@@ -51,7 +51,7 @@ export default class  DashboardPanel extends React.Component {
     return(
       <>
         {this.state.currentUser ? <CurrentUserCourseTable /> : <p>Loading...</p>}
-        {this.doesCurrentUserHasManagerAccess() && <AllUserProgressTable />}
+        {this.doesCurrentUserHasManagerAccess() && <DashboardAllUserProgressTable />}
         {this.doesCurrentUserHasManagerAccess() && <DashboardAllCoursesTable />}
         <Route path={["/user/:id", "/course/:nid/user/:uid/cert/upload"]} render={routeProps => { return (
           <Modala>

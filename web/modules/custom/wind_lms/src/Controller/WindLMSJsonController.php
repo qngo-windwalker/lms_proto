@@ -106,31 +106,30 @@ class WindLMSJsonController extends ControllerBase {
       $user = User::load($uid);
       //      $licenseNode = $this->getUserLicense($uid);
       //      $coursesData = _wind_tincan_get_user_all_assigned_course_data($user);
+
       $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
+      $courseCollection = [];
       foreach ($coursesData as $course){
-        $collection[] = [
-          'user' => \Drupal\wind_lms\WindLMSJSONStructure::getUser($user),
-          'course_nid' => $course['nid'],
-          'uid' => $uid,
-          'username' => $user->label(),
-          'user_link' => $this->getUserNameLink($user),
-          'status' => $user->get('status')->value,
-          'mail' => $user->get('mail')->value,
-          'fullName' => $user->get('field_first_name')->value . ' ' . $user->get('field_last_name')->value,
-          'created' => $user->get('created')->value,
-          'login' => $user->get('login')->value,
-          'field_clearinghouse_role' =>  '',
-          'field_enroll_date' => '',
-          'courseTitle' => $this->getCourseDataValue($course, 'title'),
-          'courseTincanId' => $this->getCourseDataValue($course, 'tincan_course_id'),
-          'courseProgress' => $this->getCourseDataValue($course, 'progress'),
-          'stored_date' => '',
-          'package_files' => $course['package_files'],
-          'certificateLink' => $this->getCourseCertificate($course, $user),
-        ];
+        $courseCollection[] = \Drupal\wind_lms\WindLMSJSONStructure::getCourse($course, $user);
+//        $collection[$uid]['courses'][$course['nid']] = [
+//          'course_nid' => $course['nid'],
+//          'nid' => $course['nid'],
+//          'field_clearinghouse_role' =>  '',
+//          'field_enroll_date' => '',
+//          'courseTitle' => $this->getCourseDataValue($course, 'title'),
+//          'courseTincanId' => $this->getCourseDataValue($course, 'tincan_course_id'),
+//          'courseProgress' => $this->getCourseDataValue($course, 'progress'),
+//          'stored_date' => '',
+//          'package_files' => $course['package_files'],
+//          'certificateLink' => $this->getCourseCertificate($course, $user),
+//        ];
       }
+      $collection[] = [
+        'user' => \Drupal\wind_lms\WindLMSJSONStructure::getUser($user),
+        'courses' => $courseCollection
+      ];
     }
-    return new JsonResponse(['data' => $collection]);
+    return new JsonResponse(['userData' => $collection]);
   }
 
   private function getUserData(User $user) {

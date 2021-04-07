@@ -19,6 +19,7 @@ h2{color: rgb(117,121,137); }
 /*label.form-required::after{ content: ' *'; color: red;}*/
 .clear-both{clear: both;}
 .table{border-bottom: 1px solid #ccc;}
+.table.no-bottom-border{border-bottom: none;}
 .badge.badge-outline.badge-secondary{ background: none; border: 1px solid #d2d2d2; color: inherit;}
 .badge.badge-outline.badge-success{ background: none; border: 1px solid #28a745; color: #28a745;}
 
