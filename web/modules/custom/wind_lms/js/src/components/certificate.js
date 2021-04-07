@@ -47,7 +47,7 @@ export default class Certificate extends React.Component {
   render(){
     let courseData = this.props['course-data'];
 
-    console.log(courseData);
+    // console.log(courseData);
     if (this.state.fetchingData) {
       return(
         <div className="spinner-border text-secondary" role="status">

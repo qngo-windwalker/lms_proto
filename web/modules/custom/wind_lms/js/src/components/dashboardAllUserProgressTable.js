@@ -5,6 +5,8 @@ import axios from "axios";
 import ReactDOMServer from "react-dom/server";
 import Certificate from "./certificate";
 import {useHistory, useParams} from "react-router-dom";
+import TableRowDetail from "./tableRowDetail";
+
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
 // Needed for DataTable export buttons
@@ -39,7 +41,7 @@ export default class DashboardAllUserProgressTable extends Component{
   async getRecords(url) {
     axios.get(url)
       .then(res => {
-        this.initDataTable(res.data.userData);
+        this.parseJson(res.data);
       })
       .catch(function (error) {
         if (error.response) {
@@ -58,6 +60,14 @@ export default class DashboardAllUserProgressTable extends Component{
           console.log('Error', error.message);
         }
       });
+  }
+
+  parseJson(resData) {
+    _.forEach(resData.userData, function(value, index) {
+      // Add rowId attribute for datatable
+      resData.userData[index].rowId = 'uid-' + value.user.uid;
+    })
+    this.initDataTable(resData.userData);
   }
 
   isEnglishMode() {
@@ -131,18 +141,29 @@ export default class DashboardAllUserProgressTable extends Component{
           return markup;
         }
       },
-      // {
-      //   title: 'Certificate',
-      //   className : "text-capitalize",
-      //   data: function ( row, type, val, meta ) {
-      //     // Create a container so we can attach ReactJS component later. @see onDataTableInitComplete()
-      //     return `<div id="cert-reactjs-container-course-nid-${row.course_nid}-uid-${row.uid}"></div>`;
-      //   }
-      // }
+      {
+        title: 'Overall Progress',
+        data: function ( row, type, val, meta ) {
+          let courseTotal = row.courses.length;
+          let completed = 0;
+          _.forEach(row.courses, function(course){
+            if (course.isCompleted) {
+              completed++;
+            }
+          });
+          // let percentage = Math.abs(completed/courseTotal) * 100;
+          let percentage = Math.floor((completed / courseTotal) * 100)
+          return `<div class="progress mt-2">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: ${percentage}%" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100">
+                        <span class="d-none" aria-hidden="true">${percentage}%</span>
+                    </div>
+                </div>`;
+        }
+      },
       {
         title: 'Operations',
         data: function ( row, type, val, meta ) {
-          let markup = '<a class="btn btn-sm btn-outline-secondary courses-info" href="node/\' . $nid . \'">User Course</a>';
+          let markup = '<a class="btn btn-sm btn-outline-secondary courses-info" href="node/\' . $nid . \'">View Course</a>';
 
           return markup;
         },
@@ -152,7 +173,7 @@ export default class DashboardAllUserProgressTable extends Component{
     ];
 
     let $datatable = $(this.refs.main).DataTable({
-      rowId : 'rowUid',
+      rowId : 'rowId',
       data: data,
       columns: columns,
       // columnDefs: [ {
@@ -163,6 +184,7 @@ export default class DashboardAllUserProgressTable extends Component{
       // } ],
       ordering: true,
       paging : true,
+      "lengthMenu": [ 3, 25, 50, 75, 100 ],
       // Dom positioning: https://datatables.net/examples/basic_init/dom.html
       // f - Filtering input
       // t - The Table!
@@ -241,61 +263,44 @@ export default class DashboardAllUserProgressTable extends Component{
   newRowMoreInfoClick(e, dt) {
     e.preventDefault();
     let $this = $(e.currentTarget);
-
-    // On/Off
-    $this.hasClass('active') ? $this.removeClass('active') : $this.addClass('active');
-
     var tr = $this.closest('tr');
     var row = dt.row( tr );
-    // var idx = $.inArray( tr.attr('id'), this.detailRows );
 
     if ( row.child.isShown() ) {
-      tr.removeClass( 'details' );
-      row.child.hide();
-
-      // Remove from the 'open' array
-      // this.detailRows.splice( idx, 1 );
+      this.hideDetailRow(tr, row, $this);
     } else {
-      tr.addClass( 'details' );
-      // create the row with HTML
-      row.child( this.format( row.data() ) ).attr('id', 'value').show();
-
-      // Once the row is created, inject ReactJS component to each of the course's certificate <div /> with a specific ID
-      let user = row.data().user;
-      _.forEach( row.data().courses, function(row) {
-        let elem = document.getElementById(`cert-reactjs-container-course-nid-${row.nid}-uid-${user.uid}`);
-        if (!elem) {
-          return;
-        }
-        ReactDOM.render(
-          <>
-            <Certificate user={user} course-data={row} />
-          </>,
-          elem
-        );
-      });
-
-      // Add to the 'open' array
-      // if ( idx === -1 ) {
-      //   this.detailRows.push( tr.attr('id') );
-      // }
+      this.showDetailRow(tr, row, $this);
     }
   }
 
-  format (rowData) {
-    // return 'Full name: The child row can contain any data you wish, including links, images, inner tables etc.';
-    return ReactDOMServer.renderToString(
-      <div className="row-extra-info container-fluid">
-        <div className="row">
-          <div className="col-md-12 p-3">
-            <UserCourseTable data={rowData} />
-          </div>
-        </div>
-      </div>
+  hideDetailRow(tr, row, $btn) {
+    $btn.removeClass('active');
+    tr.removeClass( 'details' );
+    row.child.hide();
+  }
+
+  showDetailRow(tr, row, $btn) {
+    $btn.addClass('active')
+    tr.addClass( 'details' );
+
+    // create the row with HTML
+    let user = row.data().user;
+    // Create a new container for host ReactJS component
+    let newDiv = document.createElement("div");
+    newDiv.setAttribute('id', `reactjs-container-uid-${user.uid}`);
+    // Add the new container to the new <tr />
+    row.child(newDiv).show();
+
+    // Render React comp in the new container.
+    ReactDOM.render(
+      <TableRowDetail data={row.data()} onClose={(e) => { this.hideDetailRow(tr, row, $btn) }}>
+        <UserCourseTable data={row.data()} />
+      </TableRowDetail>, newDiv
     );
   }
 }
 
+// Display a table of all the courses belong to a user.
 function UserCourseTable(props) {
   let getProgressOutput = (row, type, val, meta) => {
     let allPackageStatuses = _.map(row.package_files, function(item){
@@ -333,7 +338,7 @@ function UserCourseTable(props) {
           <tr key={index}>
             <td className="mb-3">{obj.title}</td>
             <td className="mb-3 text-capitalize" dangerouslySetInnerHTML={{__html: getProgressOutput(obj)}}></td>
-            <td className="mb-3"><div id={`cert-reactjs-container-course-nid-${obj.nid}-uid-${props.data.user.uid}`}></div></td>
+            <td className="mb-3"><Certificate user={props.data.user} course-data={obj} /></td>
           </tr>
         );
       })}
