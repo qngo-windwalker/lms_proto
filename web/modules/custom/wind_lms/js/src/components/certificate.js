@@ -35,11 +35,22 @@ export default class Certificate extends React.Component {
     });
     axios.get(url)
       .then(res => {
+
+        if (this.state.ajaxRespondData != null) {
+          this.props.onChange({
+            ajaxRespondData : res.data,
+            original : {
+              ajaxRespondData : this.state.ajaxRespondData
+            }
+          });
+        }
+
         this.setState({
           ajaxRespondData : res.data,
           certificateUploadedFiles : res.data.files,
           fetchingData : false
         });
+
       });
   }
 

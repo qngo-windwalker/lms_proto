@@ -163,7 +163,10 @@ class WindLMSCourseUserCertController extends ControllerBase{
    * @return \Drupal\Core\Entity\EntityBase|\Drupal\Core\Entity\EntityInterface|false|null
    */
   private function getCertNode(NodeInterface $courseNode, UserInterface $user) {
-    $certNode = $this->loadCertNode($courseNode, $user);
+    /** @var \Drupal\wind_lms\CertificateNode $certNodeService */
+    $certNodeService = \Drupal::service('wind_lms.certifcate_node');
+    /** @var \Drupal\node\Entity\Node $certNodeService */
+    $certNode = $certNodeService->loadCertNode($courseNode->id(), $user->id());
 
     // This scenario can happen when admin enrolls learner to ILT course and learner does NOT need to upload certificate.
     // We create certificate node to save data
@@ -172,19 +175,6 @@ class WindLMSCourseUserCertController extends ControllerBase{
     }
 
     return $certNode;
-  }
-
-  private function loadCertNode(NodeInterface $courseNode, UserInterface $user) {
-    $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
-    $query->condition('type', 'certificate');
-    $query->condition('field_activity', $courseNode->id());
-    $query->condition('field_learner', $user->id());
-    $result = $query->execute();
-    if($result) {
-      return \Drupal\node\Entity\Node::load(array_shift($result));
-    }
-
-    return false;
   }
 
   private function createNewCertNode(NodeInterface $courseNode, $uid, $fid = null) {

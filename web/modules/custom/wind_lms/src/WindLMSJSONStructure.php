@@ -69,7 +69,8 @@ class WindLMSJSONStructure {
       'certificateLink' => self::getCourseCertificate($courseData, $user),
       'field_category' => $categoryEntities,
       'package_files' => isset($courseData['package_files']) ? $courseData['package_files'] : [],
-      'isCompleted' => \Drupal\wind_lms\CourseNode::isCourseCompleted($courseData)
+      'isCompleted' => \Drupal\wind_lms\CourseNode::isCourseCompleted($courseData),
+      'certificateNode' => self::getCertificateNode($courseData['nid'], $user->id())
     ];
   }
 
@@ -129,4 +130,26 @@ class WindLMSJSONStructure {
     return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $url)->toString();
   }
 
+  /**
+   * @param $courseNid
+   * @param $uid
+   *
+   * @return array
+   */
+  private static function getCertificateNode($courseNid, $uid) {
+    /** @var \Drupal\wind_lms\CertificateNode $certNodeService */
+    $certNodeService = \Drupal::service('wind_lms.certifcate_node');
+    /** @var \Drupal\node\Entity\Node $certNodeService */
+    $certNode = $certNodeService->loadCertNode($courseNid, $uid);
+    if (!$certNode) {
+      return [];
+    }
+
+    return [
+      'title' => $certNode->label(),
+      'nid' => $certNode->id(),
+      'field_completion_verified' => $certNode->get('field_completion_verified')->getString(),
+      'field_attachment' => $certNode->get('field_attachment')->getString(),
+    ];
+  }
 }

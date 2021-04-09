@@ -6,6 +6,8 @@ import ReactDOMServer from "react-dom/server";
 import Certificate from "./certificate";
 import {useHistory, useParams} from "react-router-dom";
 import TableRowDetail from "./tableRowDetail";
+import courseProgress from "./courseProgress";
+import CourseProgress from "./courseProgress";
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
@@ -302,27 +304,6 @@ export default class DashboardAllUserProgressTable extends Component{
 
 // Display a table of all the courses belong to a user.
 function UserCourseTable(props) {
-  let getProgressOutput = (row, type, val, meta) => {
-    let allPackageStatuses = _.map(row.package_files, function(item){
-      return item.course_data.progress;
-    });
-    // Creates a duplicate-free version of an array. @see https://lodash.com/docs/4.17.15#uniq
-    allPackageStatuses = _.uniq(allPackageStatuses);
-    if(allPackageStatuses.length == 1){
-      // Make text green only if status is 'completed.
-      return allPackageStatuses[0] == 'completed' ? '<span class="text-success">' + allPackageStatuses[0] + '</span>' : allPackageStatuses[0];
-    }
-
-    // If one out of a bunch has an 'Incomplete' status.
-    if(_.includes(allPackageStatuses, 'incomplete')){
-      return 'incomplete';
-    }
-
-    // At this point, incomlete with cover these scenarios:
-    // ["completed", "Not Started"]
-    return 'incomplete';
-  }
-
   return (
     <table className="table table-borderless no-bottom-border">
       <thead>
@@ -336,13 +317,68 @@ function UserCourseTable(props) {
       {props.data['courses'].map((obj, index) => {
         return (
           <tr key={index}>
-            <td className="mb-3">{obj.title}</td>
-            <td className="mb-3 text-capitalize" dangerouslySetInnerHTML={{__html: getProgressOutput(obj)}}></td>
-            <td className="mb-3"><Certificate user={props.data.user} course-data={obj} /></td>
+            <UserCourseTableTDs course={obj} user={props.data.user} />
           </tr>
         );
       })}
       </tbody>
     </table>
   );
+}
+
+function UserCourseTableTDs(props){
+  let initialCertComplVeriStatus =  false;
+  // Override completion will set course to COMPLETED even if learner has NOT taken the course.
+  if (props.course.certificateNode) {
+    if (props.course.certificateNode.field_completion_verified == '1' || props.course.certificateNode.field_completion_verified == 'true')   {
+      initialCertComplVeriStatus = true;
+    }
+  }
+
+  // Define variable and it's setFunction
+  const [certComplVeriStatus, setCertComplVeriStatus] = useState(initialCertComplVeriStatus);
+
+  let getCoursePackageProgressText = (course) => {
+    let allPackageStatuses = _.map(course.package_files, function(item){
+      return item.course_data.progress;
+    });
+    // Creates a duplicate-free version of an array. @see https://lodash.com/docs/4.17.15#uniq
+    allPackageStatuses = _.uniq(allPackageStatuses);
+    if(allPackageStatuses.length == 1){
+      // Make text green only if status is 'completed.
+      return allPackageStatuses[0];
+    }
+
+    // If one out of a bunch has an 'Incomplete' status.
+    if(_.includes(allPackageStatuses, 'incomplete')){
+      return 'incomplete';
+    }
+
+    // At this point, incomlete with cover these scenarios:
+    // ["completed", "Not Started"]
+    return 'incomplete';
+  };
+
+  let onCertChange = (e) => {
+    console.log(e);
+    if(e.ajaxRespondData.hasOwnProperty('field_completion_verified')){
+      let newValue = e.ajaxRespondData.field_completion_verified == '1' ? true : false;
+      if(newValue != certComplVeriStatus){
+        setCertComplVeriStatus(newValue);
+      }
+    } else {
+      let newValue = false;
+      if(newValue != certComplVeriStatus){
+        setCertComplVeriStatus(newValue);
+      }
+    }
+  };
+
+  return(
+    <>
+      <td className="mb-3">{props.course.title}</td>
+      <td className="mb-3"><CourseProgress overrideCompletion={certComplVeriStatus} courseProgress={getCoursePackageProgressText(props.course)} courseData={props.course} /></td>
+      <td className="mb-3"><Certificate onChange={(e) => onCertChange(e)} user={props.user} course-data={props.course} /></td>
+    </>
+  )
 }
