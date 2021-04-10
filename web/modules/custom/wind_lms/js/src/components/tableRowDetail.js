@@ -17,10 +17,9 @@ export default class TableRowDetail extends Component {
         <div className="header">
           <div className="row flex-nowrap justify-content-between align-items-center">
             <div className="col-4 pt-1">
-
             </div>
 
-            <div className="col-4 text-center"><h4>Course</h4></div>
+            <div className="col-4 text-center"></div>
 
             <div className="col-4 d-flex justify-content-end align-items-center">
               <button type="button" className="close" onClick={this.props.onClose} data-dismiss="row-detail" aria-label="Close"><span aria-hidden="true">×</span></button>

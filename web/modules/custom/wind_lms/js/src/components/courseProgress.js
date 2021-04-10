@@ -1,16 +1,6 @@
 import React, { Component } from "react";
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  HashRouter,
-  withRouter,
-  useHistory,
-  useLocation,
-  Link
-} from "react-router-dom";
 
-export default class CourseProgress extends Component {
+export class CourseProgress extends Component {
 
   constructor(props) {
     super(props);
@@ -37,6 +27,15 @@ export default class CourseProgress extends Component {
       </div>
     );
   }
-
 }
 
+export function ProgressBar(props){
+  let percentage = Math.floor((props.numerator / props.total) * 100);
+  return (
+    <div className="progress mt-2">
+      <div className="progress-bar bg-success" role="progressbar" style={{width: percentage + '%'}} aria-valuenow={percentage} aria-valuemin="0" aria-valuemax="100">
+        <span className="d-none" aria-hidden="true">{percentage}%</span>
+      </div>
+    </div>
+  );
+}

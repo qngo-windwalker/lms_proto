@@ -6,8 +6,7 @@ import ReactDOMServer from "react-dom/server";
 import Certificate from "./certificate";
 import {useHistory, useParams} from "react-router-dom";
 import TableRowDetail from "./tableRowDetail";
-import courseProgress from "./courseProgress";
-import CourseProgress from "./courseProgress";
+import {CourseProgress, ProgressBar} from "./courseProgress";
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
@@ -113,7 +112,6 @@ export default class DashboardAllUserProgressTable extends Component{
   }
 
   initDataTable(data) {
-    let self = this;
     let columns = [
       {
         title: 'Username',
@@ -146,20 +144,19 @@ export default class DashboardAllUserProgressTable extends Component{
       {
         title: 'Overall Progress',
         data: function ( row, type, val, meta ) {
-          let courseTotal = row.courses.length;
           let completed = 0;
           _.forEach(row.courses, function(course){
-            if (course.isCompleted) {
+            if (course.isCompleted == true) {
+              completed++;
+              return; // Same as continue
+            }
+            if (course.certificateNode && course.certificateNode.field_completion_verified == '1') {
               completed++;
             }
           });
-          // let percentage = Math.abs(completed/courseTotal) * 100;
-          let percentage = Math.floor((completed / courseTotal) * 100)
-          return `<div class="progress mt-2">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: ${percentage}%" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100">
-                        <span class="d-none" aria-hidden="true">${percentage}%</span>
-                    </div>
-                </div>`;
+          // Note: this will modified on runtime @see <UserCourseTable />
+          let progressBar = ReactDOMServer.renderToString(<ProgressBar numerator={completed} total={row.courses.length} />);
+          return `<div id="react-container-uid--">${progressBar}</div>`;
         }
       },
       {
@@ -178,12 +175,6 @@ export default class DashboardAllUserProgressTable extends Component{
       rowId : 'rowId',
       data: data,
       columns: columns,
-      // columnDefs: [ {
-      //   "targets": 3,
-      //   "data": function ( row, type, val, meta ) {
-      //     return ;
-      //   }
-      // } ],
       ordering: true,
       paging : true,
       "lengthMenu": [ 3, 25, 50, 75, 100 ],
@@ -213,39 +204,15 @@ export default class DashboardAllUserProgressTable extends Component{
         // Save it for documentation on how to modify table rows.
         // var api = this.api();
         // var rows = api.rows({page: 'current'}).nodes();
-
-        // For every row, add another row underneath it.
-        // rows.each(function(row, i){
-        // });
       },
       // rowCallback : function ( row, data ) {
       // }
     });
 
-    // Fires on every page and fires after 'initComplete'
+    // Fires on every pagination page click and fires after 'initComplete' event.
     // @see https://datatables.net/reference/event/draw
     // $datatable.on('draw', function (e, settings) {
-    //   // var info = $datatable.page.info();
-    //   _.forEach(settings.json.data, function(row) {
-    //     let user ={
-    //       uid : row.uid
-    //     }
-    //     let courseData = {
-    //       nid : row.course_nid,
-    //       certificateLink : row.certificateLink
-    //     }
-    //     let elem = document.getElementById(`cert-reactjs-container-course-nid-${row.course_nid}-uid-${row.uid}`);
-    //     if (!elem) {
-    //       return;
-    //     }
-    //     ReactDOM.render(
-    //       <>
-    //         <Certificate user={user} course-data={courseData} />
-    //       </>,
-    //       elem
-    //     );
-    //   });
-    // } );
+    // });
 
     $('#user-progress-tbl tbody').on( 'click', 'tr td.td-action a.courses-info', (e) => this.newRowMoreInfoClick(e, $datatable));
   }
@@ -297,32 +264,70 @@ export default class DashboardAllUserProgressTable extends Component{
     ReactDOM.render(
       <TableRowDetail data={row.data()} onClose={(e) => { this.hideDetailRow(tr, row, $btn) }}>
         <UserCourseTable data={row.data()} />
-      </TableRowDetail>, newDiv
+      </TableRowDetail>,
+      newDiv
     );
   }
 }
 
 // Display a table of all the courses belong to a user.
 function UserCourseTable(props) {
+  let onCourseTableTDChange = (e) => {
+    let completed = 0;
+    _.forEach(props.data['courses'], function(course, index){
+      // Check the completion by course package (SCORM/TinCan)
+      if (course.isCompleted == true) {
+        completed++;
+        return; // Same as continue
+      }
+
+      // Now we check if there's an override by verification even if the course is not completed.
+      // Is the change event belongs to this course
+      if (course.nid == e.course.nid) {
+        if(e.ajaxRespondData.hasOwnProperty('field_completion_verified')){
+          // Update the data
+          props.data['courses'][index].certificateNode.field_completion_verified = e.ajaxRespondData.field_completion_verified;
+          // This maybe redundant but hopefully it helps reduce bugs
+          course.certificateNode.field_completion_verified = e.ajaxRespondData.field_completion_verified;
+        }
+      }
+
+      if (course.certificateNode && course.certificateNode.field_completion_verified == '1') {
+        completed++;
+      }
+    });
+
+    let percentage = Math.floor((completed / props.data['courses'].length) * 100);
+    updateProgressBarPercentage(percentage);
+  };
+
+  let updateProgressBarPercentage = (percentage) => {
+    let $elem = $(`#user-progress-tbl tr#uid-${props.data.user.uid} div.progress-bar`).css('width', percentage + '%').attr('aria-valuenow', percentage);
+    $elem.find('span').html(percentage + '%');
+  }
+
   return (
-    <table className="table table-borderless no-bottom-border">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Progress</th>
-          <th>Certificate</th>
-        </tr>
-      </thead>
-      <tbody>
-      {props.data['courses'].map((obj, index) => {
-        return (
-          <tr key={index}>
-            <UserCourseTableTDs course={obj} user={props.data.user} />
+    <>
+      <h4 className="text-center">Course</h4>
+      <table className="table table-borderless no-bottom-border">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Progress</th>
+            <th>Certificate</th>
           </tr>
-        );
-      })}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+        {props.data['courses'].map((obj, index) => {
+          return (
+            <tr key={index}>
+              <UserCourseTableTDs course={obj} user={props.data.user} onChange={(e) => onCourseTableTDChange(e)} />
+            </tr>
+          );
+        })}
+        </tbody>
+      </table>
+    </>
   );
 }
 
@@ -360,19 +365,28 @@ function UserCourseTableTDs(props){
   };
 
   let onCertChange = (e) => {
-    console.log(e);
     if(e.ajaxRespondData.hasOwnProperty('field_completion_verified')){
       let newValue = e.ajaxRespondData.field_completion_verified == '1' ? true : false;
       if(newValue != certComplVeriStatus){
-        setCertComplVeriStatus(newValue);
+        processChangedValue(newValue, e);
       }
     } else {
       let newValue = false;
       if(newValue != certComplVeriStatus){
-        setCertComplVeriStatus(newValue);
+        processChangedValue(newValue, e);
       }
     }
   };
+
+  let processChangedValue = (newValue, e) => {
+    setCertComplVeriStatus(newValue);
+    props.onChange({
+      ajaxRespondData: e.ajaxRespondData,
+      user : {uid : props.user.uid},
+      course : {nid: props.course.nid}
+    });
+    $(`#user-progress-tbl tr#uid-${props.user.uid}`);
+  }
 
   return(
     <>

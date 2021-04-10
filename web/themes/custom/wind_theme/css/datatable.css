@@ -6,6 +6,7 @@ table.dataTable {width: 100% !important;}
 table.dataTable tr.details { background: #deebf3;}
 table.dataTable tr.details + tr { background: url('../img/table_row_top_shadow.png') repeat-x #e8f4f9;}
 table.dataTable .row-detail-content tr:hover{ background: #d3e5ee;}
+table.dataTable .row-detail-content td{ border-top:1px solid #d5ebf5;}
 
 /*table.dataTable tr.info-row td {height: 5px; padding: 0; visibility: hidden; background: #f4f8f9; border-radius: unset; }*/
 /*table.dataTable tr.info-row td * {display: none;}*/
