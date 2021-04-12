@@ -177,7 +177,7 @@ export default class DashboardAllUserProgressTable extends Component{
       columns: columns,
       ordering: true,
       paging : true,
-      "lengthMenu": [ 3, 25, 50, 75, 100 ],
+      // "lengthMenu": [ 3, 25, 50, 75, 100 ],
       // Dom positioning: https://datatables.net/examples/basic_init/dom.html
       // f - Filtering input
       // t - The Table!

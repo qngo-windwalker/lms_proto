@@ -153,7 +153,7 @@ export default class DashboardAllCoursesTable extends Component{
       columns: columns,
       ordering: true,
       // Todo: Find out why it's tot working. @see https://datatables.net/examples/advanced_init/length_menu.html
-      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      // "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
       paging : true,
       // Dom positioning: https://datatables.net/examples/basic_init/dom.html
       // f - Filtering input
