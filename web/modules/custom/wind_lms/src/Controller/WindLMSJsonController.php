@@ -151,7 +151,7 @@ class WindLMSJsonController extends ControllerBase {
     ];
   }
 
-  protected function buildCourseRow($courseData, $user) {
+  protected function buildCourseRow($courseData, User $user) {
     $title = $courseData['title'];
 
     if($courseData['type'] == 'curriculum'){
@@ -171,11 +171,12 @@ class WindLMSJsonController extends ControllerBase {
     return [
       'data' => array(
         'title' => $courseData['title'],
+        'nid' => isset($courseData['nid']) ? $courseData['nid'] : '',
         'type' => $courseData['type'],
         'courseLink' => $this->buildCourseLink($title, $courseData),
         'certificateLink' => $this->getCourseCertificate($courseData, $user),
         'package_files' => isset($courseData['package_files']) ? $courseData['package_files'] : [],
-        'nid' => isset($courseData['nid']) ? $courseData['nid'] : '',
+        'certificateNode' => \Drupal\wind_lms\WindLMSJSONStructure::getCertificateNode($courseData['nid'], $user->id())
       ),
       'class' => array('course-row'),
       'data-tincan-id' => isset($courseData['tincan_course_id']) ?  $courseData['tincan_course_id'] : ''

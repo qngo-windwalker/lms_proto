@@ -391,7 +391,7 @@ function UserCourseTableTDs(props){
   return(
     <>
       <td className="mb-3">{props.course.title}</td>
-      <td className="mb-3"><CourseProgress overrideCompletion={certComplVeriStatus} courseProgress={getCoursePackageProgressText(props.course)} courseData={props.course} /></td>
+      <td className="mb-3"><CourseProgress overrideCompletion={certComplVeriStatus} courseProgress={getCoursePackageProgressText(props.course)} /></td>
       <td className="mb-3"><Certificate onChange={(e) => onCertChange(e)} user={props.user} course-data={props.course} /></td>
     </>
   )

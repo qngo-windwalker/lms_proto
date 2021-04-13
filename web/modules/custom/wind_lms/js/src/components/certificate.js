@@ -36,7 +36,7 @@ export default class Certificate extends React.Component {
     axios.get(url)
       .then(res => {
 
-        if (this.state.ajaxRespondData != null) {
+        if (this.state.ajaxRespondData != null && this.props.hasOwnProperty('onChange')) {
           this.props.onChange({
             ajaxRespondData : res.data,
             original : {

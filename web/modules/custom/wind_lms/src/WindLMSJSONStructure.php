@@ -136,7 +136,7 @@ class WindLMSJSONStructure {
    *
    * @return array
    */
-  private static function getCertificateNode($courseNid, $uid) {
+  public static function getCertificateNode($courseNid, $uid) {
     /** @var \Drupal\wind_lms\CertificateNode $certNodeService */
     $certNodeService = \Drupal::service('wind_lms.certifcate_node');
     /** @var \Drupal\node\Entity\Node $certNodeService */

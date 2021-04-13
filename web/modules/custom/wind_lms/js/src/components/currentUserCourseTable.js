@@ -3,6 +3,7 @@ import ReactDOMServer from "react-dom/server";
 import axios from "axios";
 import Certificate from "./certificate";
 import _ from 'lodash';
+import {CourseProgress} from "./courseProgress";
 
 export default class CurrentUserCourseTable extends Component{
 	constructor(props) {
@@ -109,8 +110,8 @@ export default class CurrentUserCourseTable extends Component{
     return(
       <tr key={key} data-nid={dataObj.data['nid']}>
         <td>{this.getColumnNameContent(dataObj)}</td>
-        <td className="text-capitalize" dangerouslySetInnerHTML={{__html: this.getColumnStatusContent(dataObj)}}></td>
-        <td><Certificate user={user} course-data={dataObj.data} /></td>
+        <td className="text-capitalize"><CourseProgress overrideCompletion={this.getCourseProgressOverrideCompletion(dataObj)} courseProgress={this.getCourseProgress(dataObj)} /></td>
+        <td><Certificate user={user} course-data={dataObj.data} onChange={(e) => this.onCertChange(e)} /></td>
       </tr>
     );
   }
@@ -125,13 +126,13 @@ export default class CurrentUserCourseTable extends Component{
     }
   }
 
-  getColumnStatusContent(dataObj) {
+  getCourseProgress(dataObj) {
     if(dataObj.data.type == 'curriculum'){
       return '';
     }
     // If course node only has 1 zip file
     if(dataObj.data['package_files'].length == 1) {
-      return this.colorizedText(dataObj.data['package_files'][0]['course_data']['progress']);
+      return dataObj.data['package_files'][0]['course_data']['progress'];
     }
 
     let statusCollection = [];
@@ -143,25 +144,33 @@ export default class CurrentUserCourseTable extends Component{
     });
 
     if (statusCollection.length == 1) {
-      return this.colorizedText(statusCollection[0]);
+      return statusCollection[0];
     }
 
     // If there's more than one type of status
     if (statusCollection.length > 1) {
       return 'Incomplete';
     }
-
-    return '';
   }
 
-  colorizedText(text) {
-    switch (text) {
-      case 'completed':
-        return  `<span class="text-success">${text}</span>`
-        break;
-      default :
-        return text;
+  getCourseProgressOverrideCompletion(dataObj) {
+    if(dataObj.data.hasOwnProperty('certificateNode') && dataObj.data.certificateNode.field_completion_verified == '1'){
+      return true;
     }
+    return false;
+  }
+
+  onCertChange(e) {
+    if(e.ajaxRespondData.hasOwnProperty('field_completion_verified')){
+      let newValue = e.ajaxRespondData.field_completion_verified == '1' ? true : false;
+      this.processChangedValue(newValue, e);
+    } else {
+      this.processChangedValue(false, e);
+    }
+  }
+
+  processChangedValue(newValue, e){
+
   }
 
   getColumnStatusCurriculumnContent(dataObj) {
