@@ -51,3 +51,17 @@ wind_tincan.certificate.id:
     _title: 'Certificate'
   requirements:
     _permission: 'access content'
+wind_tincan.admin.tincan:
+  path: '/admin/tincan'
+  defaults:
+    _controller: '\Drupal\wind_tincan\Controller\ChNavCourseAdminTincanUserCourseController::getContent'
+    _title: 'Tincan'
+  requirements:
+    _permission: 'administer users'
+wind_tincan.admin.tincan.user.course:
+  path: '/admin/tincan/{uid}/course/{tincan_id}'
+  defaults:
+    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminTincanUserCourseController::getUserCourseContent'
+    _title_callback: '\Drupal\wind_tincan\Controller\WindTincanAdminTincanUserCourseController::getUserCourseTitle'
+  requirements:
+    _permission: 'administer users'

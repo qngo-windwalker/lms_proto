@@ -4,3 +4,13 @@ my_training_block:
 wind_tincan:
   js:
     js/wind_tincan.wind_tincan.js: {}
+admin_tincan:
+  js:
+    js/wind_tincan.admin_tincan.js: {}
+  dependencies:
+    - wind/datatable
+admin_tincan_user_course:
+  js:
+    js/wind_tincan.admin_tincan_user_course.js: {}
+  dependencies:
+    - wind/datatable
