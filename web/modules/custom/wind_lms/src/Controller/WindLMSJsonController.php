@@ -26,7 +26,7 @@ class WindLMSJsonController extends ControllerBase {
     $user = $this->currentUser();
     $userAccount = User::load($user->id());
     $field_team = $userAccount->field_team->referencedEntities();
-    /** @var \Drupal\taxonomy\Entity\Term $teamEntities */
+    /** @var \Drupal\taxonomy\Entity\Term $term */
     $teamEntities = array_map (function($term){
       return [
         'tid' => $term->id(),

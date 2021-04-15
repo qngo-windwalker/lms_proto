@@ -126,6 +126,12 @@ class WindLMSDatatableController extends ControllerBase {
     return new JsonResponse(['data' => $collection]);
   }
 
+  /**
+   * wind_lms.datatable.courses:
+   *  path: 'wl-datatable/courses'
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   */
   public function getCourses() {
     $collection = [];
     $result = \Drupal::entityQuery('node')
@@ -167,6 +173,7 @@ class WindLMSDatatableController extends ControllerBase {
           'nid' => $nid,
           'rowNid' => 'nid-' . $nid,
           'field_learner_access' => $node->get('field_learner_access')->getString(),
+          'field_user_team' => $this->getCourseFieldUserTeam($node),
           'learners_data' => $this->getLearnersJsonData($node->get('field_learner')->referencedEntities()),
           'courses_data' => $this->getCourseJsonData($node->get('field_package_file')->referencedEntities()),
           'category_data' => $this->getCategoryJsonData($node->get('field_category')->referencedEntities()),
@@ -177,6 +184,39 @@ class WindLMSDatatableController extends ControllerBase {
     }
     return new JsonResponse(['data' => $collection]);
 
+  }
+
+  private function getCourseFieldUserTeam(Node $course) {
+    $field_user_team = $course->field_user_team->referencedEntities();
+    /** @var \Drupal\taxonomy\Entity\Term $term */
+    return array_map(function($term){
+      return [
+        'tid' => $term->id(),
+        'label' => $term->label(),
+        'vid' => $term->get('vid')->getString(),
+        'user' => $this->getUserByUserTeamTid(array($term->id()), $term->get('vid')->getString())
+      ];
+    }, $field_user_team);
+  }
+
+  private function getUserByUserTeamTid($tids) {
+    $userStorage = \Drupal::entityTypeManager()->getStorage('user');
+    $query = $userStorage->getQuery();
+    $result = $query
+      ->condition('field_team', $tids, 'IN')
+      ->condition('status', '1')
+      ->execute();
+
+    if ($result) {
+      $collection = [];
+      // Have remove the key from array so JsonResponse() convert it to array instead of object
+      foreach ($result as $uid){
+        $collection[] = ['uid' => $uid];
+      }
+      return $collection;
+    }
+
+    return [];
   }
 
   private function formatTime($timestamp) {

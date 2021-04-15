@@ -116,7 +116,21 @@ export default class DashboardAllCoursesTable extends Component{
       {
         title: 'Learners ',
         data: function ( row, type, val, meta ) {
-          return (row.field_learner_access == '1') ? 'Avail to All' : row.learners_data.length + ' Enrolled' ;
+          if(row.field_learner_access == '1'){
+            return 'Avail to All';
+          }
+
+          // If individual or custom team is selected
+          let output = '';
+          if (row.learners_data.length) {
+            output += row.learners_data.length + ' Learner(s) <br />';
+          }
+
+          if (row.field_user_team.length) {
+            output += row.field_user_team.length + ' Team(s)';
+          }
+
+          return output;
         },
         className : "learner-col"
       },
@@ -237,11 +251,46 @@ export default class DashboardAllCoursesTable extends Component{
   }
 
   format (rowData) {
+    let learnerConent;
+    if (rowData.field_learner_access == '0' && rowData.learners_data.length) {
+      learnerConent = (
+        <ul className="list-unstyled">
+          {rowData['learners_data'].map((obj, index) => {
+            return (
+              <li className="mb-3" key={index} data-uid={obj.uid}>
+                <a href={`/user/${obj.uid}`}>{obj.full_name}</a>
+              </li>
+            );
+          })}
+        </ul>
+      );
+    }
+
+    let teamContent;
+    if (rowData.field_learner_access == '0' && rowData.field_user_team.length) {
+      teamContent = (
+        <ul className="list-unstyled">
+          {rowData['field_user_team'].map((obj, index) => {
+            return (
+              <li className="mb-3" key={index} data-tid={obj.tid}>
+                {obj.label}
+              </li>
+            );
+          })}
+        </ul>
+      );
+    }
+
+    let availToAll;
+    if(rowData.field_learner_access == '1'){
+      availToAll = true;
+    }
+
     // return 'Full name: The child row can contain any data you wish, including links, images, inner tables etc.';
     return ReactDOMServer.renderToString(
       <div className="row-extra-info row">
         <div className="col-md-6">
-          <h6>Package File</h6>
+          <h5>Package File</h5>
           <ul className="list-unstyled">
             {rowData['courses_data'].map((obj, index) => {
               return (<li className="mb-3" key={index} data-uid={obj.uid}>{obj.title}</li>);
@@ -249,12 +298,15 @@ export default class DashboardAllCoursesTable extends Component{
           </ul>
         </div>
         <div className="col-md-6">
-          <h6> Learner </h6>
-          <ul className="list-unstyled">
-            {rowData['learners_data'].map((obj, index) => {
-              return (<li className="mb-3" key={index} data-uid={obj.uid}>{obj.full_name}</li>);
-            })}
-          </ul>
+          <h5> Availability </h5>
+          {availToAll
+            ? 'Available to All Learners'
+            :
+            <div>
+              <div>{learnerConent}</div>
+              <div>{teamContent}</div>
+            </div>
+          }
         </div>
       </div>
     );
