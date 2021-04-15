@@ -31,7 +31,8 @@ class WindLMSJSONStructure {
       return [
         'tid' => $term->id(),
         'label' => $term->label(),
-        'vid' => $term->get('vid')->getString()
+        'vid' => $term->get('vid')->getString(),
+        'ancestors' => self::getUserTeamAncestors($term->id())
       ];
     }, $field_team);
 
@@ -151,5 +152,23 @@ class WindLMSJSONStructure {
       'field_completion_verified' => $certNode->get('field_completion_verified')->getString(),
       'field_attachment' => $certNode->get('field_attachment')->getString(),
     ];
+  }
+
+  static function getUserTeamAncestors($tid) {
+    $ancestors = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($tid);
+    $list = [];
+    foreach ($ancestors as $term) {
+      if ($term->id() == $tid) {
+        continue;
+      }
+
+      $list[] = [
+        'tid' => $term->id(),
+        'label' => $term->label()
+      ];
+    }
+    // list is from current to ancestors,
+    // we flip it so we get oldest to latest.
+    return array_reverse($list);
   }
 }

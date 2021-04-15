@@ -31,7 +31,8 @@ class WindLMSJsonController extends ControllerBase {
       return [
         'tid' => $term->id(),
         'label' => $term->label(),
-        'vid' => $term->get('vid')->getString()
+        'vid' => $term->get('vid')->getString(),
+        'children' => $this->getTermChildren($term->get('vid')->getString(), $term->id())
       ];
     }, $field_team);
 
@@ -312,4 +313,28 @@ class WindLMSJsonController extends ControllerBase {
     $renderedAnchorContent = render($linkContent);
     return Link::fromTextAndUrl(Markup::create($renderedAnchorContent), $URL)->toString();
   }
+
+  /**
+   * @param $vid
+   * @param $parentTid
+   * @param mixed | int $depth // To get only immediate children, NULL to load entire tree
+   *
+   * @see https://drupal.stackexchange.com/a/258936
+   *
+   * @return mixed
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  private function getTermChildren($vid, $parentTid, $depth = NULL) {
+    $load_entities = TRUE; // True will return loaded entities rather than ids
+    $childTerms= \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid, $parentTid, $depth, $load_entities);
+    return array_map (function($term){
+      return [
+        'tid' => $term->id(),
+        'label' => $term->label(),
+        'vid' => $term->get('vid')->getString(),
+      ];
+    }, $childTerms);
+  }
+
 }

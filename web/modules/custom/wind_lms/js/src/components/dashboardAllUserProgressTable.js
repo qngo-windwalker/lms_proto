@@ -7,6 +7,7 @@ import Certificate from "./certificate";
 import {useHistory, useParams} from "react-router-dom";
 import TableRowDetail from "./tableRowDetail";
 import {CourseProgress, ProgressBar} from "./courseProgress";
+import {UserTeamBadge} from "./UIComponents";
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
@@ -69,17 +70,36 @@ export default class DashboardAllUserProgressTable extends Component{
     _.forEach(resData.userData, (value, index) => {
       // Add rowId attribute for datatable
       resData.userData[index].rowId = 'uid-' + value.user.uid;
+      resData.userData[index].currentUserTeamTid = this.props.currentUser.field_team[0].tid;
 
       if (displaySpecificTeam) {
+        // console.log(value.user.field_team);
+        // If learner does NOT belongs to a team, skip
+        if(!value.user.field_team.length){
+          return; // Same as continue
+        }
+
         // Compare 2 arrays of objects. Returns empty array of match. Returns items if there differences.
         // @see https://stackoverflow.com/a/40069773
-        var diff = _(value.user.field_team)
+        let diff = _(value.user.field_team)
           .differenceBy(this.props.displayTeam, 'tid', 'label')
           .map(_.partial(_.pick, _, 'tid', 'label'))
           .value();
 
         // If there's no differences, then it's a match.
         if (!diff.length) {
+          // The 'rowId' will is in the value because of Javacript array references.
+          filteredCollection.push(value);
+        }
+
+        // Children are the tree under the term in the hiearchy
+        let childrenDiff = _(value.user.field_team)
+          .differenceBy(this.props.displayTeam[0].children, 'tid', 'label')
+          .map(_.partial(_.pick, _, 'tid', 'label'))
+          .value();
+
+        // If there's no differences, then it's a match.
+        if (!childrenDiff.length) {
           // The 'rowId' will is in the value because of Javacript array references.
           filteredCollection.push(value);
         }
@@ -117,7 +137,7 @@ export default class DashboardAllUserProgressTable extends Component{
     let teamLabel;
     let displaySpecificTeam = this.displaySpecificTeam();
     if (displaySpecificTeam) {
-      teamLabel = <span className="lead">( {displaySpecificTeam[0].label} )</span>;
+      teamLabel = <span className="lead text-info badge badge-pill badge-outline badge-secondary"> {displaySpecificTeam[0].label}</span>;
     }
 
     return (
@@ -175,7 +195,7 @@ export default class DashboardAllUserProgressTable extends Component{
         data: function ( row, type, val, meta ) {
           let markup = '';
           _.forEach(row.user.field_team, (term) => {
-            markup += '<span class="badge badge-pill badge-outline badge-secondary mr-1 mb-1" data-tid="' + term.tid + '">' + term.label + '</span>';
+            markup += ReactDOMServer.renderToString(<UserTeamBadge currentUserTeamTid={row.currentUserTeamTid} tid={term.tid} label={term.label} ancestors={term.ancestors} />);
           });
           return markup;
         }

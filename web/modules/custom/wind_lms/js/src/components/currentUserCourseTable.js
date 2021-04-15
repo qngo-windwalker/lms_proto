@@ -178,7 +178,7 @@ export default class CurrentUserCourseTable extends Component{
     if(dataObj.data['package_files'].length > 1){
       return ReactDOMServer.renderToString(
         <>
-          <h6> &nbsp; </h6>
+          <h4> &nbsp; </h4>
           <ul className="list-unstyled">
             {dataObj.data['package_files'].map((obj, index) => {
               return (<li className="mb-3" key={index} dangerouslySetInnerHTML={{__html: obj['course_data']['progress']}}></li>);
@@ -213,7 +213,7 @@ class CurriculumNameColumn extends React.Component {
   render() {
     return (
       <>
-        <h6>{this.props.title}</h6>
+        <h5>{this.props.title}</h5>
         <ul className="list-unstyled ml-3">
           {this.props.courses.map((obj, index) => {
             return (<li className="mb-3"  key={index}><CourseNameColumn title={obj.data.title} packages={obj.data.package_files} /></li>);
@@ -248,7 +248,7 @@ class CourseNameColumn extends React.Component {
     // If this course has more than 1 zip files, render the zip course as a list item.
     return (
       <>
-        <h6>{this.props.title}</h6>
+        <h5>{this.props.title}</h5>
         <ul className="list-unstyled ml-3">
           {this.props.packages.map((obj, index) => {
             let zipPackage = obj;

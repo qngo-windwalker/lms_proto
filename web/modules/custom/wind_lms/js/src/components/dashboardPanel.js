@@ -57,7 +57,7 @@ export default class  DashboardPanel extends React.Component {
     return(
       <>
         {this.state.currentUser ? <CurrentUserCourseTable /> : <p>Loading...</p>}
-        {this.doesCurrentUserHasManagerAccess() && <DashboardAllUserProgressTable displayTeam={displayTeam} />}
+        {this.doesCurrentUserHasManagerAccess() && <DashboardAllUserProgressTable currentUser={this.state.currentUser} displayTeam={displayTeam} />}
         {this.doesCurrentUserHasManagerAccess() && <DashboardAllCoursesTable />}
         <Route path={["/user/:id", "/course/:nid/user/:uid/cert/upload"]} render={routeProps => { return (
           <Modala>

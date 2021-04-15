@@ -107,6 +107,7 @@ export default class SideModalContentCourseCertUpload extends React.Component {
 
     if(this.props.currentUser.roles.includes('administrator')
       || this.props.currentUser.roles.includes('company_admin')
+      || this.props.currentUser.roles.includes('manager')
     ) {
       return true
     }
