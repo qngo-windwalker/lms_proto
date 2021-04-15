@@ -47,7 +47,18 @@ export default class SideModalContentUser extends React.Component {
         <div className="modal-body">
           <ul className="list-group list-group-flush mb-3">
             {this.getListItemTag('Username', 'username')}
-            {this.getListItemTag('Email', 'mail')}
+            <li className="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 className="my-0">Email</h6>
+              </div>
+              <span className="text-muted"><a href={`mailto:${this.getUserValue('mail')}`}>{this.getUserValue('mail')}</a></span>
+            </li>
+            <li className="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 className="my-0">Role</h6>
+              </div>
+              <span className="text-muted text-capitalize">{this.getUserValue('roles')}</span>
+            </li>
             <li className="list-group-item d-flex justify-content-between lh-sm">
               <div>
                 <h6 className="my-0">Status</h6>
@@ -91,6 +102,10 @@ export default class SideModalContentUser extends React.Component {
 
     if (!this.state.user.hasOwnProperty(key)) {
       return '';
+    }
+
+    if(Array.isArray(this.state.user[key])){
+      return this.state.user[key][0];
     }
 
     return this.state.user[key];

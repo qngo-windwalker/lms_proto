@@ -166,6 +166,7 @@ class WindLMSJsonController extends ControllerBase {
       'mail' => $user->get('mail')->value,
       'access' => $user->get('access')->value,
       'login' => $user->get('login')->value,
+      'roles' => $user->getRoles('authenticated'),
       'user_courses' => $rows
     ];
   }
