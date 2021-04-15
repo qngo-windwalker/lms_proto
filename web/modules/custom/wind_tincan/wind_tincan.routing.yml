@@ -54,7 +54,7 @@ wind_tincan.certificate.id:
 wind_tincan.admin.tincan:
   path: '/admin/tincan'
   defaults:
-    _controller: '\Drupal\wind_tincan\Controller\ChNavCourseAdminTincanUserCourseController::getContent'
+    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminTincanUserCourseController::getContent'
     _title: 'Tincan'
   requirements:
     _permission: 'administer users'
