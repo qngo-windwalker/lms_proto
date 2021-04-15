@@ -17,12 +17,30 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WindLMSJsonController extends ControllerBase {
 
+  /**
+   * wind_lms.currentuser:
+   *  path: 'wl-json/currentuser'
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   */
   public function getCurrentUser(){
     $user = $this->currentUser();
+    $userAccount = User::load($user->id());
+    $field_team = $userAccount->field_team->referencedEntities();
+    /** @var \Drupal\taxonomy\Entity\Term $teamEntities */
+    $teamEntities = array_map (function($term){
+      return [
+        'tid' => $term->id(),
+        'label' => $term->label(),
+        'vid' => $term->get('vid')->getString()
+      ];
+    }, $field_team);
 
     return new JsonResponse([
       'uid' => $user->id(),
-      'name' => $user->getAccountName()
+      'name' => $user->getAccountName(),
+      'mail' => $user->getEmail(),
+      'roles' => $user->getRoles(),
+      'field_team' => $teamEntities,
     ]);
   }
 

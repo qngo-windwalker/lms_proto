@@ -64,11 +64,29 @@ export default class DashboardAllUserProgressTable extends Component{
   }
 
   parseJson(resData) {
-    _.forEach(resData.userData, function(value, index) {
+    let filteredCollection = [];
+    let displaySpecificTeam = this.displaySpecificTeam();
+    _.forEach(resData.userData, (value, index) => {
       // Add rowId attribute for datatable
       resData.userData[index].rowId = 'uid-' + value.user.uid;
-    })
-    this.initDataTable(resData.userData);
+
+      if (displaySpecificTeam) {
+        // Compare 2 arrays of objects. Returns empty array of match. Returns items if there differences.
+        // @see https://stackoverflow.com/a/40069773
+        var diff = _(value.user.field_team)
+          .differenceBy(this.props.displayTeam, 'tid', 'label')
+          .map(_.partial(_.pick, _, 'tid', 'label'))
+          .value();
+
+        // If there's no differences, then it's a match.
+        if (!diff.length) {
+          // The 'rowId' will is in the value because of Javacript array references.
+          filteredCollection.push(value);
+        }
+      }
+    });
+
+    displaySpecificTeam ? this.initDataTable(filteredCollection) : this.initDataTable(resData.userData);
   }
 
   isEnglishMode() {
@@ -80,10 +98,31 @@ export default class DashboardAllUserProgressTable extends Component{
     return true;
   }
 
+  displaySpecificTeam() {
+    if(this.props.hasOwnProperty('displayTeam')){
+      if( this.props.displayTeam == 'all'){
+        return false;
+      }
+
+      if (Array.isArray(this.props.displayTeam) && this.props.displayTeam.length) {
+        return this.props.displayTeam;
+      }
+
+    } else {
+      return false;
+    }
+  }
+
   render(){
+    let teamLabel;
+    let displaySpecificTeam = this.displaySpecificTeam();
+    if (displaySpecificTeam) {
+      teamLabel = <span className="lead">( {displaySpecificTeam[0].label} )</span>;
+    }
+
     return (
       <div className="section">
-        <h3 className="mb-3">{this.isEnglishMode() ? 'User Progress' : 'Progreso De Los Usuarios'}</h3>
+        <h3 className="mb-3">{this.isEnglishMode() ? 'User Progress' : 'Progreso De Los Usuarios'} {teamLabel}</h3>
         <table id="user-progress-tbl" ref="main" className="table table-user-progress responsive-enabled mb-5" data-striping="1" />
         <div className="clear-both">
           <a className="btn btn-primary " href="/admin/people/create?destination=/dashboard"><i className="fas fa-plus-circle mr-1"></i> Add User</a>

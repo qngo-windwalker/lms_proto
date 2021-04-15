@@ -26,7 +26,7 @@ export default class  DashboardPanel extends React.Component {
   }
 
   componentDidMount() {
-    this.load(`/wind/json/current-user`);
+    this.load(`/wl-json/currentuser`);
   }
 
   async load(url) {
@@ -48,10 +48,16 @@ export default class  DashboardPanel extends React.Component {
         </div>
       );
     }
+
+    let displayTeam = 'all';
+    if(this.state.currentUser.roles.includes('manager')){
+      displayTeam = this.state.currentUser.field_team;
+    }
+
     return(
       <>
         {this.state.currentUser ? <CurrentUserCourseTable /> : <p>Loading...</p>}
-        {this.doesCurrentUserHasManagerAccess() && <DashboardAllUserProgressTable />}
+        {this.doesCurrentUserHasManagerAccess() && <DashboardAllUserProgressTable displayTeam={displayTeam} />}
         {this.doesCurrentUserHasManagerAccess() && <DashboardAllCoursesTable />}
         <Route path={["/user/:id", "/course/:nid/user/:uid/cert/upload"]} render={routeProps => { return (
           <Modala>
