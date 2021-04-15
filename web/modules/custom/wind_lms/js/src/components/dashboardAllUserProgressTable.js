@@ -70,7 +70,8 @@ export default class DashboardAllUserProgressTable extends Component{
     _.forEach(resData.userData, (value, index) => {
       // Add rowId attribute for datatable
       resData.userData[index].rowId = 'uid-' + value.user.uid;
-      resData.userData[index].currentUserTeamTid = this.props.currentUser.field_team[0].tid;
+      // If the current user belongs to a team
+      resData.userData[index].currentUserTeamTid = this.props.currentUser.field_team.length ? this.props.currentUser.field_team[0].tid : 0;
 
       if (displaySpecificTeam) {
         // console.log(value.user.field_team);
