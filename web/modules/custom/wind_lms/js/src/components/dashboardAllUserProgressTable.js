@@ -70,8 +70,9 @@ export default class DashboardAllUserProgressTable extends Component{
     _.forEach(resData.userData, (value, index) => {
       // Add rowId attribute for datatable
       resData.userData[index].rowId = 'uid-' + value.user.uid;
-      // If the current user belongs to a team
-      resData.userData[index].currentUserTeamTid = this.props.currentUser.field_team.length ? this.props.currentUser.field_team[0].tid : 0;
+
+      // Add current user team(s)
+      resData.userData[index].currentUserTeams = this.props.currentUser.field_team;
 
       if (displaySpecificTeam) {
         // console.log(value.user.field_team);
@@ -135,15 +136,17 @@ export default class DashboardAllUserProgressTable extends Component{
   }
 
   render(){
-    let teamLabel;
+    let headerTeamLabels;
     let displaySpecificTeam = this.displaySpecificTeam();
     if (displaySpecificTeam) {
-      teamLabel = <span className="lead text-info badge badge-pill badge-outline badge-secondary"> {displaySpecificTeam[0].label}</span>;
+      headerTeamLabels = displaySpecificTeam.map((obj, index) => {
+        return (<span className="lead text-info badge badge-pill badge-outline badge-secondary mr-2 font-weight-lighter " key={index}> {obj.label}</span> );
+      });
     }
 
     return (
       <div className="section">
-        <h3 className="mb-3">{this.isEnglishMode() ? 'User Progress' : 'Progreso De Los Usuarios'} {teamLabel}</h3>
+        <h3 className="mb-3">{this.isEnglishMode() ? 'User Progress' : 'Progreso De Los Usuarios'} {headerTeamLabels}</h3>
         <table id="user-progress-tbl" ref="main" className="table table-user-progress responsive-enabled mb-5" data-striping="1" />
         <div className="clear-both">
           <a className="btn btn-primary " href="/admin/people/create?destination=/dashboard"><i className="fas fa-plus-circle mr-1"></i> Add User</a>
@@ -196,7 +199,7 @@ export default class DashboardAllUserProgressTable extends Component{
         data: function ( row, type, val, meta ) {
           let markup = '';
           _.forEach(row.user.field_team, (term) => {
-            markup += ReactDOMServer.renderToString(<UserTeamBadge currentUserTeamTid={row.currentUserTeamTid} tid={term.tid} label={term.label} ancestors={term.ancestors} />);
+            markup += ReactDOMServer.renderToString(<UserTeamBadge currentUserTeams={row.currentUserTeams} tid={term.tid} label={term.label} ancestors={term.ancestors} />);
           });
           return markup;
         }

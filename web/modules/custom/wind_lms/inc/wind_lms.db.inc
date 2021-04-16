@@ -84,20 +84,45 @@ function _wind_lms_load_all_courses_accessiable_to_user_by_field_learner_access(
   return $result;
 }
 
-function _wind_lms_load_all_courses_accessiable_to_user_by_field_user_team(\Drupal\user\Entity\User $user) {
+/**
+ * Get all of the course nodes associated with User's field_team.
+ *
+ * If the User's field_team taxonomy term is a child, get the courses for the taxonomy term parent as well.
+ * Any course belongs to the parent of the taxonomy term should be inherit by the child.
+ *
+ * @param \Drupal\user\Entity\User $user
+ *
+ * @return array|int
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function _wind_lms_load_all_courses_accessible_to_user_by_field_user_team(\Drupal\user\Entity\User $user) {
   // Gets all of the term tid from user
   $tids = array_map (function($item){
-      return $item['target_id'];
+    return $item['target_id'];
   }, $user->get('field_team')->getValue());
 
   if (empty($tids)) {
     return [];
   }
 
+  // Combine all the tids
+  $tidCollection = $tids;
+  foreach ($tids as $tid) {
+    // Get all ancestors (parent, grandparent, etc..)
+    $ancestors = _wind_get_term_ancestors($tid);
+    foreach ($ancestors as $ancestor) {
+      // Check so there's no duplicate
+      if (!in_array($ancestor['tid'], $tids)) {
+        $tidCollection[] = $ancestor['tid'];
+      }
+    }
+  }
+
   $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
   $query->condition('type', 'course');
   $query->condition('status', 1);
-  $query->condition('field_user_team', $tids, 'IN');
+  $query->condition('field_user_team', $tidCollection, 'IN');
   $result = $query->execute();
 
   // If no result, return empty array.

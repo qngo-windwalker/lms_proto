@@ -120,3 +120,44 @@ function _wind_gen_button_for_email($label, $link) {
   $markup .=  '</a>';
   return $markup;
 }
+
+/**
+ * @param $vid
+ * @param $parentTid
+ * @param mixed | int $depth // To get only immediate children, NULL to load entire tree
+ *
+ * @see https://drupal.stackexchange.com/a/258936
+ *
+ * @return mixed
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function _wind_get_term_children($vid, $parentTid, $depth = NULL) {
+  $load_entities = TRUE; // True will return loaded entities rather than ids
+  $childTerms= \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid, $parentTid, $depth, $load_entities);
+  return array_map (function($term){
+    return [
+      'tid' => $term->id(),
+      'label' => $term->label(),
+      'vid' => $term->get('vid')->getString(),
+    ];
+  }, $childTerms);
+}
+
+function _wind_get_term_ancestors($tid) {
+  $ancestors = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($tid);
+  $list = [];
+  foreach ($ancestors as $term) {
+    if ($term->id() == $tid) {
+      continue;
+    }
+
+    $list[] = [
+      'tid' => $term->id(),
+      'label' => $term->label()
+    ];
+  }
+  // list is from current to ancestors,
+  // we flip it so we get oldest to latest.
+  return array_reverse($list);
+}

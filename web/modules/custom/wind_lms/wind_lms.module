@@ -390,7 +390,7 @@ function _wind_lms_get_all_courses_by_user($user) {
   // Combined with of course nid(s) that are available to everyone - "Accessible To All Leaners" field checked
   $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_load_all_courses_accessiable_to_user_by_field_learner_access());
   // Combined with of course nid(s) that are available to user's team  - "User Team" field checked
-  $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_load_all_courses_accessiable_to_user_by_field_user_team($user));
+  $scorm_course_nids = array_merge($scorm_course_nids, _wind_lms_load_all_courses_accessible_to_user_by_field_user_team($user));
   return $scorm_course_nids;
 }
 
