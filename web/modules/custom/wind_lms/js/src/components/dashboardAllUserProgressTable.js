@@ -75,40 +75,41 @@ export default class DashboardAllUserProgressTable extends Component{
       resData.userData[index].currentUserTeams = this.props.currentUser.field_team;
 
       if (displaySpecificTeam) {
-        // console.log(value.user.field_team);
-        // If learner does NOT belongs to a team, skip
-        if(!value.user.field_team.length){
-          return; // Same as continue
-        }
+        // if (value.user.uid == 120) {
+        //   console.log(value.user.field_team);
+        // }
 
-        // Compare 2 arrays of objects. Returns empty array of match. Returns items if there differences.
-        // @see https://stackoverflow.com/a/40069773
-        let diff = _(value.user.field_team)
-          .differenceBy(this.props.displayTeam, 'tid', 'label')
-          .map(_.partial(_.pick, _, 'tid', 'label'))
-          .value();
-
-        // If there's no differences, then it's a match.
-        if (!diff.length) {
-          // The 'rowId' will is in the value because of Javacript array references.
-          filteredCollection.push(value);
-        }
-
-        // Children are the tree under the term in the hiearchy
-        let childrenDiff = _(value.user.field_team)
-          .differenceBy(this.props.displayTeam[0].children, 'tid', 'label')
-          .map(_.partial(_.pick, _, 'tid', 'label'))
-          .value();
-
-        // If there's no differences, then it's a match.
-        if (!childrenDiff.length) {
-          // The 'rowId' will is in the value because of Javacript array references.
+        if (this.isUserTeamsBelongToCurrentUserTeam(value.user.field_team, this.props.displayTeam)) {
           filteredCollection.push(value);
         }
       }
     });
 
     displaySpecificTeam ? this.initDataTable(filteredCollection) : this.initDataTable(resData.userData);
+  }
+
+  isUserTeamsBelongToCurrentUserTeam(userTeams, currentUserTeams) {
+    if(!userTeams.length){
+      return false;
+    }
+
+    // Compare 2 arrays of objects (User team and CURRENT user team.) Returns true if match.
+    let match = _.intersectionWith(userTeams, currentUserTeams, (obj, other) => { return obj.tid == other.tid;});
+    if (match.length) {
+      return true;
+    }
+
+    let childrenMatched;
+    // Check if user team is part of our children/grand-children/etc.. team
+    _.forEach(currentUserTeams, (value, index) => {
+      let childMatch = _.intersectionWith(userTeams, value.children, (obj, other) => { return obj.tid == other.tid;});
+      if(childMatch.length){
+        childrenMatched = true;
+        return; // same break;
+      }
+    });
+
+    return childrenMatched;
   }
 
   isEnglishMode() {

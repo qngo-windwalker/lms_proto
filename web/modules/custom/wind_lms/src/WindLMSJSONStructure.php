@@ -158,6 +158,7 @@ class WindLMSJSONStructure {
     $ancestors = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($tid);
     $list = [];
     foreach ($ancestors as $term) {
+      // Don't include ourselve in the tree
       if ($term->id() == $tid) {
         continue;
       }
