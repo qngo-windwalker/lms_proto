@@ -78,7 +78,7 @@ class CourseNode {
         return $item['target_id'];
       }, $node->get('field_user_team')->getValue());
       // Find all users belong in all the teams
-      $user_team_uids = _wind_lms_get_all_users_in_teams_by_tids($tids);
+      $user_team_uids = empty($tids) ? [] :  _wind_lms_get_all_users_in_teams_by_tids($tids);
       $user_team_uids = $this->array_key_same_as_value($user_team_uids);
 
       // Combine uids of field_team and field_learner
