@@ -29,7 +29,7 @@ export default class SiteTopHeader extends Component{
         <div id="header-top-right" className="col-md-4">
           <nav className="navbar navbar-expand-lg">
             <ul className="navbar-nav mr-auto">
-              <li className="nav-item"><LanguageSwitcher /></li>
+              {/*<li className="nav-item"><LanguageSwitcher /></li>*/}
               <li className="nav-item"><UserMenu /></li>
             </ul>
           </nav>
