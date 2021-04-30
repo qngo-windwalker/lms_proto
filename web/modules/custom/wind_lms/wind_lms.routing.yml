@@ -23,6 +23,19 @@ wind_lms.course.node:
     _title_callback: \Drupal\wind_lms\Controller\WindLMSCourseController::getTitle
   requirements:
     _permission: 'access content'
+wind_lms.course.user:
+  path: course/{node}/user/{user}
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSCourseUserController::getContent
+    _title_callback: \Drupal\wind_lms\Controller\WindLMSCourseUserController::getTitle
+  requirements:
+    _role: 'authenticated'
+  options:
+    parameters:
+      node:
+        type: entity:node
+      user:
+        type: entity:user
 wind_lms.course.user.cert.upload:
   path: course/{node}/user/{user}/cert/upload
   defaults:
