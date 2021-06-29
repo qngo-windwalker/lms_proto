@@ -27,31 +27,6 @@ class WindLMSCourseUserController extends ControllerBase{
    * @return string[]
    */
   public function getContent(NodeInterface $node, UserInterface $user){
-    $header = [
-      array('data' => 'First Name', 'class' => 'node-first-name-header'),
-      array('data' => 'Last Name', 'class' => 'node-last-name-header'),
-      array('data' => 'Email', 'class' => 'node-email-header'),
-      array('data' => 'Last Login', 'class' => 'node-last-login-header'),
-      array('data' => 'Last Accessed', 'class' => 'node-last-accessed-header'),
-      array('data' => 'Operations', 'class' => 'node-operations-header'),
-    ];
-
-    $tablConfig = [
-      '#type' => 'table',
-      '#header' => $header,
-      '#rows' => array(),
-      '#empty' => t('There are no data.'),
-      '#attributes' => array(
-        'id' => 'course-tbl',
-        'class' => array('table' ,'table-wind-theme-strip')
-      ),
-      '#attached' => array(
-        'library' => array(
-//          'wind_lms/course'
-        ),
-      )
-    ];
-
     $packageMarkup = '';
     $field_package_file = $node->get('field_package_file');
     // If there's no zip package attached to this node,
@@ -166,15 +141,12 @@ class WindLMSCourseUserController extends ControllerBase{
         'data' => array(
           'scormId' => $scorm->id,
           'value' => $result->value,
-          'operations' => '',
+          'operations' => "<a class=\"btn btn-danger\" href=\"\"'>Delete</a>",
         )
       ];
     }
-
-
     return $rows;
   }
-
 
   private function getTincanRecords($tincanActiviyId, User $user) {
     $header = [

@@ -169,7 +169,7 @@ function _wind_lms_tincan_gen_static_course_link($course_folder) {
 function _wind_lms_tincan_build_course_link($title, $path, $tincan) {
   $linkContent = '<i class="fas fa-external-link-alt align-self-center pr-1"></i> ' . "<span> {$title}</span>";
   $renderedAnchorContent = render($linkContent);
-  $dataCourseHref = _wind_lms_tincan_gen_course_link($path);
+  $dataCourseHref = _wind_lms_tincan_gen_course_link($path, $tincan);
   $url = Url::fromUserInput(
     $path,
     [
@@ -188,7 +188,7 @@ function _wind_lms_tincan_build_course_link($title, $path, $tincan) {
   );
 }
 
-function _wind_lms_tincan_gen_course_link($path) {
+function _wind_lms_tincan_gen_course_link($path, $tincan) {
   $currentUser = \Drupal::currentUser();
   $schemaAndHost = _wind_lms_get_scheme_and_http_host();
 
@@ -207,5 +207,6 @@ function _wind_lms_tincan_gen_course_link($path) {
   $link = $path . '?';
   $link .= 'endpoint=' . $schemaAndHost . '/course/tcapi';
   $link .= '&actor=' . urlencode($actorJson);
+  $link .= '&activity_id=' . urlencode($tincan->activity_id);
   return $link;
 }

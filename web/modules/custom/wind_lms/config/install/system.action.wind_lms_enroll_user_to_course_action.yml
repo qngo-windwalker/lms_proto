@@ -1,0 +1,11 @@
+uuid: 8c2a2a7e-2a34-49eb-8cbd-24d0186f2ede
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: wind_lms_enroll_user_to_course_action
+label: 'Enroll the selected user(s) to course'
+type: user
+plugin: wind_lms_enroll_user_to_course_action
+configuration: {  }

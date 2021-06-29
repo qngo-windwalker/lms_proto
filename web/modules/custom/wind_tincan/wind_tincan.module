@@ -126,6 +126,7 @@ function _wind_tincan_gen_course_link($course_folder) {
   $link = $module_path . '/course/' . $course_folder . '?';
   $link .= 'endpoint=' . $schemaAndHost . '/course/tcapi';
   $link .= '&actor=' . urlencode($actorJson);
+//  $link .= '&activity_id=' . urlencode($tincan->activity_id); // Need to add this
   return $link;
 }
 

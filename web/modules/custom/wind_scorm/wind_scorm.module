@@ -79,7 +79,8 @@ function wind_scorm_get_lanuch_link_rendable_array($scorm_id, $label = 'Launch')
         ),
       ),
     ),
-    'url' => '/scorm-course/' . $scorm_id . '/take'
+    'url' => '/scorm-course/' . $scorm_id . '/take',
+    'data-course-href' => '/scorm-course/' . $scorm_id . '/take'
   ];
 }
 
