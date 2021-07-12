@@ -161,3 +161,11 @@ function _wind_get_term_ancestors($tid) {
   // we flip it so we get oldest to latest.
   return array_reverse($list);
 }
+
+/**
+ * @return \Drupal\Core\Entity\EntityBase|\Drupal\Core\Entity\EntityInterface|\Drupal\user\Entity\User|null
+ */
+function _wind_get_current_login_user() {
+  $uid = \Drupal::currentUser()->id();
+  return \Drupal\user\Entity\User::load($uid);
+}
