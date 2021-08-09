@@ -251,10 +251,11 @@ class CourseNameColumn extends React.Component {
         <h5>{this.props.title}</h5>
         <ul className="list-unstyled ml-3">
           {this.props.packages.map((obj, index) => {
+            {console.log(obj)}
             let zipPackage = obj;
             return (
               <li className="mt-4" key={index}>
-                <ActivityLink className="wind-scorm-popup-link" progress={zipPackage.course_data.progress}  title={this.props.title} data-course-href={zipPackage.activity_link.url} href={zipPackage.activity_link.url} />
+                <ActivityLink className="wind-scorm-popup-link" progress={zipPackage.course_data.progress}  title={obj.file_name.replace('.zip', '')} data-course-href={zipPackage.activity_link.url} href={zipPackage.activity_link.url} />
               </li>
             );
           })}
