@@ -36,7 +36,7 @@
     "@babel/preset-react": "^7.10.1",
     "@babel/runtime": "^7.10.2",
     "babel-loader": "^8.1.0",
-    "datatables.net": "^1.10.22",
+    "datatables.net": "^1.11.3",
     "jquery": "^3.5.1",
     "redux-devtools": "^3.5.0",
     "webpack": "^4.43.0",
