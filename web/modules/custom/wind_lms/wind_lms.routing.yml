@@ -9,6 +9,13 @@ wind_lms.learner_dashboard:
   requirements:
     _user_is_logged_in: 'TRUE'
     _permission: 'access content'
+wind_lms.import_user:
+  path: 'import-user'
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSImportUserController:getContent
+    _title: 'Import User'
+  requirements:
+    _permission: 'administer users'
 wind_lms.course:
   path: 'course'
   defaults:
@@ -256,7 +263,13 @@ wind_lms.datatable.courses:
     _title: 'Courses'
   requirements:
     _role: 'authenticated'
-
+skywind.api.import.json:
+  path: 'wind-lms/api/import/json'
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSImportController:getContent
+  requirements:
+    _permission: 'administer users'
+  methods: [POST]
 #################################################
 ## Admin
 #################################################
