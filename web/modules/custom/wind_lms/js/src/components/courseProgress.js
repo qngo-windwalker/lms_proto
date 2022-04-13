@@ -32,9 +32,18 @@ export class CourseProgress extends Component {
 export function ProgressBar(props){
   let percentage = Math.floor((props.numerator / props.total) * 100);
   return (
-    <div className="progress mt-2">
-      <div className="progress-bar bg-success" role="progressbar" style={{width: percentage + '%'}} aria-valuenow={percentage} aria-valuemin="0" aria-valuemax="100">
-        <span className="d-none" aria-hidden="true">{percentage}%</span>
+    <div className={`container-fluid`}>
+      <div className={`row`}>
+        <div className={`col-md-9`}>
+          <div className="progress mt-2">
+            <div className="progress-bar bg-success" role="progressbar" style={{width: percentage + '%'}} aria-valuenow={percentage} aria-valuemin="0" aria-valuemax="100">
+              <span className="d-none" aria-hidden="true">{percentage}%</span>
+            </div>
+          </div>
+        </div>
+        <div className={`col-md-3`}>
+          <span className={`mt-1 text-left`}>{percentage}%</span>
+        </div>
       </div>
     </div>
   );

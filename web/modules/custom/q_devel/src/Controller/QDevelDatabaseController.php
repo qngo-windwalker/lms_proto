@@ -230,7 +230,6 @@ class QDevelDatabaseController{
         }
       }
     }
-
   }
 
   private function databaseInsert() {
@@ -258,6 +257,32 @@ class QDevelDatabaseController{
     ));
 
     $insert_query->execute();
+  }
+
+  /**
+   * @see https://www.drupal.org/docs/drupal-apis/update-api/updating-database-schema-andor-data-in-drupal-8
+   */
+  public function createNewDBTable() {
+    $spec = [
+      'description' => 'My description',
+      'fields' => [
+        'myfield1' => [
+          'description' => 'Myfield1 description.',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+          'default' => '',
+        ],
+        'myfield2' => [
+          'description' => 'Myfield2 description',
+          'type' => 'text',
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['myfield1'],
+    ];
+    $schema = Database::getConnection()->schema();
+    $schema->createTable('mytable2', $spec);
   }
 
 }

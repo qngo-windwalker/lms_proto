@@ -173,7 +173,6 @@ class QDevelUserController{
       'title' => 'New Node',
       'body' => 'Node body content',
       'type' => 'article',
-      'field_image' => ['target_id' => $file->id(), 'title' => 'This is a file title']
     ));
     $node->save();
   }

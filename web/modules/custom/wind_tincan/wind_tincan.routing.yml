@@ -44,13 +44,13 @@ wind_tincan.tcapi.activities.get_state:
     _controller: \Drupal\wind_tincan\Controller\WindTincanAPIActivitiesStateController::getActivitiesState
   requirements:
     _role: 'authenticated'
-wind_tincan.certificate.id:
-  path: certificate/{statement_id}
-  defaults:
-    _controller: \Drupal\wind_tincan\Controller\WindTincanCertificateIdController::getContent
-    _title: 'Certificate'
-  requirements:
-    _permission: 'access content'
+#wind_tincan.certificate.id:
+#  path: certificate/{statement_id}
+#  defaults:
+#    _controller: \Drupal\wind_tincan\Controller\WindTincanCertificateIdController::getContent
+#    _title: 'Certificate'
+#  requirements:
+#    _permission: 'access content'
 wind_tincan.admin.tincan:
   path: '/admin/tincan'
   defaults:

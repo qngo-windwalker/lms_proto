@@ -1,5 +1,6 @@
 <?php
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
@@ -7,6 +8,7 @@ use Drupal\Core\Link;
 use Drupal\node\NodeInterface;
 use Drupal\user\Entity\User;
 use Drupal\Core\Site\Settings;
+use Drupal\wind_tincan\Entity\TincanStatement;
 
 //include_once('./inc/wind_lms.tincan.inc');
 module_load_include('inc', 'wind_lms', 'inc/wind_lms.db');
@@ -535,9 +537,23 @@ function _wind_lms_encode_certificate_id($courseData) {
 function _wind_lms_decode_certificate_id($id) {
   $codes = explode('AA', $id);
   $nid = str_replace('CN', '', $codes[0]);
+  $packageType = substr($codes[1], 0, 2)  == 'TC' ? 'tincan' : 'scorm';
+  $packageDataId = substr($codes[1], 2);
+  $completedRecord = [];
+
+  if ($packageType == 'tincan') {
+    $completedRecord = _wind_lms_get_tincan_completed_record_by_id($packageDataId);
+  }
+
+  if ($packageType == 'scorm') {
+    $completedRecord = _wind_lms_get_scorm_completed_record_by_id($packageDataId);
+  }
+
   return [
     'node_nid' => $nid,
-    'data' => $codes
+    'data' => $codes,
+    'type' => $packageType,
+    'completedRecord' => $completedRecord
   ];
 }
 
@@ -570,4 +586,48 @@ function _wind_lms_get_ilt_lanuch_link_rendable_array( \Drupal\node\Entity\Node 
     ),
     'url' => '/node/' . $node->id()
   ];
+}
+
+function _wind_lms_get_tincan_completed_record_by_id($statement_id) {
+  $result = \Drupal::entityQuery('tincan_statement')
+    ->condition('statement_id', $statement_id)
+    ->execute();
+  if (!$result) {
+
+  }
+  $statement = TincanStatement::load(_wind_lms_array_first_child_value($result));
+  $jsonValue = $statement->get('json')->value;
+  $json_array = Json::decode($jsonValue);
+  return $json_array;
+}
+
+function _wind_lms_get_scorm_completed_record_by_id($id) {
+  $package_result = \Drupal::database()->select('opigno_scorm_packages', 'o')
+    ->fields('o', [])
+    ->condition('id', $id)
+    ->execute()
+    ->fetchAll();
+  if (empty($package_result)) {
+    return [];
+  }
+
+  $result = \Drupal::database()->select('opigno_scorm_scorm_cmi_data', 'o')
+    ->fields('o', [])
+    ->condition('o.scorm_id', $id)
+    ->execute()
+    ->fetchAll();
+
+  $records = array();
+  foreach ($result as $record){
+    if($record->cmi_key == 'cmi.completion_status'){
+      $records[$record->uid]['cmi.completion_status'] = $record->value;
+      return  $records;
+    }
+  }
+  return $records;
+}
+
+function _wind_lms_array_first_child_value($arr) {
+  $reverse = array_reverse($arr);
+  return array_pop($reverse);
 }

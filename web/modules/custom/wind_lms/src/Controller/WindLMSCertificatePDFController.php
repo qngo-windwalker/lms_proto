@@ -21,6 +21,28 @@ class WindLMSCertificatePDFController extends ControllerBase{
     $idDecoded = _wind_lms_decode_certificate_id($certificateId);
     $courseNode = \Drupal\node\Entity\Node::load($idDecoded['node_nid']);
 
+    $date =  date('m/d/Y');
+    if ($idDecoded['type'] == 'tincan') {
+      // $idDecoded['completedRecord']['timestamp'] example: 2022-04-12T02:54:36.580Z
+      // Only take the yyyy-mm-dd from
+      $timestamp =  substr($idDecoded['completedRecord']['timestamp'], 0, 10);
+      $timestampExploded = explode('-', $timestamp);
+      $date = "{$timestampExploded[1]}/{$timestampExploded[2]}/{$timestampExploded[0]}";
+    }
+
+    if ($idDecoded['type'] == 'tincan') {
+      // $idDecoded['completedRecord']['timestamp'] example: 2022-04-12T02:54:36.580Z
+      // Only take the yyyy-mm-dd from
+      $timestamp =  substr($idDecoded['completedRecord']['timestamp'], 0, 10);
+      $timestampExploded = explode('-', $timestamp);
+      $date = "{$timestampExploded[1]}/{$timestampExploded[2]}/{$timestampExploded[0]}";
+    }
+
+    // SCORM does NOT provide date of completion
+    if ($idDecoded['type'] == 'scorm') {
+      $date = "";
+    }
+
     // Include the main TCPDF library (search for installation path).
     // create new PDF document
     // L = landscape
@@ -87,9 +109,8 @@ class WindLMSCertificatePDFController extends ControllerBase{
 //    $courseTitle = '<span style="font-size:28pt;">Very very merry berry cherry carry hairry long title 20120</span>';
     $pdf->writeHTMLCell(0, 0, 0, '135', $courseTitle, 0, 1, 0, true, 'C', true);
 
-    //Todo Add real completion date.
 //    $completionData = '<span style="font-size:12pt;">'. date('m/d/Y', strtotime($json_array['timestamp'] )) . '</span>';
-    $completionData = '<span style="font-size:12pt;">'. date('m/d/Y') . '</span>';
+    $completionData = '<span style="font-size:12pt;">'. $date . '</span>';
     $pdf->writeHTMLCell(0, 0, '105', '185', $completionData, 0, 1, 0, true, '', true);
 
     $statementIdMarkup = '<span style="font-size:12pt;">' . $certificateId . '</span>';

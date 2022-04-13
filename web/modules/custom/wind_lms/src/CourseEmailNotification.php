@@ -33,7 +33,7 @@ class CourseEmailNotification {
     $params['subject'] = 'New enrollment';
     $params['from_name'] = $site_mail;
     $params['to_name'] = $site_name;
-    $params['reply_to'] = $site_mail;
+//    $params['reply_to'] = $site_mail;
     $params['message'] = 'New enrollment: ' . $node->label();
     $params['node_title'] = $node->label() ;
     $params['body'] = $greeting . 'A new training course is available to you. Please click on the link below to login and take the course: <br /><br /> '  . $courseLink . '<br /><br />' . $closingStatment . $debugInfo;

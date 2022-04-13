@@ -1,2 +1,29 @@
 <?php
 
+function q_devel_email_example() {
+  $site_name = \Drupal::config('system.site')->get('name');
+  $site_mail = \Drupal::config('system.site')->get('mail');
+
+  $renderable = [
+    '#theme' => 'wind_email',
+    '#body' => 'You have been enrolled to course: ' ,
+  ];
+  $rendered = \Drupal::service('renderer')->renderPlain($renderable);
+
+  $params = [];
+  /* @var \Drupal\Core\Mail\MailManagerInterface $mailManager */
+  $mailManager = \Drupal::service('plugin.manager.mail');
+  //    $to = $user->get('mail')->value;
+  $to = 'quan21@yahoo.com';
+  $params['to'] = $to;
+  $params['subject'] = 'New enrollment';
+  $params['from_name'] = $site_mail;
+  $params['to_name'] = $site_name;
+  $params['reply_to'] = $site_mail;
+  //    $params['body'] = check_markup('You have been enrolled to course: ' , 'plain_text');
+  $params['body'] = $rendered;
+  $langcode = \Drupal::currentUser()->getPreferredLangcode();
+
+  // Note: 1st param module name needed so MailManager will invoke hook_mail (!!this hook is required !!!)
+  $result = $mailManager->mail('wind_lms', 'create_article', $to, $langcode, $params, $site_mail);
+}
