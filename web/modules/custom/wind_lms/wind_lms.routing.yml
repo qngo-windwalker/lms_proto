@@ -9,6 +9,14 @@ wind_lms.learner_dashboard:
   requirements:
     _user_is_logged_in: 'TRUE'
     _permission: 'access content'
+# This page serves as a redirect to dashboard.
+wind_lms.home:
+  path: welcome
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSWelcomeController:getContent
+    _title_callback: \Drupal\wind_lms\Controller\WindLMSWelcomeController:getTitle
+  requirements:
+    _access: 'TRUE'
 wind_lms.import_user:
   path: 'import-user'
   defaults:
