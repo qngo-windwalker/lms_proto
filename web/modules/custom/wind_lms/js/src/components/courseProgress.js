@@ -30,7 +30,8 @@ export class CourseProgress extends Component {
 }
 
 export function ProgressBar(props){
-  let percentage = Math.floor((props.numerator / props.total) * 100);
+  // Note: Stupid Javascript:  0 / 0 equal NaN
+  let percentage = props.numerator == 0 ? 0 : Math.floor((props.numerator / props.total) * 100);
   return (
     <div className={`container-fluid`}>
       <div className={`row`}>

@@ -75,7 +75,6 @@ export class SimpleFileInput extends React.Component {
   }
 
   onChangeHandler(event){
-    console.log(event.target);
     // if(this.maxSelectFile(event) && this.checkMimeType(event) && this.checkFileSize(event)){
     if(this.maxSelectFile(event) && this.checkFileSize(event)){
       this.setState({
