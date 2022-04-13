@@ -77,6 +77,20 @@ function wind_lms_node_insert(NodeInterface $node) {
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ */
+function wind_lms_tincan_state_insert(Drupal\Core\Entity\EntityInterface $entity) {
+  _wind_lms_delete_user_course_cache_by_tincan_state($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ */
+function wind_lms_tincan_statement_insert(Drupal\Core\Entity\EntityInterface $entity) {
+  _wind_lms_delete_user_course_cache_by_tincan_statement($entity);
+}
+
+/**
  * Implements hook_ENTITY_TYPE_update() for node entities.
  * @param \Drupal\node\NodeInterface $node
  *
@@ -115,17 +129,34 @@ function wind_lms_user_update(Drupal\user\Entity\User $user) {
 }
 
 /**
+ * Implements hook_entity_delete().
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ */
+function wind_lms_entity_delete(Drupal\Core\Entity\EntityInterface $entity) {
+  switch ($entity->getEntityType()->id()) {
+    case 'tincan_state':
+      _wind_lms_delete_user_course_cache_by_tincan_state($entity);
+      break;
+
+    case 'tincan_statement':
+      _wind_lms_delete_user_course_cache_by_tincan_statement($entity);
+      break;
+  }
+}
+
+/**
  * Implements hook_form_alter().
  *
  * Applies access condidtion to fields for certain user roles.
  */
 function wind_lms_form_alter(&$form, \Drupal\Core\Form\FormStateInterface &$form_state, $form_id) {
   // If current user is on /user/[uid]/edit page
-  if ($form_id == 'user_form') {
+  if ($form_id == 'user_form' || $form_id == 'user_register_form') {
     $current_user = _wind_get_current_login_user();
-
     $haystack = $current_user->getRoles();
-    $needles = ['admin', 'administrator', 'manager'];
+
+    $needles = ['admin', 'administrator', 'company_admin', 'manager'];
     // Disable form field if user do NOT have the right role/s.
     if(count(array_intersect($haystack, $needles)) == 0){
       $form['user_picture']['#access'] = false;
@@ -133,6 +164,17 @@ function wind_lms_form_alter(&$form, \Drupal\Core\Form\FormStateInterface &$form
       $form['timezone']['#access'] = false;
       $form['language']['#access'] = false;
     }
+
+    if(count(array_intersect($haystack, ['admin', 'administrator'])) == 0){
+      unset($form['account']['roles']['#options']['admin']);
+      unset($form['account']['roles']['#options']['administrator']);
+      unset($form['account']['roles']['#options']['company_admin']);
+    }
+
+    if(count(array_intersect($haystack, ['admin', 'administrator', 'company_admin'])) == 0){
+      unset($form['account']['roles']['#options']['company_admin']);
+    }
+
   }
 }
 

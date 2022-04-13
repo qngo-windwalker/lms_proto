@@ -210,3 +210,37 @@ function _wind_lms_tincan_gen_course_link($path, $tincan) {
   $link .= '&activity_id=' . urlencode($tincan->activity_id);
   return $link;
 }
+
+/**
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function _wind_lms_delete_user_course_cache_by_tincan_state(Drupal\Core\Entity\EntityInterface $entity) {
+  $activity_id = $entity->get('activity_id')->getString();
+  $agentId = $entity->get('field_tincan_agent')->getString();
+  //Theory: When tincan add bookmarking data, it doesn't contain agent info.
+  if ($agentId == '') {
+    return;
+  }
+  $user = _wind_tincan_load_user_id_by_agent_id($agentId);
+  $course_nids = _wind_tincan_get_course_activity_id($activity_id);
+  \Drupal\wind_lms\CourseNode::deleteMultipleUserCoureCaches($user->id(), $course_nids);
+}
+
+/**
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *
+ */
+function _wind_lms_delete_user_course_cache_by_tincan_statement(Drupal\Core\Entity\EntityInterface $entity) {
+  $agentId = $entity->get('field_tincan_actor')->getString();
+  $user = _wind_tincan_load_user_id_by_agent_id($agentId);
+  if (!$user) {
+    return;
+  }
+  $activity_id = $entity->get('field_tincan_object')->getValue()[0]['id'];
+  $course_nids = _wind_tincan_get_course_activity_id($activity_id);
+  \Drupal\wind_lms\CourseNode::deleteMultipleUserCoureCaches($user->id(), $course_nids);
+}
+

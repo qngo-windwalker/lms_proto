@@ -46,6 +46,20 @@ class CourseNode {
   }
 
   /**
+   * Clear course node caches belongs to user.
+   *
+   * @param int $uid
+   * @param $courseIds
+   */
+  static function deleteMultipleUserCoureCaches(int $uid, $courseIds) {
+    foreach ($courseIds as $course_nid) {
+      // Clear the cache. Cache set @ \Drupal\wind_lms\CourseNode::getUserCourse()
+      $cid = 'wind_lms:user:' . $uid . ':node' . $course_nid;
+      \Drupal::cache()->delete($cid);
+    }
+  }
+
+  /**
    * Invoked by wind_lms_node_insert()
    * @param \Drupal\node\NodeInterface $node
    */

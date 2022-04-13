@@ -174,6 +174,28 @@ function _wind_tincan_get_all_courses_definition() {
   ];
 }
 
+function _wind_tincan_load_user_id_by_agent_id($agent_id) {
+  $agent = \Drupal\wind_tincan\Entity\TincanAgent::load($agent_id);
+  $array = $agent->toArray();
+  $name = $agent->get('name')->getValue();
+  $account_name = $agent->get('account_name')->getValue();
+  if (empty($account_name)) {
+    return FALSE;
+  }
+
+  // Turns 'admin|quan21@yahoo.com' to array(admin, 'quan21@yahoo.com');
+  $accountInfo = explode('|', $account_name[0]['value']);
+  $result = _wind_tincan_get_user_by_username_and_email($accountInfo[0], $accountInfo[1]);
+  return empty($result) ? FALSE :  User::load(array_shift($result));
+}
+
+function _wind_tincan_get_user_by_username_and_email($username, $email) {
+  $query = \Drupal::entityTypeManager()->getStorage('user')->getQuery();
+  $query->condition('name', $username);
+  $query->condition('mail', $email);
+  return $query->execute();
+}
+
 /**
  * Return array of course paid by the user
  * @param $user
@@ -264,6 +286,58 @@ function _wind_tincan_add_tincan_course_data($user, string $TC_COURSE_ID) {
 }
 
 /**
+ * @param $tincanActiviyId
+ * @param \Drupal\user\Entity\User $user
+ *
+ * @return array|false|int
+ */
+function _wind_tincan_get_all_statements_by_activity_id_for_user($tincanActiviyId, User $user){
+  $agentID = _wind_tincan_get_tincan_agent_id_by_user($user);
+  if (!$agentID) {
+    return FALSE;
+  }
+
+  $query = \Drupal::entityQuery('tincan_statement');
+  $query->condition('field_tincan_actor', $agentID);
+  $query->condition('field_tincan_object.id', $tincanActiviyId);
+  $query->condition('field_tincan_object.type', 'Activity');
+  // Sort latest to oldest
+  $query->sort('timestamp' , 'DESC');
+  $result = $query->execute();
+
+  return $result ? $result : FALSE;
+}
+
+/**
+ * @param $tincanActiviyId
+ * @param $agentID
+ *
+ * @return array|false|int
+ */
+function _wind_tincan_get_all_statements_by_activity_id_and_agent_id($tincanActiviyId, $agentID){
+  $query = \Drupal::entityQuery('tincan_statement');
+  $query->condition('field_tincan_actor', $agentID);
+  $query->condition('field_tincan_object.id', $tincanActiviyId);
+  $query->condition('field_tincan_object.type', 'Activity');
+  // Sort latest to oldest
+  $query->sort('timestamp' , 'DESC');
+  $result = $query->execute();
+
+  return $result ? $result : FALSE;
+}
+
+function _wind_tincan_get_all_states_by_activity_id_and_agent_id($tincanActiviyId, $agentID){
+  $query = \Drupal::entityQuery('tincan_state');
+  $query->condition('field_tincan_agent', $agentID);
+  $query->condition('activity_id', $tincanActiviyId);
+  // Sort latest to oldest
+  $query->sort('updated' , 'DESC');
+  $result = $query->execute();
+
+  return $result ? $result : FALSE;
+}
+
+/**
  * The the paid user license role
  * @param $uid
  *
@@ -285,4 +359,53 @@ function _wind_tincan_get_user_paid_role($uid) {
   }
 
   return '';
+}
+
+/**
+ * @param string $tincanActiviyId The id attribute in tincan.xml <activity id="xxx" />
+ *
+ * @return mixed
+ */
+function _wind_tincan_file_id_by_activity_id(string $tincanActiviyId){
+  $db = \Drupal::database();
+  $query = $db->select('wind_tincan_type_properties', 'o');
+  $query->fields('o', []);
+  $query->condition('activity_id', $tincanActiviyId);
+  return $query->execute()->fetchAll();
+}
+
+/**
+ * @param $fid
+ *
+ * @return array|int
+ */
+function _wind_tincan_get_course_nids_by_tincan_fid($fid) {
+  $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+  $query->condition('type', 'course');
+  $query->condition('field_package_file', $fid, 'IN');
+  return $query->execute();
+}
+
+/**
+ * @param $activity_id
+ *
+ * @return array
+ */
+function _wind_tincan_get_course_activity_id($activity_id) {
+  $data = array();
+  $tincanTypeObjCollection = _wind_tincan_file_id_by_activity_id($activity_id);
+  foreach ($tincanTypeObjCollection as $tincanTypeObj) {
+    // Get the course node that the package uploaded to.
+    $course_nids = _wind_tincan_get_course_nids_by_tincan_fid($tincanTypeObj->id);
+    if (empty($course_nids)) {
+      continue;
+    }
+    // Definitely an easier and more elegant way
+    foreach ($course_nids as $course_nid) {
+      if (!in_array($course_nid, $data)) {
+        $data[] = $course_nid;
+      }
+    }
+  }
+  return $data;
 }

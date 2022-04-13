@@ -4,10 +4,10 @@ import _ from 'lodash';
 import axios from "axios";
 import ReactDOMServer from "react-dom/server";
 import Certificate from "./certificate";
-import {useHistory, useParams} from "react-router-dom";
 import TableRowDetail from "./tableRowDetail";
 import {CourseProgress, ProgressBar} from "./courseProgress";
 import {UserTeamBadge} from "./UIComponents";
+import {Spinner} from "./GUI";
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
@@ -26,7 +26,10 @@ require( 'datatables.net-buttons/js/buttons.html5.js' )();
 export default class DashboardAllUserProgressTable extends Component{
   constructor(props) {
     super(props);
-    this.state = { tableRow: [] };
+    this.state = {
+      tableRow: [],
+      isLoaded: false,
+    };
   };
 
   componentDidMount() {
@@ -85,6 +88,7 @@ export default class DashboardAllUserProgressTable extends Component{
       }
     });
 
+    this.setState({isLoaded: true});
     displaySpecificTeam ? this.initDataTable(filteredCollection) : this.initDataTable(resData.userData);
   }
 
@@ -149,6 +153,7 @@ export default class DashboardAllUserProgressTable extends Component{
       <div className="section">
         <h3 className="mb-3">{this.isEnglishMode() ? 'User Progress' : 'Progreso De Los Usuarios'} {headerTeamLabels}</h3>
         <table id="user-progress-tbl" ref="main" className="table table-user-progress responsive-enabled mb-5" data-striping="1" />
+        {!this.state.isLoaded && <Spinner />}
         <div className="clear-both">
           <a className="btn btn-primary " href="/admin/people/create?destination=/dashboard"><i className="fas fa-plus-circle mr-1"></i> Add User</a>
           <a className="btn btn-primary ml-3 " href="/import-user?destination=/dashboard"><i className="fas fa-plus-circle mr-1"></i>Import Users</a>
@@ -179,16 +184,22 @@ export default class DashboardAllUserProgressTable extends Component{
   initDataTable(data) {
     let columns = [
       {
-        title: 'Username',
+        title: 'First Name',
         // width: 120,
-        data: function ( row, type, val, meta ) {
-          return '<a href="#/user/' + row.user.uid + '">' + row.user.username + '</a>';
-        },
+        data: 'user.field_first_name',
+        className : "first-child"
+      },
+      {
+        title: 'Last Name',
+        // width: 120,
+        data: 'user.field_last_name',
         className : "first-child"
       },
       {
         title: 'Email',
-        data: 'user.mail'
+        data: function ( row, type, val, meta ) {
+          return `<a href="mailto:${row.user.mail}">${row.user.mail}</a>`;
+        },
       },
       {
         title: 'User Status',

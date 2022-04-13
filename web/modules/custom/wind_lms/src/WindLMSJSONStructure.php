@@ -41,6 +41,8 @@ class WindLMSJSONStructure {
       'username' => $user->getAccountName(),
       'name' => $user->getAccountName(),
       'fullName' => _wind_lms_get_user_full_name($user),
+      'field_first_name' => $user->hasField('field_first_name') ? $user->get('field_first_name')->value : '',
+      'field_last_name' => $user->hasField('field_last_name') ? $user->get('field_last_name')->value : '',
       'status' => $user->get('status')->value,
       'mail' => $user->get('mail')->value,
       'access' => $user->get('access')->value,

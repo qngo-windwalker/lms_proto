@@ -36,9 +36,7 @@ export function ProgressBar(props){
       <div className={`row`}>
         <div className={`col-md-9`}>
           <div className="progress mt-2">
-            <div className="progress-bar bg-success" role="progressbar" style={{width: percentage + '%'}} aria-valuenow={percentage} aria-valuemin="0" aria-valuemax="100">
-              <span className="d-none" aria-hidden="true">{percentage}%</span>
-            </div>
+            <div className="progress-bar bg-success" role="progressbar" style={{width: percentage + '%'}} aria-valuenow={percentage} aria-valuemin="0" aria-valuemax="100" />
           </div>
         </div>
         <div className={`col-md-3`}>

@@ -119,9 +119,11 @@ class WindLMSJsonController extends ControllerBase {
       ->execute();
 
     foreach ($result as $uid) {
-      if($uid == 0 ){
+      // We don't want admin to show up on client User Progress table.
+      if($uid == 0 || $uid == 1){
         continue;
       }
+
       $user = User::load($uid);
       //      $licenseNode = $this->getUserLicense($uid);
       //      $coursesData = _wind_tincan_get_user_all_assigned_course_data($user);
