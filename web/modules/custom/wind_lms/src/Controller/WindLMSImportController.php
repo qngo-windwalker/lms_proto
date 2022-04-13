@@ -119,12 +119,14 @@ class WindLMSImportController extends ControllerBase {
           continue;
         }
 
-        $firstName = $param[0];
-        $lastName = $param[1];
-        $email = $param[2];
-        $role = strtolower($param[3]);
-        $username = $param[4];
-        $result = $this->addUser($firstName, $lastName, $email, $role, $username);
+        $firstName = trim($param[0]);
+        $lastName = trim($param[1]);
+        $email = trim($param[2]);
+        $role = strtolower(trim($param[3]));
+        $role = str_replace(' ', '_', $role);
+        $teamTid = $this->getUserTeamTid(trim($param[4]));
+
+        $result = $this->addUser($firstName, $lastName, $email, $role, $teamTid);
         if ($result) {
           $successCollection[] = $param;
         } else {
@@ -153,23 +155,29 @@ class WindLMSImportController extends ControllerBase {
     );
   }
 
-  private function addUser($firstName, $lastName, $email, $role, $username){
-    $uid = $this->loadUserByNames($firstName, $lastName);
+  private function addUser($firstName, $lastName, $email, $role, $teamTid){
+    $uid = $this->loadUserByEmail($email);
     if ($uid) {
       $user = User::load($uid);
     } else {
+      $password = substr(strtoupper($firstName), 0, 1). ucfirst($lastName);
+
       $user = User::create();
       // Mandatory settings
-      $user->setPassword($username . $role);
+      $user->setPassword($password);
       $user->enforceIsNew();
       $user->setEmail($email);
-      $user->setUsername($username);
+      $user->setUsername($email);
       // Optional settings
       $user->set("init", 'email');
       $user->addRole($role);
       $user->set('field_first_name', $firstName);
       $user->set('field_last_name', $lastName);
       $user->activate();
+    }
+
+    if ($teamTid) {
+      $user->set('field_team', $teamTid);
     }
 
     try {
@@ -190,4 +198,43 @@ class WindLMSImportController extends ControllerBase {
     }
     return false;
   }
+
+  private function loadUserByEmail(string $email) {
+    $query = \Drupal::entityTypeManager()->getStorage('user')->getQuery();
+    $query->condition('mail', $email);
+    $result = $query->execute();
+    if($result){
+      return array_shift($result);
+    }
+    return false;
+  }
+
+  private function getUserTeamTid(string $title) {
+    $vocab = Vocabulary::load('user_team');
+    if (!$vocab) {
+      return;
+    }
+
+    $term = wind_get_tid_by_name($title, $vocab->id());
+    // If term already exist, do an update.
+    if ($term) {
+      // Todo: add update to term.
+    } else {
+      $term = Term::create(array(
+        // htmlspecialchars — Convert special characters to HTML entities
+        'name' => $title,
+        'vid' => $vocab->id(),
+//        'description' => htmlspecialchars($body),
+//        'weight' => $weight,
+      ));
+    }
+
+    try {
+      $term->save();
+    } catch (EntityStorageException $e) {
+      return FALSE;
+    }
+    return $term->id();
+  }
+
 }

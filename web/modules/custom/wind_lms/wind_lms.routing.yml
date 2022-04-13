@@ -263,7 +263,7 @@ wind_lms.datatable.courses:
     _title: 'Courses'
   requirements:
     _role: 'authenticated'
-skywind.api.import.json:
+wind_lms.api.import.json:
   path: 'wind-lms/api/import/json'
   defaults:
     _controller: \Drupal\wind_lms\Controller\WindLMSImportController:getContent

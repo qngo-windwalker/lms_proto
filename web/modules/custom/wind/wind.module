@@ -118,7 +118,7 @@ function _wind_array_compare($array_new, $array_origin) {
  * @param string $link
  */
 function _wind_gen_button_for_email($label, $link) {
-  $markup =  '<a class=" btn " style="align-items:baseline; box-sizing:border-box; border-radius:3px; border-width:0; display:inline-flex; font-style:normal; font-size:inherit; height:2.28571429em; line-height:2.28571429em; margin:0; outline:none; padding:8px 10px; text-align:center; vertical-align:middle; white-space:nowrap; text-decoration:none; border:none; background:#007bff; color:#fff" href="'. $link .'">';
+  $markup =  '<a class=" btn " style="align-items:baseline; box-sizing:border-box; border-radius:3px; border-width:0; display:inline-flex; font-style:normal; font-size:inherit; width:auto; height:3em; line-height:2.28571429em; margin:0; outline:none; padding:8px 10px; text-align:center; vertical-align:middle; white-space:nowrap; text-decoration:none; border:none; background:#007bff; color:#fff" href="'. $link .'">';
   $markup .=  $label;
   $markup .=  '</a>';
   return $markup;
@@ -166,9 +166,45 @@ function _wind_get_term_ancestors($tid) {
 }
 
 /**
+ * Utility: find term by name and vid.
+ * @param null $name
+ *  Term name
+ * @param null $vid
+ *  Term vid
+ * @return int
+ *  Term id or 0 if none.
+ * @see https://drupal.stackexchange.com/a/225211
+ */
+function wind_get_tid_by_name($name = NULL, $vid = NULL) {
+  $properties = [];
+  if (!empty($name)) {
+    $properties['name'] = $name;
+  }
+  if (!empty($vid)) {
+    $properties['vid'] = $vid;
+  }
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties($properties);
+  $term = reset($terms);
+
+  return !empty($term) ? $term : 0;
+}
+
+/**
  * @return \Drupal\Core\Entity\EntityBase|\Drupal\Core\Entity\EntityInterface|\Drupal\user\Entity\User|null
  */
 function _wind_get_current_login_user() {
   $uid = \Drupal::currentUser()->id();
   return \Drupal\user\Entity\User::load($uid);
+}
+
+/**
+ * Get first child value of an array.
+ *  Have to write it out to avoid: Notice: Only variables should be passed by reference
+ * @param $arr
+ *
+ * @return mixed
+ */
+function _wind_array_first_child_value($arr) {
+  $reverse = array_reverse($arr);
+  return array_pop($reverse);
 }
