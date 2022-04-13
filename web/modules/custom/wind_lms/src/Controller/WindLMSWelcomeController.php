@@ -40,8 +40,30 @@ class WindLMSWelcomeController extends ControllerBase {
     return array(
       '#type' => 'markup',
       '#markup' => $markup,
-      '#attached' => array(
-      )
+      '#allowed_tags' => [
+        'center',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'span',
+        'ul',
+        'li',
+        'p',
+        'a',
+        'button',
+        'div',
+        'ol',
+        'table',
+        'tbody',
+        'thead',
+        'tr',
+        'th',
+        'td',
+      ],
+      '#attached' => array()
     );
   }
 
