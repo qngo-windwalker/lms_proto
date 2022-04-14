@@ -33,6 +33,7 @@ export default class DashboardAllUserProgressTable extends Component{
       tableRow: [],
       isLoaded: false,
     };
+    this.getOperationsContent = this.getOperationsContent.bind(this);
   };
 
   componentDidMount() {
@@ -184,6 +185,18 @@ export default class DashboardAllUserProgressTable extends Component{
     return ddmmyy;
   }
 
+  getOperationsContent(row, type, val, meta){
+    // let markup = `<a class="btn btn-sm btn-outline-secondary courses-info" href="#">View Course</a>`;
+    let markup = ReactDOMServer.renderToString(
+      <div className={`btn-group`}>
+        <a className="btn btn-sm btn-outline-secondary courses-info" href="#">Course</a>
+        <a className="btn btn-sm btn-outline-secondary" href={`/user/${row.user.uid}/edit`}>Edit</a>
+      </div>
+    );
+
+    return markup;
+  }
+
   initDataTable(data) {
     let columns = [
       {
@@ -244,11 +257,12 @@ export default class DashboardAllUserProgressTable extends Component{
       },
       {
         title: 'Operations',
-        data: function ( row, type, val, meta ) {
-          let markup = '<a class="btn btn-sm btn-outline-secondary courses-info" href="node/\' . $nid . \'">View Course</a>';
-
-          return markup;
-        },
+        // data: (row, type, val, meta) => {
+        //   let markup = '<a class="btn btn-sm btn-outline-secondary courses-info" href="node/\' . $nid . \'">View Course</a>';
+        //
+        //   return markup;
+        // },
+        data : this.getOperationsContent,
         orderable: false,
         className : "td-action"
       }
@@ -269,7 +283,7 @@ export default class DashboardAllUserProgressTable extends Component{
       // @see https://datatables.net/extensions/buttons/examples/initialisation/export.html
       buttons: [
         {
-          title: 'User Progress',
+          title: 'User',
           exportOptions: {
             columns: [0,1,2,3,4,5,] // To exclude Operation column
           },
@@ -278,14 +292,14 @@ export default class DashboardAllUserProgressTable extends Component{
         //   sheetName: 'User Progress data'
         },
         {
-          title: 'User Progress',
+          title: 'User',
           exportOptions: {
             columns: [0,1,2,3,4,5,] // To exclude Operation column
           },
           extend: 'csvHtml5',
         },
         {
-          title: 'User Progress',
+          title: 'User',
           exportOptions: {
             columns: [0,1,2,3,4,5,] // To exclude Operation column
           },
