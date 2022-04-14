@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import axios from "axios";
 import ReactDOMServer from "react-dom/server";
 import _ from 'lodash';
+import {Spinner, StatusCircle} from "./GUI";
+
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
 // Datatable with Bootstrap v4
@@ -108,7 +110,7 @@ export default class DashboardAllCoursesTable extends Component{
       {
         title: 'Title',
         // width: 120,
-        className : "first-child",
+        className : "first-child align-middle",
         data: function ( row, type, val, meta ) {
           return `<a href="/node/${row.nid}">${row.title}</a>` ;
         },
@@ -146,8 +148,11 @@ export default class DashboardAllCoursesTable extends Component{
       },
       {
         title: 'Status',
+        className: 'align-middle',
         data:  function ( row, type, val, meta ) {
-          return (row.status) ? '<span class="text-success">&#9679;</span>  Active' : '<span class="text-danger">&#9679;</span> Inactive';
+          let active = ReactDOMServer.renderToString(<StatusCircle label={'Active'}/>);
+          let inActive = ReactDOMServer.renderToString(<StatusCircle label={'Inactive'}/>);
+          return (row.status) ? active : inActive;
         }
       },
       {
@@ -176,14 +181,35 @@ export default class DashboardAllCoursesTable extends Component{
       dom: 'Bfrtip',
       // @see https://datatables.net/extensions/buttons/examples/initialisation/export.html
       buttons: [
+        {
+          title: 'Courses',
+          exportOptions: {
+            columns: [0,1,2,3,] // To exclude Operation column
+          },
+          extend: 'excelHtml5',
+          //   autoFilter: true,
+          //   sheetName: 'User Progress data'
+        },
+        {
+          title: 'Courses',
+          exportOptions: {
+            columns: [0,1,2,3,] // To exclude Operation column
+          },
+          extend: 'csvHtml5',
+        },
+        {
+          title: 'Courses',
+          exportOptions: {
+            columns: [0,1,2,3,] // To exclude Operation column
+          },
+          autoFilter: true,
+          extend: 'pdfHtml5',
+        },
+
         // {
         //   extend: 'excelHtml5',
-        //   autoFilter: true,
         //   sheetName: 'User Progress data'
         // },
-        'excelHtml5',
-        'csvHtml5',
-        'pdfHtml5',
       ],
       initComplete: this.onDataTableInitComplete,
       /**

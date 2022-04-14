@@ -7,7 +7,10 @@ import Certificate from "./certificate";
 import TableRowDetail from "./tableRowDetail";
 import {CourseProgress, ProgressBar} from "./courseProgress";
 import {UserTeamBadge} from "./UIComponents";
-import {Spinner} from "./GUI";
+import {Spinner, StatusCircle} from "./GUI";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
@@ -186,25 +189,29 @@ export default class DashboardAllUserProgressTable extends Component{
       {
         title: 'First Name',
         // width: 120,
+        className : "first-child align-middle",
         data: 'user.field_first_name',
-        className : "first-child"
       },
       {
         title: 'Last Name',
         // width: 120,
+        className: 'align-middle',
         data: 'user.field_last_name',
-        className : "first-child"
       },
       {
         title: 'Email',
+        className: 'align-middle',
         data: function ( row, type, val, meta ) {
           return `<a href="mailto:${row.user.mail}">${row.user.mail}</a>`;
         },
       },
       {
         title: 'User Status',
+        className: 'align-middle',
         data: function ( row, type, val, meta ) {
-          return (row.user.status) ? '<span class="text-success">&#9679;</span>  Active' : '<span class="text-danger">&#9679;</span> Inactive';
+          let active = ReactDOMServer.renderToString(<StatusCircle label={'Active'}/>);
+          let inActive =  ReactDOMServer.renderToString(<StatusCircle label={'Inactive'}/>);
+          return (row.user.status) ? active : inActive;
         }
       },
       {
@@ -261,14 +268,29 @@ export default class DashboardAllUserProgressTable extends Component{
       dom: 'Bfrtip',
       // @see https://datatables.net/extensions/buttons/examples/initialisation/export.html
       buttons: [
-        // {
-        //   extend: 'excelHtml5',
+        {
+          title: 'User Progress',
+          exportOptions: {
+            columns: [0,1,2,3,4,5,] // To exclude Operation column
+          },
+          extend: 'excelHtml5',
         //   autoFilter: true,
         //   sheetName: 'User Progress data'
-        // },
-        'excelHtml5',
-        'csvHtml5',
-        'pdfHtml5',
+        },
+        {
+          title: 'User Progress',
+          exportOptions: {
+            columns: [0,1,2,3,4,5,] // To exclude Operation column
+          },
+          extend: 'csvHtml5',
+        },
+        {
+          title: 'User Progress',
+          exportOptions: {
+            columns: [0,1,2,3,4,5,] // To exclude Operation column
+          },
+          extend: 'pdfHtml5',
+        },
       ],
       initComplete: this.onDataTableInitComplete,
       /**

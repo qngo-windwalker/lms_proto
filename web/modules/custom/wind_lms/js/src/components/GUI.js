@@ -348,3 +348,13 @@ export function RewardItem(props) {
     </div>
   );
 }
+
+export function StatusCircle(props){
+  const colorClass = props.label == 'Active' ? 'text-success' : 'text-danger';
+  return (
+    <>
+      <i style={{fontSize : '0.5rem'}} className={`fas fa-circle fa-xs ${colorClass}`}></i>
+      <span className={`ml-2`}>{props.label}</span>
+    </>
+  );
+}
