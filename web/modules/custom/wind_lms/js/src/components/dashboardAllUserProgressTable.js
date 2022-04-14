@@ -155,7 +155,7 @@ export default class DashboardAllUserProgressTable extends Component{
 
     return (
       <div className="section">
-        <h3 className="mb-3">{this.isEnglishMode() ? 'User Progress' : 'Progreso De Los Usuarios'} {headerTeamLabels}</h3>
+        <h3 className="mb-3">{this.isEnglishMode() ? 'User' : 'Progreso De Los Usuarios'} {headerTeamLabels}</h3>
         <table id="user-progress-tbl" ref="main" className="table table-user-progress responsive-enabled mb-5" data-striping="1" />
         {!this.state.isLoaded && <Spinner />}
         <div className="clear-both">

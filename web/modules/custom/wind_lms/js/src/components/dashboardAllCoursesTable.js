@@ -77,7 +77,7 @@ export default class DashboardAllCoursesTable extends Component{
   render(){
     return (
       <div className="section">
-        <h3 className="mb-3">{this.isEnglishMode() ? 'Courses' : 'Cursos'}</h3>
+        <h3 className="mb-3">{this.isEnglishMode() ? 'Course' : 'Cursos'}</h3>
         <table id="courses-tbl" ref="main" className="table table-curriculum responsive-enabled mb-5" data-striping="1" />
         <div className="clear-both">
           <a className="btn btn-primary " href="/node/add/course?destination=/dashboard"><i className="fas fa-plus-circle mr-1"></i> Add Course</a>
@@ -182,7 +182,7 @@ export default class DashboardAllCoursesTable extends Component{
       // @see https://datatables.net/extensions/buttons/examples/initialisation/export.html
       buttons: [
         {
-          title: 'Courses',
+          title: 'Course',
           exportOptions: {
             columns: [0,1,2,3,] // To exclude Operation column
           },
@@ -191,14 +191,14 @@ export default class DashboardAllCoursesTable extends Component{
           //   sheetName: 'User Progress data'
         },
         {
-          title: 'Courses',
+          title: 'Course',
           exportOptions: {
             columns: [0,1,2,3,] // To exclude Operation column
           },
           extend: 'csvHtml5',
         },
         {
-          title: 'Courses',
+          title: 'Course',
           exportOptions: {
             columns: [0,1,2,3,] // To exclude Operation column
           },
