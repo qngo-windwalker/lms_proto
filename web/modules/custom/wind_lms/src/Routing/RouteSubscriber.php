@@ -11,8 +11,10 @@ use Symfony\Component\Routing\RouteCollection;
 class RouteSubscriber extends RouteSubscriberBase {
 
   /**
-   * Customize access to admin page
+   * Customize access to admin page.
    *
+   *
+   * @see https://www.drupal.org/docs/drupal-apis/routing-system/altering-existing-routes-and-adding-new-routes-based-on-dynamic-ones#custom_access_checks
    * @see web/core/modules/user/user.routing.yml
    * {@inheritdoc}
    */

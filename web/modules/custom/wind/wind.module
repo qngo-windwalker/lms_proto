@@ -6,6 +6,7 @@
  */
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\user\Entity\User;
 
 /**
  * Implements hook_user_login().
@@ -66,6 +67,40 @@ function wind_mail_alter(&$message) {
   // Allows rich HTML email
   $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
   $message['body'] = [$rendered];
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Applies access condidtion to fields for certain user roles.
+ */
+function wind_form_alter(&$form, \Drupal\Core\Form\FormStateInterface &$form_state, $form_id) {
+  // If current user is on /user/[uid]/edit page
+  if ($form_id == 'user_form') {
+    $current_user = _wind_get_current_login_user();
+    $haystack = $current_user->getRoles();
+    // Disable form if user do NOT have the right role/s.
+    if(count(array_intersect($haystack, ['admin', 'administrator'])) == 0){
+
+      if($_SERVER['REQUEST_URI'] == '/user/1/edit'){
+        $form['#access'] = false;
+        $form['#markup'] = 'You do not have elevated access';
+      }
+
+      $uriExploded = explode('/', $_SERVER['REQUEST_URI']);
+      if (is_numeric($uriExploded[2])) {
+        $formUser = User::load($uriExploded[2]);
+        $formUserRoles = $formUser->getRoles();
+
+        // If the current user editing someone with admin role; but they-themselve don't have admin role,
+        // don't let current user edit the form.
+        if(count(array_intersect($formUserRoles, ['admin', 'administrator'])) != 0){
+          $form['#access'] = false;
+          $form['#markup'] = 'You do not have elevated access';
+        }
+      }
+    }
+  }
 }
 
 function _wind_get_greeting_time() {
