@@ -51,6 +51,9 @@ wind_tincan.tcapi.activities.get_state:
 #    _title: 'Certificate'
 #  requirements:
 #    _permission: 'access content'
+#################################################
+## Admin
+#################################################
 wind_tincan.admin.tincan:
   path: '/admin/tincan'
   defaults:
@@ -65,3 +68,69 @@ wind_tincan.admin.tincan.user.course:
     _title_callback: '\Drupal\wind_tincan\Controller\WindTincanAdminTincanUserCourseController::getUserCourseTitle'
   requirements:
     _permission: 'administer users'
+
+# Use this
+wind_tincan.admin.tincan.user.uid.node.nid:
+  path: '/admin/tincan/user/{user}/node/{node}'
+  defaults:
+    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminTincanController::getUserNodeContent'
+  requirements:
+    _permission: 'administer users'
+  options:
+    parameters:
+      user:
+        type: entity:user
+      node:
+        type: entity:node
+wind_tincan.admin.tincan.user.uid.file.fid:
+  path: '/admin/tincan/user/{user}/file/{file}'
+  defaults:
+    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminTincanController::getUserFileContent'
+  requirements:
+    _permission: 'administer users'
+  options:
+    parameters:
+      user:
+        type: entity:user
+      file:
+        type: entity:file
+wind_tincan.admin.tincan.user.uid.file.fid.delete_all_statements:
+  path: '/admin/tincan/user/{user}/file/{file}/delete-all-statements'
+  defaults:
+    _form: \Drupal\wind_tincan\Form\WindTincanUserFileDeleteAllStatements
+  requirements:
+    _permission: 'administer users'
+  options:
+    parameters:
+      user:
+        type: entity:user
+      node:
+        type: entity:file
+wind_tincan.admin.tincan.statement.id:
+  path: '/admin/tincan/statement/{id}'
+  defaults:
+    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminTincanController::getStatement'
+    _title: 'Tincan'
+  requirements:
+    _permission: 'administer users'
+#  options:
+#    parameters:
+#      statementid:
+#        type: entity:tincan_statement
+wind_tincan.admin.tincan.statement.id.delete:
+  path: '/admin/tincan/statement/{id}/delete'
+  defaults:
+    _form: \Drupal\wind_tincan\Form\WindTincanStatementDelete
+  requirements:
+    _permission: 'administer users'
+wind_tincan.tincan.state.tincan_state.delete:
+  path: '/tincan/state/{tincan_state}/delete'
+  defaults:
+    _form: \Drupal\wind_tincan\Form\WindTincanStateDeleteConfirm
+  requirements:
+    _permission: 'administer users'
+  options:
+    parameters:
+      tincan_state:
+        type: entity:tincan_state
+    _custom_theme: 'claro'

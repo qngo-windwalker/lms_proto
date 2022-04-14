@@ -1,7 +1,7 @@
 <?php
-
 use Drupal\wind_tincan\Entity\TincanStatement;
 use Drupal\Component\Serialization\Json;
+use Drupal\user\Entity\User;
 
 
 /**
@@ -73,6 +73,32 @@ function _wind_tincan_get_user_tincan_agent_account_name($user){
 }
 
 /**
+ * @return string
+ */
+function _wind_tincan_get_scheme_and_http_host(){
+  // Temporary fix for Reverse Proxy server
+  if (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+    return $_SERVER['HTTP_X_FORWARDED_PROTO'] . '://' . $_SERVER['HTTP_HOST'];
+  }
+
+  // Since we're using forward HTTP to HTTPS ($_SERVER[HTTP_X_FORWARDED_PROTO] = https),
+  // \Drupal::request()->getSchemeAndHttpHost() will return http://... on www.xxx.com
+  // We have to make sure the URL is HTTPS
+  $schemaAndHost = \Drupal::request()->getSchemeAndHttpHost();
+  return $schemaAndHost;
+}
+
+
+//Ex: {"name":["quan ngo"],"account":[{"accountServiceHomePage":"http://cloud.scorm.com","accountName":"0QTP625WM3|quan.ngo@windwalker.com"}],"objectType":"Agent"}
+function _wind_tincan_gen_tincan_agent_home_page($uid){
+  $schemaAndHost = _wind_tincan_get_scheme_and_http_host();
+  return $schemaAndHost . '/user/' . $uid;
+}
+
+
+/**
+ * NOTE: This is buggy,
+ * @deprecated Use _wind_tincan_get_tincan_agent_id_by_user
  * @param $user
  *
  * @return bool|integer tincan_agent id
@@ -87,6 +113,25 @@ function _wind_tincan_get_user_tincan_agent_id($user) {
     return end($result);
   }
   return FALSE;
+}
+
+/**
+ * This is only for finding Agent Id in the database. See note about 'homePage' vs 'accountServiceHomePage'
+ * @param User $user
+ * @return false|int|mixed
+ */
+function _wind_tincan_get_tincan_agent_id_by_user(User $user){
+  $agentArray = [
+    'objectType' => 'Agent',
+    'account' => array(
+      'name' => _wind_tincan_get_user_tincan_agent_account_name($user),
+      // Note: we send it as 'accountServiceHomePage' but Tincan JS API send back as 'homePage'
+      'homePage' => _wind_tincan_gen_tincan_agent_home_page($user->id())
+    ),
+    'name' => 'admin'
+  ];
+  $tincanStatement = TincanStatement::create();
+  return $tincanStatement->findAgent($agentArray);
 }
 
 function _wind_tincan_get_agent_id_by_tincan_agent_account_name($tincan_agent_account_name) {

@@ -14,3 +14,13 @@ admin_tincan_user_course:
     js/wind_tincan.admin_tincan_user_course.js: {}
   dependencies:
     - wind/datatable
+admin_tincan_user_node:
+  js:
+    js/wind_tincan.admin_tincan_user_node.js: {}
+  dependencies:
+    - wind/datatable
+admin_tincan_user_tincan_state:
+  js:
+    js/admin_tincan_user_tincan_state.js: {}
+  dependencies:
+    - wind/datatable

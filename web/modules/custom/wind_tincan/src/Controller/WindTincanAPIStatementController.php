@@ -112,12 +112,41 @@ class WindTincanAPIStatementController extends ControllerBase{
     $statement = TincanStatement::create($tincan_statement);
     try {
       $statement->save();
+
+      $jsonDecoded = Json::decode($tincan_statement['json']);
+      if (isset($jsonDecoded['result']) && isset($jsonDecoded['result']['completion']) && $jsonDecoded['result']['completion'] == true) {
+        $this->invokeCourseCompleteHook($statement, $jsonDecoded);
+      }
     } catch (\Exception $e) {
       throw new HttpException(500, 'Internal Server Error. Statement save fail: ' . $e->getMessage());
 //      services_error ('Internal Server Error', 500, 'Statement save fail: ' . $e->getMessage());
     }
 
     return new Response('Success', 204);
+  }
+
+  private function invokeCourseCompleteHook(TincanStatement $tincanStatment, $tincanStatementJson) {
+    $agentId = $tincanStatment->findAgent($tincanStatementJson['actor']);
+    $user = _wind_tincan_load_user_id_by_agent_id($agentId);
+    $tincanObjectValue =  $tincanStatment->get('field_tincan_object')->getValue();
+    $tincanObjectActivityId = $tincanObjectValue[0]['id'];
+    $tincanTypeObjCollection = _wind_tincan_file_id_by_activity_id($tincanObjectActivityId);
+    if (empty($tincanTypeObjCollection)) {
+      \Drupal::moduleHandler()->invokeAll('tincan_course_complete', [null, $user, ['agentId' => $agentId, 'tincanStatment' => $tincanStatment, 'tincanStatmentJsonDecoded' => $tincanStatementJson]]);
+      return;
+    }
+
+    foreach ($tincanTypeObjCollection as $tincanTypeObj) {
+      // Get the course node that the package uploaded to.
+      $course_nids = _wind_tincan_get_course_nids_by_tincan_fid($tincanTypeObj->fid);
+      if (empty($course_nids)) {
+        continue;
+      }
+
+      foreach ($course_nids as $course_nid) {
+        \Drupal::moduleHandler()->invokeAll('tincan_course_complete', [$course_nid, $user, ['agentId' => $agentId, 'tincanStatment' => $tincanStatment, 'tincanStatmentJsonDecoded' => $tincanStatementJson]]);
+      }
+    }
   }
 
 }
