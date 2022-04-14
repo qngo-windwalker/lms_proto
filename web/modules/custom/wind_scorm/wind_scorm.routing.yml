@@ -31,7 +31,7 @@ wind_scorm.admin.content.scorm_package:
     _controller: '\Drupal\wind_scorm\Controller\WindScormAdminContentPackageController::getContent'
     _title: 'SCORM Package'
   requirements:
-    _permission: 'administer users'
+    _role: 'administrator'
 wind_scorm.scorm_package.add:
   path: '/scorm-package/add'
   defaults:

@@ -12,3 +12,7 @@ services:
   wind_lms.certifcate_node:
     class: Drupal\wind_lms\CertificateNode
     arguments: ['@database']
+  wind_lms.route_subscriber:
+    class: Drupal\wind_lms\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
