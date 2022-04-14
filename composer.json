@@ -20,6 +20,7 @@
         "drupal/core-project-message": "^9",
         "drupal/core-recommended": "^9",
         "drupal/devel": "^4.0",
+        "drupal/force_password_change": "^2.0",
         "drupal/graphql": "^4.0",
         "drupal/jsonapi_extras": "^3.15",
         "drupal/sendgrid_integration": "^1.7",
