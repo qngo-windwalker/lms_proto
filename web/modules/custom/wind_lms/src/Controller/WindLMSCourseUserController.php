@@ -175,16 +175,21 @@ class WindLMSCourseUserController extends ControllerBase{
   }
 
   private function getTincanTableRows($tincanActiviyId, User $user) {
-    $agentID = _wind_tincan_get_user_tincan_agent_id($user);
+    $agentID = _wind_tincan_get_tincan_agent_id_by_user($user);
     if (!$agentID) {
       return [];
     }
 
     $query = \Drupal::entityQuery('tincan_statement');
+    // Create the orConditionGroup
+    // @see https://www.drupal.org/docs/8/api/database-api/dynamic-queries/conditions
+    $orGroup = $query->orConditionGroup()
+      ->condition('json', 'completion', 'CONTAINS')
+      ->condition('json', 'completed', 'CONTAINS');
+
     $query->condition('field_tincan_actor', $agentID);
     $query->condition('field_tincan_object.id', $tincanActiviyId);
     $query->condition('field_tincan_object.type', 'Activity');
-    $query->condition('json', 'completion', 'CONTAINS');
     // Sort latest to oldest
     $query->sort('timestamp' , 'DESC');
     $result = $query->execute();

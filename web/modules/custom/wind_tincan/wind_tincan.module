@@ -128,7 +128,7 @@ function _wind_tincan_get_tincan_agent_id_by_user(User $user){
       // Note: we send it as 'accountServiceHomePage' but Tincan JS API send back as 'homePage'
       'homePage' => _wind_tincan_gen_tincan_agent_home_page($user->id())
     ),
-    'name' => 'admin'
+    'name' => $user->getAccountName()
   ];
   $tincanStatement = TincanStatement::create();
   return $tincanStatement->findAgent($agentArray);
@@ -283,7 +283,7 @@ function _wind_tincan_get_user_all_assigned_course_data($user){
  * @return string
  */
 function _wind_tincan_add_tincan_course_data($user, string $TC_COURSE_ID) {
-  $agentID = _wind_tincan_get_user_tincan_agent_id($user);
+  $agentID = _wind_tincan_get_tincan_agent_id_by_user($user);
   if (!$agentID) {
     return [
       'progress' => 'Not Started'

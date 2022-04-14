@@ -4,7 +4,10 @@ namespace Drupal\wind_lms;
 
 use Drupal\Core\Database\Connection;
 use Drupal\file\Entity\File;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+use Drupal\user\Entity\User;
+
 /**
  * Class CourseNode.
  */

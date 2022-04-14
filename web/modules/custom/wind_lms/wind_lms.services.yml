@@ -16,3 +16,6 @@ services:
     class: Drupal\wind_lms\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+  wind_lms.scorm:
+    class: Drupal\wind_lms\WindLMSSCORMService
+    arguments: ['@database']

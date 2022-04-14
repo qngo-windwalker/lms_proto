@@ -146,6 +146,22 @@ function wind_lms_entity_delete(Drupal\Core\Entity\EntityInterface $entity) {
 }
 
 /**
+ * Implements hook_opigno_scorm_commit().
+ * @see opigno_scorm.module::opigno_scorm_opigno_scorm_commit()
+ * @see Drupal\opigno_scorm\Controller\OpignoScormController::scormCommit
+ */
+function wind_lms_opigno_scorm_commit($scorm, $sco_id, $data) {
+  $uid = $data->cmi->learner_id;
+  $fid = $scorm->fid;
+  $courseNids = \Drupal\wind_lms\WindLMSSCORMService::getAllCoursesByFid($fid);
+  if (empty($courseNids)) {
+    return;
+  }
+
+  \Drupal\wind_lms\CourseNode::deleteMultipleUserCoureCaches($uid, $courseNids);
+}
+
+/**
  * Implements hook_form_alter().
  *
  * Applies access condidtion to fields for certain user roles.
@@ -360,6 +376,39 @@ function wind_lms_current_user_and_target_user_in_groups($currentUser, $target_u
   return $currentUserSameGroups;
 }
 
+function _wind_lms_get_test_courses() {
+  $test_courses = array();
+  // get ?test=true in the URL
+  $isTestActive = \Drupal::request()->get('test');
+  // Add testing courses if user has permission and parameter test is true
+  $test_courses[] = [
+    'title' => 'Test Course',
+    'type' => 'course',
+    'package_files' => array(
+      [
+        'type' => 'tincan',
+        'course_data' => _wind_lms_course_add_tincan_course_data($user, 'test_abc123'),
+        'activity_link' => _wind_lms_tincan_build_link_of_static_course('Test Course', 'test_course')
+      ]
+    ),
+    'folder' => 'test_course',
+    'tincan_course_id' => 'test_abc123'
+  ];
+  $test_courses[] = [
+    'title' => 'Le Rouge',
+    'type' => 'course',
+    'package_files' => array(
+      [
+        'type' => 'tincan',
+        'course_data' => _wind_lms_course_add_tincan_course_data($user, 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'),
+        'activity_link' => _wind_lms_tincan_build_link_of_static_course('Le Rouge', 'le-rouge-tincan-4SaXPWmj')
+      ]
+    ),
+    'folder' =>  'le-rouge-tincan-4SaXPWmj',
+    'tincan_course_id' => 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'
+  ];
+  return $test_courses;
+}
 /**
  * Return array of course paid by the user
  * @param $user
@@ -372,32 +421,7 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
   $isTestActive = \Drupal::request()->get('test');
   // Add testing courses if user has permission and parameter test is true
   if($isTestActive == 'true'){
-    $test_courses[] = [
-      'title' => 'Test Course',
-      'type' => 'course',
-      'package_files' => array(
-        [
-          'type' => 'tincan',
-          'course_data' => _wind_lms_course_add_tincan_course_data($user, 'test_abc123'),
-          'activity_link' => _wind_lms_tincan_build_link_of_static_course('Test Course', 'test_course')
-        ]
-      ),
-      'folder' => 'test_course',
-      'tincan_course_id' => 'test_abc123'
-    ];
-    $test_courses[] = [
-      'title' => 'Le Rouge',
-      'type' => 'course',
-      'package_files' => array(
-        [
-          'type' => 'tincan',
-          'course_data' => _wind_lms_course_add_tincan_course_data($user, 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'),
-          'activity_link' => _wind_lms_tincan_build_link_of_static_course('Le Rouge', 'le-rouge-tincan-4SaXPWmj')
-        ]
-      ),
-      'folder' =>  'le-rouge-tincan-4SaXPWmj',
-      'tincan_course_id' => 'http://9qnQNtAlndQDKxBIjpu7htddOsClIEQh_rise'
-    ];
+    $test_courses = _wind_lms_get_test_courses();
   }
 
   // Get all of the course nid(s) assigned to $user

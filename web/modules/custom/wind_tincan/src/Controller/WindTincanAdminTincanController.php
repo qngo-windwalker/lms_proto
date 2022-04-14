@@ -246,7 +246,7 @@ class  WindTincanAdminTincanController extends ControllerBase{
     return [
       'uid' => $user->id(),
       'username' => $user->label(),
-      'agentId' => _wind_tincan_get_user_tincan_agent_id($user),
+      'agentId' => _wind_tincan_get_tincan_agent_id_by_user($user),
     ];
   }
 
@@ -275,7 +275,7 @@ class  WindTincanAdminTincanController extends ControllerBase{
   }
 
   private function getTincan($user, $TC_COURSE_ID) {
-    $agentID = _wind_tincan_get_user_tincan_agent_id($user);
+    $agentID = _wind_tincan_get_tincan_agent_id_by_user($user);
     if (!$agentID) {
      return [];
     }

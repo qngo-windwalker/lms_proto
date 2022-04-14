@@ -25,8 +25,6 @@ class WindLMSAdminUserCourseProgressesDatatableController extends ControllerBase
       }
       $user = User::load($uid);
       $userArr = \Drupal\wind_lms\WindLMSJSONStructure::getUser($user);
-//      $licenseNode = $this->getUserLicense($uid);
-//      $coursesData = _wind_tincan_get_user_all_assigned_course_data($user);
       $coursesData = _wind_lms_get_user_all_assigned_course_data($user , \Drupal::request()->get('lang'));
       foreach ($coursesData as $course){
         $courseArr = \Drupal\wind_lms\WindLMSJSONStructure::getCourse($course, $user);

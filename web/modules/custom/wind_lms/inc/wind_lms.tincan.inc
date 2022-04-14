@@ -22,7 +22,7 @@ function _wind_lms_tincan_load_by_fid($fid){
  * @return string
  */
 function _wind_lms_course_add_tincan_course_data($user, string $TC_COURSE_ID) {
-  $agentID = _wind_lms_get_user_tincan_agent_id($user);
+  $agentID = _wind_tincan_get_tincan_agent_id_by_user($user);
   if (!$agentID) {
     return [
       'progress' => 'Not Started'
@@ -30,10 +30,17 @@ function _wind_lms_course_add_tincan_course_data($user, string $TC_COURSE_ID) {
   }
 
   $query = \Drupal::entityQuery('tincan_statement');
+  // Create the orConditionGroup
+  // @see https://www.drupal.org/docs/8/api/database-api/dynamic-queries/conditions
+  $orGroup = $query->orConditionGroup()
+    ->condition('json', 'completion', 'CONTAINS')
+    ->condition('json', 'completed', 'CONTAINS');
+
   $query->condition('field_tincan_actor', $agentID);
   $query->condition('field_tincan_object.id', $TC_COURSE_ID);
   $query->condition('field_tincan_object.type', 'Activity');
-  $query->condition('json', 'completion', 'CONTAINS');
+  $query->condition($orGroup);
+
   // Sort latest to oldest
   $query->sort('timestamp' , 'DESC');
   $result = $query->execute();
@@ -54,6 +61,7 @@ function _wind_lms_course_add_tincan_course_data($user, string $TC_COURSE_ID) {
     }
   }
   $statements = TincanStatement::loadMultiple($result);
+  /** @var \Drupal\wind_tincan\Entity\TincanStatement $statement */
   foreach ($statements as $statement ){
     $json_array = Json::decode($statement->get('json')->value);
     if( isset($json_array['result']) && isset($json_array['result']['completion']) ){
@@ -82,6 +90,8 @@ function _wind_lms_get_user_tincan_agent_account_name($user){
 }
 
 /**
+ * NOTE: This is buggy,
+ * @deprecated Use _wind_tincan_get_tincan_agent_id_by_user
  * @param $user
  *
  * @return bool|integer tincan_agent id

@@ -52,29 +52,43 @@ class WindLMSJSONStructure {
   }
 
   static function getCourse($courseData, User $user) {
-    $title = $courseData['title'];
-    $node = \Drupal\node\Entity\Node::load($courseData['nid']);
-    $field_category = $node->field_category->referencedEntities();
-    /** @var \Drupal\taxonomy\Entity\Term $teamEntities */
-    $categoryEntities = array_map (function($term){
-      return [
-        'tid' => $term->id(),
-        'label' => $term->label(),
-        'vid' => $term->get('vid')->getString()
-      ];
-    }, $field_category);
+    $courseNid = isset($courseData['nid']) ? $courseData['nid'] : '';
+    $cid = 'wind_lms:user:' . $user->id() . ':node' . $courseNid;
 
-    return [
-      'title' => $courseData['title'],
-      'nid' => isset($courseData['nid']) ? $courseData['nid'] : '',
-      'type' => $courseData['type'],
-      'courseLink' => self::buildCourseLink($title, $courseData),
-      'certificateLink' => self::getCourseCertificate($courseData, $user),
-      'field_category' => $categoryEntities,
-      'package_files' => isset($courseData['package_files']) ? $courseData['package_files'] : [],
-      'isCompleted' => \Drupal\wind_lms\CourseNode::isCourseCompleted($courseData),
-      'certificateNode' => self::getCertificateNode($courseData['nid'], $user->id())
-    ];
+    $course = [];
+    if ($cache = \Drupal::cache()->get($cid)) {
+      $course = $cache->data;
+    } else {
+      $title = $courseData['title'];
+      $node = \Drupal\node\Entity\Node::load($courseData['nid']);
+      $field_category = $node->field_category->referencedEntities();
+      /** @var \Drupal\taxonomy\Entity\Term $teamEntities */
+      $categoryEntities = array_map (function($term){
+        return [
+          'tid' => $term->id(),
+          'label' => $term->label(),
+          'vid' => $term->get('vid')->getString()
+        ];
+      }, $field_category);
+
+      $course = [
+        'title' => $courseData['title'],
+        'nid' => $courseNid,
+        'type' => $courseData['type'],
+        'courseLink' => self::buildCourseLink($title, $courseData),
+        'certificateLink' => self::getCourseCertificate($courseData, $user),
+        'field_category' => $categoryEntities,
+        'package_files' => isset($courseData['package_files']) ? $courseData['package_files'] : [],
+        'isCompleted' => \Drupal\wind_lms\CourseNode::isCourseCompleted($courseData),
+        'certificateNode' => self::getCertificateNode($courseData['nid'], $user->id())
+      ];
+
+      $requestTime = \Drupal::time()->getRequestTime();
+      $expire = strtotime('+1 day', $requestTime);
+      \Drupal::cache()->set($cid, $course, $expire);
+    }
+
+    return $course;
   }
 
   /**
