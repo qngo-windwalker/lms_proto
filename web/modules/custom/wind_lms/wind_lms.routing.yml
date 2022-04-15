@@ -289,6 +289,14 @@ wind_lms.multiple_user_enroll:
     _title: 'Enroll user'
   requirements:
     _permission: 'administer users'
+# confirmation route from WindLMSAddUserTeamAction.php
+wind_lms.admin.people.user_add_team:
+  path: '/admin/people/user-add-team'
+  defaults:
+    _form: '\Drupal\wind_lms\Form\WindLMSUserMultipleAddUserTeam'
+    _title: 'Add User(s) to User Team'
+  requirements:
+    _permission: 'administer users'
 
 wind_lms.admin_people:
   path: admin/people/learner-score
