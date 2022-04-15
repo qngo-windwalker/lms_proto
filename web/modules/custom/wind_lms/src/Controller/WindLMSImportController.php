@@ -176,9 +176,15 @@ class WindLMSImportController extends ControllerBase {
       $user->activate();
     }
 
-    if ($teamTid) {
-      $user->set('field_team', $teamTid);
-    }
+
+    // This will replace any existing value
+//    if ($teamTid) {
+//      $user->set('field_team', $teamTid);
+//    }
+
+    // If we re-import the same user but with different Team,
+    // add Team Tid if it doesn't exit instead of replacing it
+    $user = $this->appendUserFieldTeam($user, $teamTid);
 
     try {
       $user->save();
@@ -197,6 +203,22 @@ class WindLMSImportController extends ControllerBase {
       return array_shift($result);
     }
     return false;
+  }
+
+  function appendUserFieldTeam(EntityInterface &$userEntity, $teamTid){
+    if (!$teamTid) {
+      return $userEntity;
+    }
+
+    $currentValue = $userEntity->get('field_team')->getValue();
+
+    // Only add if user does NOT have it.
+    if(!in_array($teamTid, array_column($currentValue, 'target_id'))){
+      // @credit https://drupal.stackexchange.com/a/197628
+      $userEntity->field_team[] = $teamTid;
+    }
+
+    return $userEntity;
   }
 
   private function loadUserByEmail(string $email) {

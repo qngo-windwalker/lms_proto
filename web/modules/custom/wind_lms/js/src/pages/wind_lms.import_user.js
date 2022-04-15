@@ -70,6 +70,7 @@ function ImportForm(props) {
       let lastName = row[i][1];
       let username = firstName.charAt(0) + lastName;
       let pass = firstName.toUpperCase().charAt(0) + capitalizeFirstLetter(lastName);
+      pass = '*****';
       // row[i].push(username);
       row[i].push(row[i][2]);
       row[i].push(pass);
@@ -105,11 +106,13 @@ function ImportForm(props) {
         if(res.data.hasOwnProperty('success') ){
           setSuccess(res.data);
         }
-
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
       }
+
+      setTimeout(() => { setIsLoading(false);}, 500);
+    }).catch(function(error) {
+      console.log(error);
+      setError(error);
+      setTimeout(() => { setIsLoading(false);}, 500);
     });
   }
 
@@ -122,7 +125,9 @@ function ImportForm(props) {
   let getMessage = () => {
     if(success){
       return(
-        <div className="alert alert-success" role="alert">Content successfully imported.</div>
+        <div className="alert alert-success" role="alert">
+          User(s) successfully imported. Imported user(s) will be prompted to change their password at first login.
+        </div>
       );
     }
 
@@ -196,7 +201,7 @@ function PreviewTable(props){
         </thead>
         <tbody>
         {dataRows.map( (cols, index) => (
-          <tr key={index}>
+          <tr key={index} className={`${isSuccessful(cols, index) ? 'text-success' : ''}`}>
             <th scope="row">
               { isSuccessful(cols, index) ? <i className="far fa-check-circle mr-2 text-success"></i> : ''}
               {index + 1}
