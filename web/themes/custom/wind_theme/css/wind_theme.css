@@ -84,7 +84,6 @@ body.page-front.user-not-logged-in .form-wrapper.user-login{margin-bottom: 80px;
 /*body.page-user input{ margin-bottom: 15px;}*/
 body.page-user-login .description{ margin-bottom: 20px; color: #8e8e8e;}
 body.page-user-login .password-strength { margin-bottom: 20px;}
-body.user-login .password-confirm-message { margin-bottom: 10px;} /* Passwords match: text */
 
 /* Hide the redundant links below the title. */
 body.page-user.page-user-login #block-wind-theme-local-tasks,
@@ -108,6 +107,9 @@ body.path-node footer {color: #545560; margin-bottom: 1rem;} /*Author info. Ex: 
 /*** [site]/user/{uid} ***/
 body.page-not-front.path-user.user-logged-in article > div {margin-bottom: 1rem;}
 body.page-not-front.path-user.user-logged-in article > div > div:first-child{font-weight: bold;}
+body.page-not-front.path-user.user-logged-in .password-confirm-message { margin-bottom: 10px;} /* Passwords match: text */
+body.page-not-front.path-user.user-logged-in .password-confirm-message .error{ color: #bd2130;}
+body.page-not-front.path-user.user-logged-in .password-confirm-message .ok{ color: #28a745;}
 
 /*** [site]/manager ***/
 /* Datatable */

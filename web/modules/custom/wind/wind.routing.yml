@@ -71,3 +71,20 @@ wind.technical:
     _title: 'Technical Support'
   requirements:
     _role: 'authenticated'
+wind.user.account_activation_notify:
+  path: 'user/{uid}/account-activation-notify'
+  defaults:
+    _controller: '\Drupal\wind\Controller\WindUserAccountActivationNotify::getContent'
+  requirements:
+    _permission: 'administer users'
+#################################################
+## Admin
+#################################################
+# confirmation route from WindLMSEnrollCourseAction.php
+wind.user.multiple_user_account_activation_email:
+  path: '/admin/people/user-account-activation-email'
+  defaults:
+    _form: '\Drupal\wind\Form\WindUserAccountActivationEmail'
+    _title: 'Account Activation Email'
+  requirements:
+    _permission: 'administer users'

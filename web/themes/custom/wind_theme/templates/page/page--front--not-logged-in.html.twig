@@ -71,10 +71,10 @@
 
         <div class="form-wrapper user-login" data-target="/user/login" {% if route_name == 'user.pass' or route_name == 'user.register' %}style="display: none;"{% endif %}>
           {{ login_form }}
-{#          <div class="switch-link text-center mt-auto pt-4">#}
-{#            <div><a href="{{ path('user.pass') }}">{{ 'Request new password'|t }}</a></div>#}
+          <div class="switch-link text-center mt-auto pt-4">
+            <div><a href="{{ path('user.pass') }}">{{ 'Request new password'|t }}</a></div>
 {#            <div><a href="{{ path('user.register') }}">{{ 'Create new account'|t }}</a></div>#}
-{#          </div>#}
+          </div>
         </div>
 
 {#        <div class="form-wrapper user-password" data-target="/user/password" {% if route_name != 'user.pass' %}style="display: none;"{% endif %}>#}
