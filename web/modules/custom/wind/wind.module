@@ -19,11 +19,17 @@ function wind_user_login($account) {
   if(isset($_GET['_format']) && $_GET['_format'] == 'json' ){
     return;
   }
+
+  // If user is login in from a one-time-link password reset email.
+  if (str_contains($_SERVER['REDIRECT_URL'], '/user/reset') || (isset($_REQUEST['form_id']) && $_REQUEST['form_id'] == 'user_pass_reset') ){
+    return;
+  }
   // Code below cause user to unable to login after update Drupal core to 9.2.3
 //  $response = new RedirectResponse('/dashboard');
 //  $response->send();
+
   // Temporary fix for unable to login. @see https://www.drupal.org/project/drupal/issues/2852657#comment-14151263
-//  \Drupal::service('request_stack')->getCurrentRequest()->query->set('destination', '/dashboard');
+  \Drupal::service('request_stack')->getCurrentRequest()->query->set('destination', '/dashboard');
 }
 
 /**
