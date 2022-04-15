@@ -7,8 +7,9 @@ wind_lms.learner_dashboard:
     _controller: \Drupal\wind_lms\Controller\WindLMSDashboardController:getContent
     _title_callback: \Drupal\wind_lms\Controller\WindLMSDashboardController:getTitle
   requirements:
-    _user_is_logged_in: 'TRUE'
-    _permission: 'access content'
+#    _user_is_logged_in: 'TRUE'
+#    _permission: 'access content'
+    _access: 'TRUE'
 # This page serves as a redirect to dashboard.
 wind_lms.home:
   path: welcome

@@ -20,8 +20,9 @@ export default class  DashboardPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataLoaded: false,
-      currentUser : null
+      isLoaded: false,
+      currentUser : null,
+      error: null,
     };
   }
 
@@ -34,14 +35,24 @@ export default class  DashboardPanel extends React.Component {
       .then(res => {
         // const posts = res.data.data.children.map(obj => obj.data);
         this.setState({
-          dataLoaded : true,
+          isLoaded : true,
           currentUser : res.data
         });
-      });
+      }).catch( (error) => {
+
+        this.setState({
+          isLoaded : true,
+          error
+        });
+      }
+    );
   }
 
   render() {
-    if (!this.state.dataLoaded) {
+    const { error, isLoaded } = this.state;
+    if (error) {
+      return <></>;
+    } else if (!isLoaded) {
       return (
         <div className="spinner-border text-primary" role="status">
           <span className="sr-only">Loading...</span>
