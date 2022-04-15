@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\user\Entity\User;
 
 /**
+ * Note: Any Redirect here will cause issue with Reset Password Login process
  * Implements hook_user_login().
  *
  * @param $account
@@ -22,7 +23,7 @@ function wind_user_login($account) {
 //  $response = new RedirectResponse('/dashboard');
 //  $response->send();
   // Temporary fix for unable to login. @see https://www.drupal.org/project/drupal/issues/2852657#comment-14151263
-  \Drupal::service('request_stack')->getCurrentRequest()->query->set('destination', '/dashboard');
+//  \Drupal::service('request_stack')->getCurrentRequest()->query->set('destination', '/dashboard');
 }
 
 /**
