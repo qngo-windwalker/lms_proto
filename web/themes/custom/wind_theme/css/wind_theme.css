@@ -111,6 +111,30 @@ body.page-not-front.path-user.user-logged-in .password-confirm-message { margin-
 body.page-not-front.path-user.user-logged-in .password-confirm-message .error{ color: #bd2130;}
 body.page-not-front.path-user.user-logged-in .password-confirm-message .ok{ color: #28a745;}
 
+/* Visual styling for the Password strength indicator */
+.password-strength__meter {
+  margin-top: 0.5em;
+  background-color: #ebeae4;
+}
+.password-strength__indicator {
+  -webkit-transition: width 0.5s ease-out;
+  transition: width 0.5s ease-out;
+  background-color: #77b259;
+}
+.password-strength__indicator.is-weak {
+  background-color: #e62600;
+}
+.password-strength__indicator.is-fair {
+  background-color: #e09600;
+}
+.password-strength__indicator.is-good {
+  background-color: #0074bd;
+}
+.password-strength__indicator.is-strong {
+  background-color: #77b259;
+}
+
+
 /*** [site]/manager ***/
 /* Datatable */
 .dataTables_info{color: #8e8e8e;} /*Applies to 'Showing # to # of # entries' */
