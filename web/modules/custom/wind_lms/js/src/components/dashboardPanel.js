@@ -15,6 +15,8 @@ import DashboardAllUserProgressTable from './dashboardAllUserProgressTable';
 import DashboardAllCoursesTable from './dashboardAllCoursesTable';
 import SideModalContentUser from "./sideModalContentUser";
 import SideModalContentCertUpload from "./sideModalContentCourseCertUpload";
+import DashboardTeamTable from "./dashboardTeamTable";
+import {Spinner} from "./GUI";
 
 export default class  DashboardPanel extends React.Component {
   constructor(props) {
@@ -54,9 +56,7 @@ export default class  DashboardPanel extends React.Component {
       return <></>;
     } else if (!isLoaded) {
       return (
-        <div className="spinner-border text-primary" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
+        <Spinner text={'Loading...'} />
       );
     }
 
@@ -68,8 +68,7 @@ export default class  DashboardPanel extends React.Component {
     return(
       <>
         {this.state.currentUser ? <CurrentUserCourseTable /> : <p>Loading...</p>}
-        {this.doesCurrentUserHasManagerAccess() && <DashboardAllUserProgressTable currentUser={this.state.currentUser} displayTeam={displayTeam} />}
-        {this.doesCurrentUserHasManagerAccess() && <DashboardAllCoursesTable />}
+        {this.doesCurrentUserHasManagerAccess() && <ManagerTables currentUser={this.state.currentUser} displayTeam={displayTeam} />}
         <Route path={["/user/:id", "/course/:nid/user/:uid/cert/upload"]} render={routeProps => { return (
           <Modala>
             {routeProps.match.path == '/user/:id' && <SideModalContentUser {...routeProps}/>}
@@ -94,6 +93,59 @@ export default class  DashboardPanel extends React.Component {
 
     return false;
   }
+}
+
+function ManagerTables(props){
+  const currentUser = props.currentUser;
+  const displayTeam = props.displayTeam;
+  const [isError, setIsError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [items, setItems] = useState(null);
+
+  const isEnglishMode = () => {
+    let pathname = window.location.pathname;
+    // if we are on 'es' spanish mode
+    if(pathname.split('/')[1] == 'es'){
+      return false;
+    }
+    return true;
+  }
+
+  useEffect(() => {
+    let url = new URL(window.location.href);
+    let testParam = url.searchParams.get('test') ? 'test=true' : '';
+    let langParam = isEnglishMode() ? 'en' : 'es';
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/wl-json/all-users-progress/?lang=${langParam}&${testParam}`);
+        let result = await response.json();
+        setItems(result);
+        console.log(result);
+      } catch (error) {
+        console.log(error);
+        setIsError(true);
+      }
+      setIsLoaded(true);
+    }
+
+    fetchData();
+  }, []);
+
+  return (
+    <>
+      {isError && <div className={`text-danger`}>Something went wrong ...</div>}
+      {!isLoaded ?
+        <Spinner text={'Loading...'} />
+       : (
+        <>
+          <DashboardAllUserProgressTable currentUser={currentUser} displayTeam={displayTeam} data={items} />
+          <DashboardTeamTable currentUser={currentUser} data={items} />
+        </>
+      )}
+      <DashboardAllCoursesTable />
+    </>
+  )
 }
 
 function Modala(props) {

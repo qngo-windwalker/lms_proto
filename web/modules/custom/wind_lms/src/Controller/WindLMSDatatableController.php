@@ -4,6 +4,7 @@ namespace Drupal\wind_lms\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\group\Entity\Group;
+use Drupal\wind_lms\WindLMSJSONStructure;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\node\NodeInterface;
@@ -54,27 +55,6 @@ class WindLMSDatatableController extends ControllerBase {
           'infoHTML' => $infoHTML,
         ];
       }
-    }
-    return new JsonResponse(['data' => $collection]);
-  }
-
-  public function getAllCourseUsers(Group $group) {
-    $collection = [];
-    $groupMembers = $group->getMembers();
-    foreach ($groupMembers as $groupMember) {
-      $groupContent = $groupMember->getGroupContent();
-      $user = $groupMember->getUser();
-      $uid = $user->id();
-      $collection[] = [
-        'first_name' => $user->get('field_first_name')->getString(),
-        'last_name' => $user->get('field_last_name')->getString(),
-        'email' => $user->getEmail(),
-        'last_login' => $this->formatTime($user->getLastLoginTime()),
-        'last_accessed' => $this->formatTime($user->getLastAccessedTime()),
-        'operations' => '...',
-        'rowUid' => 'uid-' . $uid,
-        'uid' => $uid,
-      ];
     }
     return new JsonResponse(['data' => $collection]);
   }
@@ -183,8 +163,8 @@ class WindLMSDatatableController extends ControllerBase {
       }
     }
     return new JsonResponse(['data' => $collection]);
-
   }
+
 
   private function getCourseFieldUserTeam(Node $course) {
     $field_user_team = $course->field_user_team->referencedEntities();
@@ -217,15 +197,6 @@ class WindLMSDatatableController extends ControllerBase {
     }
 
     return [];
-  }
-
-  private function formatTime($timestamp) {
-    if ($timestamp) {
-      return date('m-d-Y', $timestamp);
-    } else {
-      // If the $timestamp is 0
-      return 'Never';
-    }
   }
 
   private function getCoursesJsonData($arr) {
@@ -331,21 +302,5 @@ class WindLMSDatatableController extends ControllerBase {
         ]
       )
     );
-  }
-
-  /**
-   * @param EntityInterface $node_course
-   * @return int|string|void
-   */
-  private function getAllCourseClients(EntityInterface $node_course) {
-    $result = \Drupal::entityQuery('node')
-      ->condition('status', 1)
-      ->condition('type', 'client')
-      ->condition('field_course', $node_course->id())
-      ->execute();
-    if($result){
-      return count($result);
-    }
-    return '0';
   }
 }

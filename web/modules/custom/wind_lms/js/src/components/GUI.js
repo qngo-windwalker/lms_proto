@@ -88,7 +88,7 @@ export function Rhombus(props) {
 export function Spinner(props) {
   return (
     <div className={`spinner-container text-center ${props.containerClass}`}>
-      <div className="spinner-border text-dark" role="status">
+      <div className="spinner-border text-primary" role="status">
         <span className="sr-only">{props.text}</span>
       </div>
     </div>
@@ -350,7 +350,7 @@ export function RewardItem(props) {
 }
 
 export function StatusCircle(props){
-  const colorClass = props.label == 'Active' ? 'text-success' : 'text-danger';
+  const colorClass = props.label == 'Active' || props.label == 'Published' ? 'text-success' : 'text-danger';
   return (
     <>
       <i style={{fontSize : '0.5rem'}} className={`fas fa-circle fa-xs ${colorClass}`}></i>

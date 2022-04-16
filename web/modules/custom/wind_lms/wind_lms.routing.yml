@@ -28,10 +28,17 @@ wind_lms.import_user:
 wind_lms.course:
   path: 'course'
   defaults:
-    _controller: '\Drupal\wind_lms\Controller\WindLMSCourseController::getContent'
+    _controller: '\Drupal\wind_lms\Controller\WindLMSReactPageController::getCourseContent'
     _title: 'Course'
   requirements:
     _permission: 'access content'
+wind_lms.team:
+  path: 'team'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSReactPageController::getTeamContent'
+    _title: 'Team'
+  requirements:
+    _role: 'administrator+windwalker_manager+company_admin+manager'
 wind_lms.course.node:
   path: 'course/{node}'
   defaults:
@@ -124,52 +131,6 @@ wind_lms.cert.edit:
         type: entity:node
 # Old SCORM course URL
 # Need to streamline to /course
-#wind_lms.course:
-#  path: 'course/{group}'
-#  defaults:
-#    _controller: \Drupal\wind_lms\Controller\WindLMSCourseController::getContent
-#    _title_callback: \Drupal\wind_lms\Controller\WindLMSCourseController::getTitle
-#  requirements:
-#    _permission: 'administer site configuration'
-#  options:
-#    parameters:
-#      group:
-#        type: entity:group
-#wind_lms.course.user:
-#  path: 'course/{group}/users'
-#  defaults:
-#    _controller: \Drupal\wind_lms\Controller\WindLMSCourseUsersController::getContent
-#    _title_callback: \Drupal\wind_lms\Controller\WindLMSCourseUsersController::getTitle
-#  requirements:
-#    _permission: 'administer site configuration'
-#  options:
-#    parameters:
-#      group:
-#        type: entity:group
-#wind_lms.course.adduser:
-#  path: course/{group}/addUser
-#  defaults:
-#    _form: '\Drupal\wind_lms\Form\WindLMSCourseAddUsersForm'
-#    _title: 'Add User'
-#  requirements:
-#    _permission: 'authenticated'
-#  options:
-#    parameters:
-#      group:
-#        type: entity:group
-#wind_lms.course.user.add:
-#  path: course/{group}/user/{user}/add
-#  defaults:
-#    _form: \Drupal\wind_lms\Form\WindLMSCourseUserAddForm
-#    _title_callback: \Drupal\wind_lms\Form\WindLMSCourseUserAddForm::getTitle
-#  requirements:
-#    _custom_access: \Drupal\wind_lms\Form\WindLMSCourseUserAddForm::access
-#  options:
-#    parameters:
-#      group:
-#        type: entity:group
-#      user:
-#        type: entity:user
 #wind_lms.course.user.remove:
 #  path: course/{group}/user/{user}/remove
 #  defaults:
@@ -212,6 +173,13 @@ wind_lms.json.all_users_progress:
     _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getAllUsersProgress'
   requirements:
     _role: 'authenticated'
+wind_lms.json.team:
+  path: 'wl-json/team'
+  defaults:
+    _controller: '\Drupal\wind_lms\Controller\WindLMSJsonController::getAllTeams'
+    _title: 'Teams'
+  requirements:
+    _role: 'administrator+windwalker_manager+company_admin+manager'
 wind_lms.json.user:
   path: 'wl-json/user/{user}'
   defaults:
@@ -247,17 +215,6 @@ wind_lms.datatable.client:
     _title: 'Client'
   requirements:
     _role: 'authenticated'
-wind_lms.datatable.course.users:
-  path: 'wl-datatable/course/{group}/users'
-  defaults:
-    _controller: '\Drupal\wind_lms\Controller\WindLMSDatatableController::getAllCourseUsers'
-    _title: 'Users'
-  requirements:
-    _role: 'authenticated'
-  options:
-    parameters:
-      group:
-        type: entity:group
 wind_lms.datatable.curriculum:
   path: 'wl-datatable/curriculum'
   defaults:

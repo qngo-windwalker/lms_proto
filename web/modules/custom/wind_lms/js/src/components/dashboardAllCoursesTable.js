@@ -150,8 +150,8 @@ export default class DashboardAllCoursesTable extends Component{
         title: 'Status',
         className: 'align-middle',
         data:  function ( row, type, val, meta ) {
-          let active = ReactDOMServer.renderToString(<StatusCircle label={'Active'}/>);
-          let inActive = ReactDOMServer.renderToString(<StatusCircle label={'Inactive'}/>);
+          let active = ReactDOMServer.renderToString(<StatusCircle label={'Published'}/>);
+          let inActive = ReactDOMServer.renderToString(<StatusCircle label={'Unpublished'}/>);
           return (row.status) ? active : inActive;
         }
       },

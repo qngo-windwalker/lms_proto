@@ -40,7 +40,8 @@ export default class DashboardAllUserProgressTable extends Component{
     let url = new URL(window.location.href);
     let testParam = url.searchParams.get('test') ? 'test=true' : '';
     let langParam = this.isEnglishMode() ? 'en' : 'es';
-    this.getRecords(`/wl-json/all-users-progress/?lang=${langParam}&${testParam}`);
+    // this.getRecords(`/wl-json/all-users-progress/?lang=${langParam}&${testParam}`);
+    this.parseJson(this.props.data);
   }
 
   componentDidUpdate(){
@@ -223,8 +224,8 @@ export default class DashboardAllUserProgressTable extends Component{
         className: 'align-middle',
         data: function ( row, type, val, meta ) {
           let active = ReactDOMServer.renderToString(<StatusCircle label={'Active'}/>);
-          let inActive =  ReactDOMServer.renderToString(<StatusCircle label={'Inactive'}/>);
-          return (row.user.status) ? active : inActive;
+          let inActive =  ReactDOMServer.renderToString(<StatusCircle label={'Blocked'}/>);
+          return (row.user.status) == '1' ? active : inActive;
         }
       },
       {

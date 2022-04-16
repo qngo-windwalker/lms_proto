@@ -3,14 +3,9 @@
 import React, {Component} from 'react';
 import ReactDOM from "react-dom";
 import {
-  BrowserRouter,
   Switch,
-  Route,
   HashRouter,
-  withRouter,
-  useHistory,
   useLocation,
-  Link
 } from "react-router-dom";
 import DashboardPanel from '../components/dashboardPanel';
 
@@ -40,7 +35,7 @@ export default class Dashboard extends React.Component {
 
 function LocationConsole() {
   const location = useLocation();
-  console.log( '%clocation.pathname : ' + location.pathname, 'color: green');
+  // console.log( '%clocation.pathname : ' + location.pathname, 'color: green');
   return (<> </>);
 }
 

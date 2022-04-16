@@ -4,6 +4,7 @@ namespace Drupal\wind_lms\Controller;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\wind_lms\WindLMSJSONStructure;
 use Drupal\wind_tincan\Entity\TincanStatement;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Entity\EntityInterface;
@@ -151,6 +152,24 @@ class WindLMSJsonController extends ControllerBase {
       ];
     }
     return new JsonResponse(['userData' => $collection]);
+  }
+
+  public function getAllTeams() {
+    $vid = 'user_team';
+    $terms =\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+    if (!$terms) {
+      return new JsonResponse([]);
+    }
+
+    $collection = [];
+    /** @var stdClass $term */
+    foreach ($terms as $term) {
+      $collection[] = [
+        'tid' => $term->tid,
+        'name' => $term->name,
+      ];
+    }
+    return new JsonResponse(['data' => $collection]);
   }
 
   private function getUserData(User $user) {

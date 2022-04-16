@@ -17,7 +17,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\taxonomy\Entity\Term;
 
 /**
- * Provides a confirmation form for cancelling multiple user accounts.
+ * Confirmation form for Views bulk action of WindLMSAddUserTeamAction.
  *
  * @internal
  */

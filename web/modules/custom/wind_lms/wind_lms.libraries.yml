@@ -16,6 +16,11 @@ dashboard:
     js/dist/wind_lms.dashboard.bundle.js: {}
   dependencies:
     - wind/datatable_css
+team:
+  js:
+    js/dist/wind_lms.team.bundle.js: {minified: true , preprocess: false }
+  dependencies:
+    - wind/datatable_css
 import_user:
   js:
     js/dist/wind_lms.import_user.bundle.js: {}
