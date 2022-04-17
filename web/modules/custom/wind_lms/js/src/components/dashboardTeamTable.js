@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import ReactDOMServer from "react-dom/server";
-import {Spinner, StatusCircle} from "./GUI";
+import {Spinner, ExportCSV} from "./GUI";
 import Utility from "../modules/utility";
 import {ProgressBar} from "./courseProgress";
+import ReactDOM from "react-dom";
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
@@ -21,6 +22,8 @@ require( 'datatables.net-buttons/js/buttons.print.js' )();
 // Export to Excel button
 require( 'datatables.net-buttons/js/buttons.html5.js' )();
 
+const TABLE_ID = 'team-tbl';
+
 export default class DashboardTeamTable extends Component{
   constructor(props) {
     super(props);
@@ -30,9 +33,10 @@ export default class DashboardTeamTable extends Component{
       isLoaded: false,
     };
 
-    this.newRowMoreInfoClick = this.newRowMoreInfoClick.bind(this)
-    this.getMemberColumnContent = this.getMemberColumnContent.bind(this)
-    this.getProgressColumnContent = this.getProgressColumnContent.bind(this)
+    this.newRowMoreInfoClick = this.newRowMoreInfoClick.bind(this);
+    this.getMemberColumnContent = this.getMemberColumnContent.bind(this);
+    this.getProgressColumnContent = this.getProgressColumnContent.bind(this);
+    this.getOperationsContent = this.getOperationsContent.bind(this);
   };
 
   componentDidMount() {
@@ -64,7 +68,7 @@ export default class DashboardTeamTable extends Component{
         <table id="team-tbl" ref="main" className="table table-curriculum responsive-enabled mb-5" data-striping="1" />
         <div className="clear-both">
           <a className="btn btn-primary " href="/admin/structure/taxonomy/manage/user_team/add?destination=/dashboard"><i className="fas fa-plus-circle mr-1"></i> Add Team</a>
-          <a className="btn btn-primary ml-3" href="/admin/structure/taxonomy/manage/user_team/overview?destination=/dashboard"><i className="fas fa-plus-circle mr-1"></i> View Team List</a>
+          <a className="btn btn-primary ml-3" href="/admin/structure/taxonomy/manage/user_team/overview?destination=/dashboard"><i className="fas fa-th-list mr-1"></i> View Team List</a>
         </div>
       </div>
     );
@@ -95,6 +99,27 @@ export default class DashboardTeamTable extends Component{
     return `<div id="react-container-uid--">${progressBar}</div>`;
   }
 
+  getOperationsContent(td, cellData, rowData) {
+    let teamUsers = Utility.getAllActiveUsersInTeam(rowData.tid, this.props.data.userData);
+    let csvRow = [];
+    csvRow.push(['First Name', 'Last Name', 'Email', 'Overall Progress %']);
+    for (const teamUser of teamUsers){
+      let userOverProgress = Utility.getUserOverallCourseProgress(teamUser.courses);
+      let userColumn = [];
+      userColumn.push(teamUser.user.field_first_name);
+      userColumn.push(teamUser.user.field_last_name);
+      userColumn.push(teamUser.user.mail);
+      userColumn.push(Math.floor((userOverProgress.completePercentage) * 100));
+      csvRow.push(userColumn);
+    }
+
+    return ReactDOM.render(
+      <div className={`btn-group`}>
+        <a className="btn btn-sm btn-outline-secondary" href={`/taxonomy/term/${rowData.tid}/edit`}>Edit</a>
+        <ExportCSV data={csvRow} fileName={`${rowData.name}.csv`} />
+      </div>, td )
+  }
+
   initDataTable(data) {
     let columns = [
       {
@@ -119,15 +144,7 @@ export default class DashboardTeamTable extends Component{
         title: 'Operations',
         orderable: false,
         className : "td-action",
-        data: (row, type, val, meta) => {
-          let markup = ReactDOMServer.renderToString(
-            <div className={`btn-group`}>
-              <a className="btn btn-sm btn-outline-secondary" href={`/taxonomy/term/${row.tid}/edit`}>Edit</a>
-            </div>
-          );
-
-          return markup;
-        },
+        data: (row, type, val, meta)  => { return ''},
       }
     ];
 
@@ -139,6 +156,12 @@ export default class DashboardTeamTable extends Component{
       rowId : 'DT_RowId',
       data: data.data,
       columns: columns,
+      columnDefs: [
+        {
+          targets: [3],
+          createdCell: this.getOperationsContent,
+        },
+      ],
       ordering: true,
       // Todo: Find out why it's tot working. @see https://datatables.net/examples/advanced_init/length_menu.html
       // "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -153,11 +176,11 @@ export default class DashboardTeamTable extends Component{
         {
           title: 'Team',
           exportOptions: {
-            columns: [0,1,2,3,] // To exclude Operation column
+            columns: [0,1,2,] // To exclude Operation column
           },
           extend: 'excelHtml5',
           //   autoFilter: true,
-          //   sheetName: 'User Progress data'
+          //   sheetName: 'Worksheet 1'
         },
         {
           title: 'Team',
@@ -174,11 +197,6 @@ export default class DashboardTeamTable extends Component{
           autoFilter: true,
           extend: 'pdfHtml5',
         },
-
-        // {
-        //   extend: 'excelHtml5',
-        //   sheetName: 'User Progress data'
-        // },
       ],
       initComplete: this.onDataTableInitComplete,
       /**
@@ -201,7 +219,7 @@ export default class DashboardTeamTable extends Component{
     // Array to track the ids of the details displayed rows
     // this.detailRows = [];
 
-    $('#courses-tbl tbody').on( 'click', 'tr td.td-action a.anchor-info', (e) => this.newRowMoreInfoClick(e, dt));
+    $(`#${TABLE_ID} tbody`).on( 'click', 'tr td.td-action a.anchor-info', (e) => this.newRowMoreInfoClick(e, dt));
 
     //@see https://datatables.net/examples/server_side/row_details.html
     // On each draw, loop over the `detailRows` array and show any child rows
@@ -309,6 +327,6 @@ export default class DashboardTeamTable extends Component{
 
   onDataTableInitComplete(settings, json){
     // Add some magic.
-    $('#courses-tbl thead').addClass('thead-light');
+    $(`#${TABLE_ID} thead`).addClass('thead-light');
   }
 }

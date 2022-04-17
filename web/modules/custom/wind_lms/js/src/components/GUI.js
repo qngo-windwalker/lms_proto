@@ -358,3 +358,30 @@ export function StatusCircle(props){
     </>
   );
 }
+
+export function ExportCSV(props) {
+  let downloadCSV = () => {
+    console.log(this)
+    const rows = [
+      ["name1", "city1", "some other info"],
+      ["name2", "city2", "more info"]
+    ];
+
+    let csvContent = "data:text/csv;charset=utf-8,"
+      + props.data.map(e => e.join(",")).join("\n");
+
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", props.fileName);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link); // Required for FF
+    link.click();
+  }
+
+  return (
+    <button className="btn btn-sm btn-outline-secondary" onClick={downloadCSV}>
+      Export CSV
+    </button>
+  )
+}
