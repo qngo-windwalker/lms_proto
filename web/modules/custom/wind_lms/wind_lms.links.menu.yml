@@ -4,3 +4,9 @@ wind_lms.group.group_users:
   route_name: 'wind_lms.group.group_users'
   parent: 'system.admin_group'
   weight: 11
+wind_lms.admin:
+  title: 'Wind LMS settings'
+  description: 'LMS System configuration'
+  parent: system.admin_config_system
+  route_name: wind_lms.admin_settings
+  weight: 100
