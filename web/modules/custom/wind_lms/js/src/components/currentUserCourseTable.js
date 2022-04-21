@@ -87,7 +87,7 @@ export default class CurrentUserCourseTable extends Component{
 		return (
 			<div className="section">
         <h3 className="mb-3">{this.isEnglishMode() ? 'My Training' : 'Mi Entrenamiento'}</h3>
-        { !this.state.userCourses.length ? <p className="text-align-center my-5">You do not have any course assigned to you.</p> : this.getTable()}
+        { !this.state.userCourses.length && this.state.loadCompleted ? <p className="text-align-center my-5">You do not have any course assigned to you.</p> : this.getTable()}
         { !this.state.loadCompleted && <Spinner />}
 			</div>
 		);
