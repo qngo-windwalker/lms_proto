@@ -67,15 +67,18 @@ function wind_lms_mail($key, &$message, $params) {
  * @param \Drupal\Core\Entity\EntityInterface $userEntity
  */
 function wind_lms_user_presave(Drupal\Core\Entity\EntityInterface $userEntity) {
-  $originalValue = $userEntity->original->get('field_team')->getValue();
-  $newValue = $userEntity->get('field_team')->getValue();
-  if (!$userEntity->isNew() && $originalValue != $newValue ) {
-    $originalValueTargeIds = array_column($originalValue, 'target_id');
-    $newValueTargeIds = array_column($newValue, 'target_id');
-    $diff = _wind_array_compare($newValueTargeIds, $originalValueTargeIds);
-    if(!empty($diff['removed'])){
-      foreach ($diff['removed'] as $teamTid) {
-        CourseNode::clearUserCachesByTeamTid($userEntity->id(), $teamTid);
+  // Only existing user. New user do NOT have 'original' property.
+  if (!$userEntity->isNew()){
+    $originalValue = $userEntity->original->get('field_team')->getValue();
+    $newValue = $userEntity->get('field_team')->getValue();
+    if (!$userEntity->isNew() && $originalValue != $newValue ) {
+      $originalValueTargeIds = array_column($originalValue, 'target_id');
+      $newValueTargeIds = array_column($newValue, 'target_id');
+      $diff = _wind_array_compare($newValueTargeIds, $originalValueTargeIds);
+      if(!empty($diff['removed'])){
+        foreach ($diff['removed'] as $teamTid) {
+          CourseNode::clearUserCachesByTeamTid($userEntity->id(), $teamTid);
+        }
       }
     }
   }
