@@ -4,11 +4,17 @@ import axios from "axios";
 import Certificate from "./certificate";
 import _ from 'lodash';
 import {CourseProgress} from "./courseProgress";
+import {Spinner} from "./GUI";
 
 export default class CurrentUserCourseTable extends Component{
 	constructor(props) {
     super(props);
-    this.state = { tableRow: [], user : null, loadCompleted : false };
+    this.state = {
+      userCourses : [],
+      user : null,
+      loadCompleted : false,
+      systemSettings: null
+    };
     this.courseClickHandler = this.courseClickHandler.bind(this);
   };
 
@@ -81,7 +87,8 @@ export default class CurrentUserCourseTable extends Component{
 		return (
 			<div className="section">
         <h3 className="mb-3">{this.isEnglishMode() ? 'My Training' : 'Mi Entrenamiento'}</h3>
-        { (!this.state.tableRow.length && this.state.loadCompleted) ? <p className="text-align-center my-5">You do not have any course assigned to you.</p> : this.getTable()}
+        { !this.state.userCourses.length ? <p className="text-align-center my-5">You do not have any course assigned to you.</p> : this.getTable()}
+        { !this.state.loadCompleted && <Spinner />}
 			</div>
 		);
 	}
@@ -93,27 +100,22 @@ export default class CurrentUserCourseTable extends Component{
         <tr>
           <th>{this.isEnglishMode() ? 'Name' : 'Nombre'}</th>
           <th>{this.isEnglishMode() ? 'Status' : 'Estado'}</th>
-          <th>{this.isEnglishMode() ? 'Certificate' : 'Certificado'}</th>
+          {this.hideCertificateColumn(this.state.systemSettings) ? null : <th>Certificate</th>}
         </tr>
         </thead>
         <tbody>
-        {this.state.tableRow.map((obj, index) => {
-          return obj.Comp;
-          // return this.rendertBodyRow(obj.name, obj.rateFormatted, obj.hours, obj.priceCalculatedFormatted, index);
+        {this.state.userCourses.map((userCourse, index) => {
+          return (
+            <tr key={index} data-nid={userCourse.data['nid']}>
+              <td>{this.getColumnNameContent(userCourse)}</td>
+              <td className="text-capitalize"><CourseProgress overrideCompletion={this.getCourseProgressOverrideCompletion(userCourse)} courseProgress={this.getCourseProgress(userCourse)} /></td>
+              {this.hideCertificateColumn(this.state.systemSettings) ? null : <td><Certificate user={this.state.user} course-data={userCourse.data} onChange={(e) => this.onCertChange(e)} /></td>}
+            </tr>
+          )
         })}
         </tbody>
       </table>
     )
-  }
-
-  rendertBodyRow(dataObj, key, user){
-    return(
-      <tr key={key} data-nid={dataObj.data['nid']}>
-        <td>{this.getColumnNameContent(dataObj)}</td>
-        <td className="text-capitalize"><CourseProgress overrideCompletion={this.getCourseProgressOverrideCompletion(dataObj)} courseProgress={this.getCourseProgress(dataObj)} /></td>
-        <td><Certificate user={user} course-data={dataObj.data} onChange={(e) => this.onCertChange(e)} /></td>
-      </tr>
-    );
   }
 
   getColumnNameContent(dataObj) {
@@ -124,6 +126,15 @@ export default class CurrentUserCourseTable extends Component{
     if(dataObj.data.type == 'course'){
       return (<CourseNameColumn title={dataObj.data.title} nid={dataObj.data.nid} packages={dataObj.data.package_files} />)
     }
+  }
+
+  hideCertificateColumn(systemSettings) {
+    console.log(systemSettings);
+    if (!systemSettings || !systemSettings.hasOwnProperty('my_training') || !systemSettings.my_training.hasOwnProperty('hide_certificate_column')) {
+      return false;
+    }
+
+    return systemSettings.my_training.hide_certificate_column;
   }
 
   getCourseProgress(dataObj) {
@@ -194,17 +205,11 @@ export default class CurrentUserCourseTable extends Component{
 
   parseJson(data) {
     let user = {uid: data.uid, username: data.username, name: data.name};
-    let collection = [];
-    for(var i = 0; i < data.user_courses.length; i++){
-      let Comp = this.rendertBodyRow(data.user_courses[i], i, user);
-      // If user has not made selected an option to this item, then skip it.
-      collection.push({Comp : Comp});
-    }
-    // const posts = res.data.data.children.map(obj => obj.data);
     this.setState({
-      tableRow : collection,
       user : user,
-      loadCompleted: true
+      userCourses : data.user_courses,
+      loadCompleted: true,
+      systemSettings: data.hasOwnProperty('system_settings') ? data.system_settings : null
     });
   }
 }

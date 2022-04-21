@@ -282,23 +282,30 @@ function wind_theme_form_system_theme_settings_alter(&$form, FormStateInterface 
 /**
  * Validation callback for wind_theme_form_system_theme_settings_alter().
  */
-function wind_theme_form_system_theme_settings_alter_validate($form, &$form_state) {
+function wind_theme_form_system_theme_settings_alter_validate($form, FormStateInterface &$form_state) {
   if (in_array('file_managed_file_submit', $form_state->getSubmitHandlers())) {
     return;
   }
 
   $new_storage = [];
 
-  $file = _file_save_upload_from_form($form['wind_theme_body_settings']['image']['wind_theme_body_image_upload'], $form_state, 0);
-  if ($file) {
-    $file->setPermanent();
-    $file->save();
-    $file_usage = \Drupal::service('file.usage');
-    $file_usage->add($file, 'wind_theme', 'user', \Drupal::currentUser()->id());
-    $new_storage['wind_theme_body_image_path'] = $file;
-    // Put the temporary file in form_values so we can save it on submit.
-  } else {
-    $form_state->setErrorByName('wind_theme_body_image_upload', t("Couldn't upload file."));
+  if( $form_state->getValue('wind_theme_body_image_upload') ){
+    $file = _file_save_upload_from_form($form['wind_theme_body_settings']['image']['wind_theme_body_image_upload'], $form_state, 0);
+    if ($file) {
+      $file->setPermanent();
+      $file->save();
+      $file_usage = \Drupal::service('file.usage');
+      $file_usage->add($file, 'wind_theme', 'user', \Drupal::currentUser()->id());
+      $new_storage['wind_theme_body_image_path'] = $file;
+      // Put the temporary file in form_values so we can save it on submit.
+    } else {
+      $form_state->setErrorByName('wind_theme_body_image_upload', t("Couldn't upload file."));
+    }
+  }
+
+  // When intending to use the default background, unset the wind_theme_body_image_path.
+  if ($form_state->getValue('wind_theme_use_default_body_background')) {
+    $form_state->unsetValue('wind_theme_body_image_path');
   }
 
   $form_state->setStorage($new_storage);

@@ -362,3 +362,10 @@ wind_lms.user.course_progress_datatable:
     _title: 'User Course Progress'
   requirements:
     _custom_access: '\Drupal\wind_lms\Controller\WindLMSAdminUserCourseProgressesDatatableController::getAccess'
+wind_lms.admin_settings:
+  path: '/admin/config/wind-lms'
+  defaults:
+    _form: '\Drupal\wind_lms\Form\WindLMSAdminConfigurationForm'
+    _title: 'Wind LMS Configuration'
+  requirements:
+    _permission: 'administer site configuration'

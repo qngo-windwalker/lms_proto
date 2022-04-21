@@ -62,6 +62,23 @@ class CourseNode {
     }
   }
 
+  public static function clearUserCachesByTeamTid(int $uid, int $teamTid) {
+    $courseNids = self::getAllCoursesByTeamTid($teamTid);
+    if (!empty($courseNids)) {
+      self::deleteMultipleUserCoureCaches($uid, $courseNids);
+    }
+  }
+
+  private static function getAllCoursesByTeamTid($teamTid) {
+    $userStorage = \Drupal::entityTypeManager()->getStorage('node');
+    $query = $userStorage->getQuery();
+    return $query
+      ->condition('type', 'course')
+      ->condition('field_user_team', $teamTid, 'IN')
+      ->condition('status', '1')
+      ->execute();
+  }
+
   /**
    * Invoked by wind_lms_node_insert()
    * @param \Drupal\node\NodeInterface $node
