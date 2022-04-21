@@ -21,7 +21,11 @@ function wind_user_login($account) {
   }
 
   // If user is login in from a one-time-link password reset email.
-  if (str_contains($_SERVER['REDIRECT_URL'], '/user/reset') || (isset($_REQUEST['form_id']) && $_REQUEST['form_id'] == 'user_pass_reset') ){
+  if (isset($_SERVER['REDIRECT_URL']) && str_contains($_SERVER['REDIRECT_URL'], '/user/reset')) {
+    return;
+  }
+
+  if (isset($_REQUEST['form_id']) && $_REQUEST['form_id'] == 'user_pass_reset'){
     return;
   }
   // Code below cause user to unable to login after update Drupal core to 9.2.3

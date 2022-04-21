@@ -62,6 +62,7 @@ class WindLMSJsonController extends ControllerBase {
       return new Response($output, 200, array());
     }
 
+    $data['system_settings'] = $this->getSystemSettings();
     return new JsonResponse($data);
   }
 
@@ -338,6 +339,15 @@ class WindLMSJsonController extends ControllerBase {
         'vid' => $term->get('vid')->getString(),
       ];
     }, $childTerms);
+  }
+
+  private function getSystemSettings() {
+    $wind_lmsConfigSettings = \Drupal::config('wind_lms.settings');
+    return [
+      'my_training' => array(
+        'hide_certificate_column' => $wind_lmsConfigSettings->get('hide_certificate_column') == 1 ? TRUE : FALSE
+      )
+    ];
   }
 
 }

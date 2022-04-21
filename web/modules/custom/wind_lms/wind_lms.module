@@ -9,6 +9,7 @@ use Drupal\node\NodeInterface;
 use Drupal\user\Entity\User;
 use Drupal\Core\Site\Settings;
 use Drupal\wind_tincan\Entity\TincanStatement;
+use Drupal\wind_lms\CourseNode;
 
 //include_once('./inc/wind_lms.tincan.inc');
 module_load_include('inc', 'wind_lms', 'inc/wind_lms.db');
@@ -56,6 +57,26 @@ function wind_lms_mail($key, &$message, $params) {
   } else {
     if (isset($params['reply_to']) && !empty($params['reply_to'])) {
       $message['headers']['Reply-To'] = $params['reply_to'];
+    }
+  }
+}
+
+/**
+ * Implement hook_ENTITY_TYPE_presave()
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $userEntity
+ */
+function wind_lms_user_presave(Drupal\Core\Entity\EntityInterface $userEntity) {
+  $originalValue = $userEntity->original->get('field_team')->getValue();
+  $newValue = $userEntity->get('field_team')->getValue();
+  if (!$userEntity->isNew() && $originalValue != $newValue ) {
+    $originalValueTargeIds = array_column($originalValue, 'target_id');
+    $newValueTargeIds = array_column($newValue, 'target_id');
+    $diff = _wind_array_compare($newValueTargeIds, $originalValueTargeIds);
+    if(!empty($diff['removed'])){
+      foreach ($diff['removed'] as $teamTid) {
+        CourseNode::clearUserCachesByTeamTid($userEntity->id(), $teamTid);
+      }
     }
   }
 }
