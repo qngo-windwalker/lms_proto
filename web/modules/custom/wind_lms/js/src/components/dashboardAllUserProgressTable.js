@@ -413,9 +413,11 @@ function UserCourseTable(props) {
     updateProgressBarPercentage(percentage);
   };
 
+  // Update <ProgressBar /> static HTML
   let updateProgressBarPercentage = (percentage) => {
     let $elem = $(`#user-progress-tbl tr#uid-${props.data.user.uid} div.progress-bar`).css('width', percentage + '%').attr('aria-valuenow', percentage);
     $elem.find('span').html(percentage + '%');
+    $(`#user-progress-tbl tr#uid-${props.data.user.uid} div.progress-bar-text span`).html(percentage + '%');
   }
 
   return (

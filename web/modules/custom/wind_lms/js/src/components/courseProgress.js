@@ -29,19 +29,20 @@ export class CourseProgress extends Component {
   }
 }
 
+// This will get modified in <UserCourseTable /> -> updateProgressBarPercentage()
 export function ProgressBar(props){
   // Note: Stupid Javascript:  0 / 0 equal NaN
   let percentage = props.numerator == 0 ? 0 : Math.floor((props.numerator / props.total) * 100);
   return (
     <div className={`container-fluid`}>
       <div className={`row`}>
-        <div className={`col-md-9`}>
+        <div className={`col-md-9 pl-0`}>
           <div className="progress mt-2">
             <div className="progress-bar bg-success" role="progressbar" style={{width: percentage + '%'}} aria-valuenow={percentage} aria-valuemin="0" aria-valuemax="100" />
           </div>
         </div>
-        <div className={`col-md-3`}>
-          <span className={`mt-1 text-left`}>{percentage}%</span>
+        <div className={`col-md-3 p-0 progress-bar-text text-right`}>
+          <span className={``}>{percentage}%</span>
         </div>
       </div>
     </div>

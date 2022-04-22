@@ -279,6 +279,19 @@ wind_lms.api.import.json:
   requirements:
     _permission: 'administer users'
   methods: [POST]
+wind_lms.api.course.user.cert:
+  path: 'wind-lms/api/course/{course}/user/{user}/cert'
+  defaults:
+    _controller: \Drupal\wind_lms\Controller\WindLMSCourseUserCertController::getCourseUserCertContent
+    _title: 'Certificate'
+  requirements:
+    _role: 'authenticated'
+  options:
+    parameters:
+      course:
+        type: entity:node
+      user:
+        type: entity:user
 #################################################
 ## Admin
 #################################################

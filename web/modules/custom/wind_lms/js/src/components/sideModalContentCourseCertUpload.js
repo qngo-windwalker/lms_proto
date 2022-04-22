@@ -1,13 +1,6 @@
 'use strict';
 
 import React, { useEffect, useState  } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  HashRouter,
-  Link
-} from "react-router-dom";
 import axios from 'axios';
 import FileUpload from "./fileUpload";
 
@@ -17,28 +10,44 @@ export default class SideModalContentCourseCertUpload extends React.Component {
     this.state = {
       ajaxRespondData : null,
       courseVerifyStatus : false,
-      isFileVerified : false
+      isFileVerified : false,
+      error: null,
+      isLoaded: false,
     };
     this.allowFileVerification = this.doesCurrentUserHasAdminAccess();
     this.onFileVerificationSwitchChange = this.onFileVerificationSwitchChange.bind(this);
   }
 
   componentDidMount() {
-    this.load(`/jsonapi/node/certificate?filter[field_activity.nid]=${this.props.match.params.nid}&filter[field_learner.uid]=${this.props.match.params.uid}`)
+    this.load(`/wind-lms/api/course/${this.props.match.params.nid}/user/${this.props.match.params.uid}/cert`)
   }
 
   async load(url) {
-    axios.get(url)
-      .then(res => {
-        let newState = {
-          ajaxRespondData : res.data,
-        };
-
-        if (res.data.data.length) {
-          newState.isFileVerified = res.data.data[0].attributes.field_completion_verified
-        }
-        this.setState(newState);
+    try {
+      const response = await fetch(url);
+      let result = await response.json();
+      this.setState({
+        ajaxRespondData : result,
+        isFileVerified : this.getFileVerification(result)
       });
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+      this.setState({
+        error
+      });
+    }
+    this.setState({
+      isLoaded: true
+    });
+  }
+
+  getFileVerification(ajaxRespondData) {
+    if(!ajaxRespondData.hasOwnProperty('certificate') || !ajaxRespondData.certificate.hasOwnProperty('field_completion_verified')){
+      return false;
+    }
+
+    return ajaxRespondData.certificate.field_completion_verified == '1' ? true : false;
   }
 
   onFileVerificationSwitchChange(e){
@@ -67,19 +76,23 @@ export default class SideModalContentCourseCertUpload extends React.Component {
   }
 
   render() {
-    if (!this.state.ajaxRespondData) {
+    const { error, isLoaded, ajaxRespondData } = this.state;
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
       return (
         <div className="spinner-border text-primary" role="status">
           <span className="sr-only">Loading...</span>
         </div>
       );
     }
+
     let match = this.props.match;
 
     return (
       <>
         <div className="modal-header">
-          <h3 className="modal-title">Verification for <small className="text-muted"><NodeTitle nid={match.params.nid}/></small></h3>
+          <h3 className="modal-title">Verification for <small className="text-muted">{ajaxRespondData.course.title}</small></h3>
         </div>
 
         <div className="modal-body">
@@ -113,51 +126,5 @@ export default class SideModalContentCourseCertUpload extends React.Component {
     }
 
     return false;
-  }
-}
-
-function NodeTitle(props) {
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [respondData, setRespondData] = useState({});
-
-  let query = `query {
-      course(id: ${props.nid}){
-        id
-        title
-      }
-    }`;
-
-  // Note: the empty deps array [] means
-  // this useEffect will run once
-  // similar to componentDidMount()
-  useEffect(() => {
-    fetch(`/graphql/?query=${query}`)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setRespondData(result.data);
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      )
-  }, [])
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  } else if (!isLoaded) {
-    return <div>Loading...</div>;
-  } else {
-    return (
-      <>
-        {respondData.hasOwnProperty('course') && respondData.course.title}
-      </>
-    );
   }
 }

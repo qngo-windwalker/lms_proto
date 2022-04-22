@@ -129,7 +129,6 @@ export default class CurrentUserCourseTable extends Component{
   }
 
   hideCertificateColumn(systemSettings) {
-    console.log(systemSettings);
     if (!systemSettings || !systemSettings.hasOwnProperty('my_training') || !systemSettings.my_training.hasOwnProperty('hide_certificate_column')) {
       return false;
     }
