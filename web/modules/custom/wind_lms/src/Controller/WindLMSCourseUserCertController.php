@@ -11,9 +11,41 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\user\UserInterface;
+use Drupal\wind_lms\CourseNode;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class WindLMSCourseUserCertController extends ControllerBase{
+
+  public function getCourseUserCertContent(NodeInterface $course, UserInterface $user) {
+    /** @var \Drupal\wind_lms\CertificateNode $certNodeService */
+    $certNodeService = \Drupal::service('wind_lms.certifcate_node');
+    /** @var \Drupal\node\Entity\Node $certNode */
+    $certNode = $certNodeService->loadCertNode($course->id(), $user->id());
+    $certData = [];
+
+    if ($certNode) {
+      $certData['title'] = $certNode->getTitle();
+      $certData['field_learner'] = $certNode->get('field_learner')->getString();
+      $certData['field_completion_verified'] = $certNode->get('field_completion_verified')->getString();
+      $certData['field_completion_date'] = $certNode->get('field_completion_date')->getString();
+    }
+
+    return new JsonResponse([
+      'certificate' => $certData,
+      'course' => array(
+        'title' => $course->getTitle(),
+      ),
+      'user' => array(
+        'uid' => $user->id(),
+        'username' => $user->getAccountName(),
+        'fullName' => _wind_lms_get_user_full_name($user),
+        'field_first_name' => $user->hasField('field_first_name') ? $user->get('field_first_name')->value : '',
+        'field_last_name' => $user->hasField('field_last_name') ? $user->get('field_last_name')->value : '',
+        'status' => $user->get('status')->value,
+        'mail' => $user->get('mail')->value,
+      )
+    ]);
+  }
 
   /**
    * wind_lms.course.user.cert.upload:
@@ -141,6 +173,9 @@ class WindLMSCourseUserCertController extends ControllerBase{
 
     $certNode->revision_uid->setValue($this->currentUser()->id());
     $saveResult = $certNode->save();
+
+    CourseNode::deleteMultipleUserCoureCaches($user->id(), [$node->id()]);
+
     if(!$saveResult){
       return new JsonResponse([
         'code' => 500,
