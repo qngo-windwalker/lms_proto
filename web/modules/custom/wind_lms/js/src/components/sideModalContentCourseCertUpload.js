@@ -50,6 +50,28 @@ export default class SideModalContentCourseCertUpload extends React.Component {
     return ajaxRespondData.certificate.field_completion_verified == '1' ? true : false;
   }
 
+  onSetState(stateData) {
+    let userData = {
+      routeMatch : {
+        params: {
+          courseNid : this.props.match.params.nid,
+          userUid : this.props.match.params.uid,
+        }
+      },
+      ajaxRespondData : this.state.ajaxRespondData,
+      stateData: stateData,
+      uid: this.props.match.params.uid,
+      detail: 'userFileVerificationChanged'
+    }
+
+    if(this.props.hasOwnProperty('onFileVerificationChanged')){
+      this.props.onFileVerificationChanged(userData);
+    }
+
+    const customEvent = new CustomEvent('userPropertyUpdated', userData);
+    document.dispatchEvent(customEvent);
+  }
+
   onFileVerificationSwitchChange(e){
     let match = this.props.match;
     // @see https://reactjs.org/docs/forms.html
@@ -57,9 +79,11 @@ export default class SideModalContentCourseCertUpload extends React.Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    this.setState({
+    let newState = {
       [name]: value
-    });
+    };
+
+    this.setState(newState, () => this.onSetState(newState));
 
     // Save the data on the server
     axios.get(`course/${match.params.nid}/user/${match.params.uid}/cert/verify?field_completion_verified=${value}`)

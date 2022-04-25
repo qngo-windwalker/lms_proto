@@ -25,7 +25,10 @@ export default class  DashboardPanel extends React.Component {
       isLoaded: false,
       currentUser : null,
       error: null,
+      onUserUpdatedUid : null
     };
+
+    this.onFileVerificationChanged = this.onFileVerificationChanged.bind(this);
   }
 
   componentDidMount() {
@@ -68,15 +71,22 @@ export default class  DashboardPanel extends React.Component {
     return(
       <>
         {this.state.currentUser ? <CurrentUserCourseTable /> : <p>Loading...</p>}
-        {this.doesCurrentUserHasManagerAccess() && <ManagerTables currentUser={this.state.currentUser} displayTeam={displayTeam} />}
+        {this.doesCurrentUserHasManagerAccess() && <ManagerTables currentUser={this.state.currentUser} displayTeam={displayTeam} updateUser={this.state.onUserUpdatedUid} />}
         <Route path={["/user/:id", "/course/:nid/user/:uid/cert/upload"]} render={routeProps => { return (
           <Modala>
             {routeProps.match.path == '/user/:id' && <SideModalContentUser {...routeProps}/>}
-            {routeProps.match.path == '/course/:nid/user/:uid/cert/upload' && <SideModalContentCertUpload currentUser={this.state.currentUser} {...routeProps}/>}
+            {routeProps.match.path == '/course/:nid/user/:uid/cert/upload' && <SideModalContentCertUpload currentUser={this.state.currentUser} onFileVerificationChanged={this.onFileVerificationChanged } {...routeProps}/>}
           </Modala>
         );}}/>
       </>
     );
+  }
+
+  onFileVerificationChanged(e){
+    console.log(e);
+    this.state({
+      onUserUpdatedUid: e.routeMatch.params.userUid
+    });
   }
 
   doesCurrentUserHasManagerAccess() {
@@ -161,6 +171,10 @@ function Modala(props) {
     setTimeout(() => {
       // After CSS transition finished, call history to hide this hook.
       history.goBack();
+
+      if(props.hasOwnProperty('onSlideOutComplete')){
+        props.onSlideOutComplete();
+      }
     }, 350);
   };
 
