@@ -83,6 +83,7 @@ function ImportForm(props) {
       // each row being an array of cells.
       let processedData = processExcel(rows);
       setProcessedExcelData(rows);
+      setSuccess(null);// reset success to clear out old message
     });
   }
 
@@ -126,7 +127,8 @@ function ImportForm(props) {
     if(success){
       return(
         <div className="alert alert-success" role="alert">
-          User(s) successfully imported. Imported user(s) will be prompted to change their password at first login.
+          User(s) successfully imported. Imported user(s) will recieve an Account Activation notification email in their inbox.
+          {/*Imported user(s) will be prompted to change their password at first login.*/}
         </div>
       );
     }

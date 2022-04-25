@@ -4,6 +4,7 @@ namespace Drupal\wind_lms\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityStorageException;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\node\Entity\Node;
 use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -157,7 +158,9 @@ class WindLMSImportController extends ControllerBase {
 
   private function addUser($firstName, $lastName, $email, $role, $teamTid){
     $uid = $this->loadUserByEmail($email);
+    $userIsNew = null;
     if ($uid) {
+      // If user already exist in the system
       $user = User::load($uid);
     } else {
       $password = substr(strtoupper($firstName), 0, 1). ucfirst($lastName);
@@ -174,6 +177,8 @@ class WindLMSImportController extends ControllerBase {
       $user->set('field_first_name', $firstName);
       $user->set('field_last_name', $lastName);
       $user->activate();
+
+      $userIsNew = TRUE;
     }
 
 
@@ -188,6 +193,18 @@ class WindLMSImportController extends ControllerBase {
 
     try {
       $user->save();
+      // Note: $user->isNew() won't work after user has been saved ( $user->save() )to the database.
+      // And calling _user_mail_notify() before $user->save() won't work because the account won't have an Uid associated with it.
+      if ($userIsNew) {
+        $result = _user_mail_notify('status_activated', $user);
+        if ($result) {
+          // Code commetted out b/c ReactJS Frontend will have it own success message. Keeping codes for reference.
+          /** @var \Drupal\Core\Messenger\MessengerInterface $message */
+//          $message = \Drupal::messenger()->addMessage("An Account Activation notification email has been send to {$user->getEmail()}.");
+//          $statusMessages = $message->messagesByType(MessengerInterface::TYPE_STATUS);
+        }
+      }
+
     } catch (EntityStorageException $e) {
       return FALSE;
     }
