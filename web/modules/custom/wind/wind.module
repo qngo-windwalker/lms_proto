@@ -164,7 +164,7 @@ function _wind_array_compare($array_new, $array_origin) {
  * @param string $link
  */
 function _wind_gen_button_for_email($label, $link) {
-  $markup =  '<a class=" btn " style="align-items:baseline; box-sizing:border-box; border-radius:3px; border-width:0; display:inline-flex; font-style:normal; font-size:inherit; width:auto; height:3em; line-height:2.28571429em; margin:0; outline:none; padding:8px 10px; text-align:center; vertical-align:middle; white-space:nowrap; text-decoration:none; border:none; background:#007bff; color:#fff" href="'. $link .'">';
+  $markup =  '<a class=" btn " style="align-items:baseline; box-sizing:border-box; border-radius:3px; border-width:0; display:inline-block; font-style:normal; font-size:1.5em; width:auto; height:3em; line-height:2.28571429em; margin:0; outline:none; padding:8px 10px; text-align:center; vertical-align:middle; white-space:nowrap; text-decoration:none; border:none; background:#007bff; color:#fff" href="'. $link .'">';
   $markup .=  $label;
   $markup .=  '</a>';
   return $markup;

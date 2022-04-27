@@ -1,0 +1,29 @@
+uuid: a8a48c53-e112-4974-b834-05ed6f2aeeba
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_user
+    - node.type.notification
+id: node.notification.field_user
+field_name: field_user
+entity_type: node
+bundle: notification
+label: User
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    include_anonymous: false
+    filter:
+      type: _none
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

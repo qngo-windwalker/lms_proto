@@ -19,3 +19,6 @@ services:
   wind_lms.scorm:
     class: Drupal\wind_lms\WindLMSSCORMService
     arguments: ['@database']
+  wind_lms.notification:
+    class: Drupal\skywind\WindLMSNotificationService
+    arguments: [ '@database' ]

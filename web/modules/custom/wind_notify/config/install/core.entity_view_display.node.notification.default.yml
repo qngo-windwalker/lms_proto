@@ -1,0 +1,48 @@
+uuid: 5ba783ed-3d43-41ce-9375-ce4e69dc96b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.notification.body
+    - field.field.node.notification.field_notification_id
+    - field.field.node.notification.field_user
+    - node.type.notification
+  module:
+    - text
+    - user
+_core:
+  default_config_hash: 8kMuvlj5NJjNJ2JfB4GJ1HuChEF45OGexfWD0FzKZ9E
+id: node.notification.default
+targetEntityType: node
+bundle: notification
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_notification_id:
+    weight: 103
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_user:
+    weight: 104
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden: {  }

@@ -1,0 +1,20 @@
+<?php
+
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\user\Entity\User;
+use Drupal\wind_notify\WindNotifyUserService;
+
+/**
+ * Implement hook_cron()
+ */
+//function wind_notify_cron() {
+//  $last_run = \Drupal::state()->get('wind_notify.last_run', 0);
+//  $requestTime = \Drupal::time()->getRequestTime();
+//  // If 24 hours passed since last time.
+//  if (($requestTime - $last_run) > 86400) {
+//    // Update last run.
+//    \Drupal::state()->set('wind_notify.last_run', $requestTime);
+//
+//    WindNotifyUserService::sendCheckInReminder();
+//  }
+//}

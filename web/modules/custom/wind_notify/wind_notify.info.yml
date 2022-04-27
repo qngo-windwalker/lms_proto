@@ -1,0 +1,6 @@
+name: Windwalker Notify
+description: Provide email notification functionality
+type: module
+package: Windwalker
+version: 1.0
+core_version_requirement: ^8.8 || ^9

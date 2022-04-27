@@ -1,0 +1,8 @@
+services:
+  wind_notify.user:
+    class: Drupal\wind_notify\WindNotifyUserService
+    arguments: ['@database']
+
+  wind_notify.mail:
+    class: Drupal\wind_notify\WindNotifyMailService
+    arguments: ['@database']

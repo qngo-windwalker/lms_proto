@@ -10,6 +10,7 @@ use Drupal\user\Entity\User;
 use Drupal\Core\Site\Settings;
 use Drupal\wind_tincan\Entity\TincanStatement;
 use Drupal\wind_lms\CourseNode;
+use Drupal\wind_lms\WindLMSNotificationService;
 
 //include_once('./inc/wind_lms.tincan.inc');
 module_load_include('inc', 'wind_lms', 'inc/wind_lms.db');
@@ -215,6 +216,25 @@ function wind_lms_form_alter(&$form, \Drupal\Core\Form\FormStateInterface &$form
       unset($form['account']['roles']['#options']['company_admin']);
     }
 
+  }
+}
+
+/**
+ * Implement hook_cron()
+ */
+function wind_lms_cron() {
+      WindLMSNotificationService::sendCompletionReminder();
+  if (\Drupal::service('module_handler')->moduleExists('wind_notify')) {
+    // Module wind_notify enabled
+    $last_run = \Drupal::state()->get('wind_lms.last_run', 0);
+    $requestTime = \Drupal::time()->getRequestTime();
+    // If 24 hours passed since last time.
+    if (($requestTime - $last_run) > 86400) {
+      // Update last run.
+      \Drupal::state()->set('wind_lms.last_run', $requestTime);
+
+      WindLMSNotificationService::sendCompletionReminder();
+    }
   }
 }
 

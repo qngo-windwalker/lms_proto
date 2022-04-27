@@ -45,6 +45,35 @@ class WindLMSAdminConfigurationForm extends ConfigFormBase {
       '#default_value' => $config->get('hide_certificate_column'),
     ];
 
+    $form['notification_config'] = [
+      '#type' => 'vertical_tabs',
+      '#title' => $this->t('Email Notification Settings'),
+      '#default_tab' => 'edit-visibility',
+    ];
+
+    $form['notification'] = [
+      '#type' => 'details',
+      '#title' => $this->t('1 Week course Completion'),
+      '#description' => $this->t('Edit the 1 week course completion reminder email message sent to users if they have not completed their assigned course(s).
+                                  Available variables are: [site:name], [site:url], [user:full-name], [user:account-name], [user:mail], [site:login-url].'),
+      '#group' => 'notification_config',
+      '#parents' => ['settings', 'notification'],
+    ];
+
+    $form['notification']['one_week_course_completion_reminder_subject'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Subject'),
+      '#default_value' => $config->get('one_week_course_completion_reminder.subject') ? $config->get('one_week_course_completion_reminder.subject') : 'Incomplete Course Reminder',
+      '#maxlength' => 180,
+    ];
+
+    $form['notification']['one_week_course_completion_reminder_body'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Body'),
+      '#default_value' => $this->getEmailNotificationBody($config, 'one_week_course_completion_reminder.body'),
+      '#rows' => 12,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -54,8 +83,26 @@ class WindLMSAdminConfigurationForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->configFactory->getEditable('wind_lms.settings')
       ->set('hide_certificate_column', $form_state->getValue('hide_certificate_column'))
+      ->set('one_week_course_completion_reminder.subject', $form_state->getValue('one_week_course_completion_reminder_subject'))
+      ->set('one_week_course_completion_reminder.body', $form_state->getValue('one_week_course_completion_reminder_body'))
       ->save();
     parent::submitForm($form, $form_state);
+  }
+
+  private function getEmailNotificationBody(\Drupal\Core\Config\Config $config, string $configKey) {
+    if ($config->get($configKey)) {
+      return $config->get($configKey);
+    }
+    return 'Good Afternoon [user:full-name],
+
+You have incomplete course(s). Please click on the link below to login to complete your course(s):
+
+[site:login-url]
+
+
+Sincerely,
+[site:name] team
+    ';
   }
 
 }

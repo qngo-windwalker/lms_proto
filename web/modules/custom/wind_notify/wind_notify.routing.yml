@@ -1,0 +1,56 @@
+wind_notify.test:
+  path: 'wind-notify/user/last-access'
+  defaults:
+    _controller: '\Drupal\wind_notify\Controller\WindNotifyController::getUserLastAccess'
+    _title: 'User Last Access'
+  requirements:
+    _permission: 'administer users'
+wind_notify.admin.email_blast:
+  path: admin/wind-notify/email-blast
+  defaults:
+    _form: \Drupal\wind_notify\Form\WindNotifyEmailBlast
+    _title: 'Email Blast'
+  requirements:
+    _permission: 'administer users'
+wind_notify.api.user.current.notify:
+  path: 'wind-notify/api/user/current/alert'
+  defaults:
+    _controller: '\Drupal\wind_notify\Controller\WindNotifyAPIController::getCurrentUserAlert'
+  requirements:
+    _role: 'authenticated'
+wind_notify.api.notification.nid.edit.unpublish:
+  path: 'wind-notify/api/notification/{notification}/edit/unpublish'
+  defaults:
+    _controller: '\Drupal\wind_notify\Controller\WindNotifyAPIController::setUnpublish'
+  requirements:
+    _role: 'authenticated'
+  methods: [POST]
+  options:
+    parameters:
+      notification:
+        type: entity:node
+wind_notify.admin.preview:
+  path: admin/wind-notify/preview
+  defaults:
+    _controller: \Drupal\wind_notify\Controller\WindNotifyPreview::getContent
+    _title: 'Preview'
+  requirements:
+    _permission: 'administer users'
+wind_notify.admin.user.uid.preview:
+  path: admin/wind-notify/user/{user}/preview
+  defaults:
+    _controller: \Drupal\wind_notify\Controller\WindNotifyPreview::getUserContent
+    _title: 'Preview'
+  requirements:
+    _permission: 'administer users'
+  options:
+    parameters:
+      user:
+        type: entity:user
+wind_notify.admin.user.uid.edit:
+  path: 'admin/wind-notify/user/{user}/edit'
+  defaults:
+    _form: \Drupal\wind_notify\Form\WindNotifyUserEdit
+    _title: 'User Edit'
+  requirements:
+    _permission: 'administer users'
