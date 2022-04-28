@@ -223,7 +223,6 @@ function wind_lms_form_alter(&$form, \Drupal\Core\Form\FormStateInterface &$form
  * Implement hook_cron()
  */
 function wind_lms_cron() {
-      WindLMSNotificationService::sendCompletionReminder();
   if (\Drupal::service('module_handler')->moduleExists('wind_notify')) {
     // Module wind_notify enabled
     $last_run = \Drupal::state()->get('wind_lms.last_run', 0);

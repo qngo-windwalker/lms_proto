@@ -200,8 +200,8 @@ Sincerely,
     $threeDaysAgoTimeStamp =  $oDate->format('U');
     $query = \Drupal::entityQuery('user');
     $query->condition('status', 1);
-//    $query->condition('access', 0, '>');
-//    $query->condition('access', $threeDaysAgoTimeStamp, '<');
+    $query->condition('access', 0, '>');
+    $query->condition('access', $threeDaysAgoTimeStamp, '<');
     $query->condition('status', 1);
     $result = $query->execute();
     if (empty($result)) {
