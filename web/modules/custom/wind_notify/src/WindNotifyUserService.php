@@ -44,7 +44,7 @@ class WindNotifyUserService {
       // Check if notification record has already been sent out.
       $notifyResults = self::getNotification($user, self::USER_ONE_WEEK_CHECK_IN_ID);
       if (empty($notifyResults)) {
-        self::createNotifition($user, self::USER_ONE_WEEK_CHECK_IN_ID);
+        self::createNotification($user, self::USER_ONE_WEEK_CHECK_IN_ID);
       } else {
         $notiNodes = Node::loadMultiple($notifyResults);
         $oDate = new DrupalDateTime('now');
@@ -59,7 +59,7 @@ class WindNotifyUserService {
         }
         // If there has NOT been any recent notification in less than a week
         if (empty($recentNotifications)) {
-          self::createNotifition($user, self::USER_ONE_WEEK_CHECK_IN_ID);
+          self::createNotification($user, self::USER_ONE_WEEK_CHECK_IN_ID);
         }
       }
     }
@@ -74,7 +74,7 @@ class WindNotifyUserService {
 //    }
   }
 
-  static public function createNotifition(User $user, $field_notification_id){
+  static public function createNotification(User $user, $field_notification_id){
     $title = self::getNotifyTitle($user, $field_notification_id);
     $body = self::getNotifyBody($user, $field_notification_id);
     $notiNode = Node::create([
@@ -91,7 +91,45 @@ class WindNotifyUserService {
 
     }
     $to = $user->get('mail')->value;
-    WindNotifyMailService::sendMail($to, $title, $body, 'no-reply@windwalker.com');
+    $replyToEmail = self::getReplyToEmailAddress();
+    WindNotifyMailService::sendMail($to, $title, $body, $replyToEmail);
+  }
+
+  static public function createNotificationWithParams(User $user, $field_notification_id, $params){
+    $title = self::translateTokenizedString($user, $params['subject']);
+    $body = self::translateTokenizedString($user, $params['body']);
+    $notiNode = Node::create([
+      'type' => 'notification',
+      'status' => TRUE,
+      'title' => $title,
+    ]);
+    $notiNode->field_user[] = $user->id();
+    $notiNode->set('field_notification_id', $field_notification_id);
+    $notiNode->set('body', ['value' => $body, 'format' => 'basic_html']);
+    try {
+      $notiNode->save();
+    } catch (EntityStorageException $e) {
+
+    }
+    $to = $user->get('mail')->value;
+    $replyToEmail = self::getReplyToEmailAddress();
+    WindNotifyMailService::sendMail($to, $title, $body, $replyToEmail);
+  }
+
+  static public function translateTokenizedString(User $user, string $string) {
+    $greeting = self::getGreetingTime();
+    $string = str_replace('[date:greeting-time]', $greeting, $string);
+    $site_name = \Drupal::config('system.site')->get('name');
+    $string = str_replace('[site:name]', $site_name, $string);
+    $siteAddress = _wind_lms_get_scheme_and_http_host() . '?destination=/dashboard';
+    $string = str_replace('[site:url]', $siteAddress, $string);
+    $string = str_replace('[site:login-url]', _wind_gen_button_for_email('Login', $siteAddress), $string);
+    $user_full_name = _wind_lms_get_user_full_name($user);
+    $string = str_replace('[user:full-name]', $user_full_name, $string);
+    $string = str_replace('[user:account-name]', $user->getAccountName(), $string);
+    $string = str_replace('[user:mail]', $user->getEmail(), $string);
+
+    return $string;
   }
 
   static public function getNotifyTitle(User $user, $field_notification_id) {
@@ -127,6 +165,22 @@ class WindNotifyUserService {
         break;
     }
 
+  }
+
+  static function getReplyToEmailAddress() {
+    // Get the custom site notification email to use as the from email address
+    // if it has been set. @see admin/config/people/accounts -> Notification email address
+    $site_mail = \Drupal::config('system.site')->get('mail_notification');
+    // If the custom site notification email has not been set, we use the site
+    // default for this. @see /admin/config/system/site-information
+    if (empty($site_mail)) {
+      $site_mail = \Drupal::config('system.site')->get('mail');
+    }
+    if (empty($site_mail)) {
+      $site_mail = ini_get('sendmail_from');
+    }
+
+    return $site_mail;
   }
 
   static private function getGreetingTime() {

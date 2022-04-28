@@ -4,6 +4,7 @@ namespace Drupal\wind_lms\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\wind_lms\WindLMSNotificationService;
 
 /**
  * Provides a form for User Statistics Settings.
@@ -63,14 +64,14 @@ class WindLMSAdminConfigurationForm extends ConfigFormBase {
     $form['notification']['one_week_course_completion_reminder_subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Subject'),
-      '#default_value' => $config->get('one_week_course_completion_reminder.subject') ? $config->get('one_week_course_completion_reminder.subject') : 'Incomplete Course Reminder',
+      '#default_value' => WindLMSNotificationService::getNotificationSettings($config, 'one_week_course_completion_reminder.subject'),
       '#maxlength' => 180,
     ];
 
     $form['notification']['one_week_course_completion_reminder_body'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Body'),
-      '#default_value' => $this->getEmailNotificationBody($config, 'one_week_course_completion_reminder.body'),
+      '#default_value' => WindLMSNotificationService::getNotificationSettings($config, 'one_week_course_completion_reminder.body'),
       '#rows' => 12,
     ];
 
@@ -88,21 +89,4 @@ class WindLMSAdminConfigurationForm extends ConfigFormBase {
       ->save();
     parent::submitForm($form, $form_state);
   }
-
-  private function getEmailNotificationBody(\Drupal\Core\Config\Config $config, string $configKey) {
-    if ($config->get($configKey)) {
-      return $config->get($configKey);
-    }
-    return 'Good Afternoon [user:full-name],
-
-You have incomplete course(s). Please click on the link below to login to complete your course(s):
-
-[site:login-url]
-
-
-Sincerely,
-[site:name] team
-    ';
-  }
-
 }

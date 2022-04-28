@@ -41,10 +41,12 @@ class WindLMSNotificationService {
 
     foreach ($users as $user) {
       // Check if notification record has already been sent out.
-      $notifyResults = WindNotifyUserService::getNotification($user, WindNotifyUserService::USER_ONE_WEEK_COURSE_COMPLETION_REMINDER);
+      $notifyResults = WindNotifyUserService::getNotification($user, self::WIND_LMS_USER_COURSE_COMPLETION_REMINDER);
+      $params = self::createNotificationParams($user, self::WIND_LMS_USER_COURSE_COMPLETION_REMINDER);
       if (empty($notifyResults)) {
-        WindNotifyUserService::createNotifition($user, WindNotifyUserService::USER_ONE_WEEK_COURSE_COMPLETION_REMINDER);
+        WindNotifyUserService::createNotificationWithParams($user, self::WIND_LMS_USER_COURSE_COMPLETION_REMINDER, $params);
       } else {
+        // If notification already sent out, check when is the last time it sent out
         $notiNodes = Node::loadMultiple($notifyResults);
         $oDate = new DrupalDateTime('now');
         $oDate->modify('-7 day');
@@ -58,11 +60,55 @@ class WindLMSNotificationService {
         }
         // If there has NOT been any recent notification in less than a week
         if (empty($recentNotifications)) {
-          WindNotifyUserService::createNotifition($user, WindNotifyUserService::USER_ONE_WEEK_COURSE_COMPLETION_REMINDER);
+          WindNotifyUserService::createNotificationWithParams($user, self::WIND_LMS_USER_COURSE_COMPLETION_REMINDER, $params);
         }
       }
-  }
     }
+  }
+
+  static function createNotificationParams(User $user, $field_notification_id) {
+    $config = \Drupal::config('wind_lms.settings');
+    $subject = '';
+    $body = '';
+
+    switch ($field_notification_id) {
+      case self::WIND_LMS_USER_COURSE_COMPLETION_REMINDER :
+        $subject = self::getNotificationSettings($config, 'one_week_course_completion_reminder.subject');
+        $body = self::getNotificationSettings($config, 'one_week_course_completion_reminder.body');;
+        break;
+    }
+
+    return [
+      'subject' => $subject,
+      'body' => $body
+    ];
+  }
+
+  static function getNotificationSettings(\Drupal\Core\Config\Config $config, string $configKey){
+    if ($config->get($configKey)) {
+      return $config->get($configKey);
+    }
+
+    // If no value in the config, get static value
+    switch ($configKey) {
+      case 'one_week_course_completion_reminder.subject':
+        return 'Incomplete Course Reminder';
+
+      case 'one_week_course_completion_reminder.body':
+        return 'Good Afternoon [user:full-name],
+
+You have incomplete course(s). Please click on the link below to login to complete your course(s):
+
+[site:login-url]
+
+
+Sincerely,
+[site:name] team
+    ';
+    }
+
+    return '';
+  }
 
   /**
    * Create new notification node.
