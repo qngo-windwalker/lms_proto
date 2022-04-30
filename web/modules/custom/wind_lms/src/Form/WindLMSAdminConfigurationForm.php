@@ -61,6 +61,12 @@ class WindLMSAdminConfigurationForm extends ConfigFormBase {
       '#parents' => ['settings', 'notification'],
     ];
 
+    $form['notification']['one_week_course_completion_reminder_enable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable'),
+      '#default_value' => $config->get('one_week_course_completion_reminder.enable'),
+    ];
+
     $form['notification']['one_week_course_completion_reminder_subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Subject'),
@@ -84,6 +90,7 @@ class WindLMSAdminConfigurationForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->configFactory->getEditable('wind_lms.settings')
       ->set('hide_certificate_column', $form_state->getValue('hide_certificate_column'))
+      ->set('one_week_course_completion_reminder.enable', $form_state->getValue('one_week_course_completion_reminder_enable'))
       ->set('one_week_course_completion_reminder.subject', $form_state->getValue('one_week_course_completion_reminder_subject'))
       ->set('one_week_course_completion_reminder.body', $form_state->getValue('one_week_course_completion_reminder_body'))
       ->save();
