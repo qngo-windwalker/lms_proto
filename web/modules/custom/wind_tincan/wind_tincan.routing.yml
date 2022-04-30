@@ -94,6 +94,22 @@ wind_tincan.admin.tincan.user.uid.file.fid:
         type: entity:user
       file:
         type: entity:file
+wind_tincan.admin.agent_search:
+  path: '/admin/tincan/agent/search'
+  defaults:
+    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminTincanController::getAgentSearchContent'
+  requirements:
+    _permission: 'administer users'
+wind_tincan.admin.agent.agent_id:
+  path: '/admin/tincan/agent/{agent_id}'
+  defaults:
+    _controller: '\Drupal\wind_tincan\Controller\WindTincanAdminTincanController::getAgentContent'
+  requirements:
+    _permission: 'administer users'
+  options:
+    parameters:
+      agent_id:
+        type: string
 wind_tincan.admin.tincan.user.uid.file.fid.delete_all_statements:
   path: '/admin/tincan/user/{user}/file/{file}/delete-all-statements'
   defaults:

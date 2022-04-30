@@ -182,7 +182,16 @@ class  WindTincanAdminTincanController extends ControllerBase{
     ];
   }
 
-  private function getUserTincanStateDatatable($agentID, $tincanActiviyId) {
+  public function getAgentSearchContent() {
+    $simpleform = \Drupal::formBuilder()->getForm('Drupal\wind_tincan\Form\AgentSearchForm');
+
+    return $simpleform;
+  }
+
+  public function getAgentContent($agent_id) {
+  }
+
+  public function getUserTincanStateDatatable($agentID, $tincanActiviyId) {
     return [
       '#markup' => '<div><table id="tincan-user-tincan-state-tbl" ref="main" data-striping="1" data-page-length="20"></table></div>',
       '#attached' => array(
@@ -251,27 +260,7 @@ class  WindTincanAdminTincanController extends ControllerBase{
   }
 
   private function getTincanRecords($tincanActiviyId, $agentID) {
-    $result = _wind_tincan_get_all_statements_by_activity_id_and_agent_id($tincanActiviyId, $agentID);
-    if (!$result) {
-      return [];
-    }
-
-    $records = array();
-    $statements = TincanStatement::loadMultiple($result);
-    foreach ($statements as $statement ){
-      $json_array = Json::decode($statement->get('json')->value);
-      $records[] = array(
-        'statementJsonId' => $json_array['id'],
-        'statementJsonTimestamp' => strtotime($json_array['timestamp']),
-        'id' => $statement->id(),
-        'statementId' => $statement->get('statement_id')->value,
-        'verb' => $json_array['verb']['display'],
-        'context' => isset($json_array['context']) ? $json_array['context'] : [],
-        'object' => $json_array['object'],
-        'result' => isset($json_array['result']) ? $json_array['result'] :  'No data',
-      );
-    }
-    return $records;
+    return _wind_tincan_get_all_agent_tincan_activity_tincan_records($tincanActiviyId, $agentID) ;
   }
 
   private function getTincan($user, $TC_COURSE_ID) {

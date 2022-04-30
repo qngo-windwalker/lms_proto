@@ -126,7 +126,8 @@ function _wind_tincan_get_tincan_agent_id_by_user(User $user){
     'account' => array(
       'name' => _wind_tincan_get_user_tincan_agent_account_name($user),
       // Note: we send it as 'accountServiceHomePage' but Tincan JS API send back as 'homePage'
-      'homePage' => _wind_tincan_gen_tincan_agent_home_page($user->id())
+//      'homePage' => _wind_tincan_gen_tincan_agent_home_page($user->id())
+      'homePage' => 'https://aurora.windwalkerlearning.com/user/104'
     ),
     'name' => $user->getAccountName()
   ];
@@ -453,4 +454,28 @@ function _wind_tincan_get_course_activity_id($activity_id) {
     }
   }
   return $data;
+}
+
+function _wind_tincan_get_all_agent_tincan_activity_tincan_records($tincanActiviyId, $agentID) {
+  $result = _wind_tincan_get_all_statements_by_activity_id_and_agent_id($tincanActiviyId, $agentID);
+  if (!$result) {
+    return [];
+  }
+
+  $records = array();
+  $statements = TincanStatement::loadMultiple($result);
+  foreach ($statements as $statement ){
+    $json_array = Json::decode($statement->get('json')->value);
+    $records[] = array(
+      'statementJsonId' => $json_array['id'],
+      'statementJsonTimestamp' => strtotime($json_array['timestamp']),
+      'id' => $statement->id(),
+      'statementId' => $statement->get('statement_id')->value,
+      'verb' => $json_array['verb']['display'],
+      'context' => isset($json_array['context']) ? $json_array['context'] : [],
+      'object' => $json_array['object'],
+      'result' => isset($json_array['result']) ? $json_array['result'] :  'No data',
+    );
+  }
+  return $records;
 }
