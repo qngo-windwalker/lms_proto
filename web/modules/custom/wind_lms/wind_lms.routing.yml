@@ -382,3 +382,10 @@ wind_lms.admin_settings:
     _title: 'Wind LMS Configuration'
   requirements:
     _permission: 'administer site configuration'
+wind_lms.admin_settings.send_user_test_email:
+  path: '/admin/config/wind-lms/send-user-test-email'
+  defaults:
+    _form: '\Drupal\wind_lms\Form\WindLMSAdminSendUserTestEmailForm'
+    _title: 'Test Email Send'
+  requirements:
+    _permission: 'administer'

@@ -5,13 +5,7 @@ namespace Drupal\wind_notify;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\taxonomy\Entity\Term;
-use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\taxonomy\Plugin\views\argument\Taxonomy;
 use Drupal\user\Entity\User;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Datetime\DrupalDateTime;
 
 /**
