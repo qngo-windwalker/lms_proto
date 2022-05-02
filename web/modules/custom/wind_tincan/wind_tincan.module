@@ -126,8 +126,8 @@ function _wind_tincan_get_tincan_agent_id_by_user(User $user){
     'account' => array(
       'name' => _wind_tincan_get_user_tincan_agent_account_name($user),
       // Note: we send it as 'accountServiceHomePage' but Tincan JS API send back as 'homePage'
-//      'homePage' => _wind_tincan_gen_tincan_agent_home_page($user->id())
-      'homePage' => 'https://aurora.windwalkerlearning.com/user/104'
+      'homePage' => _wind_tincan_gen_tincan_agent_home_page($user->id())
+//      'homePage' => 'https://aurora.windwalkerlearning.com/user/104'
     ),
     'name' => $user->getAccountName()
   ];
