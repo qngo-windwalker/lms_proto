@@ -213,8 +213,19 @@ Sincerely,
     foreach ($users as $uid => $user) {
       $userAllCourseData = WindLMSJSONStructure::getUserAllCourseData($user);
       foreach ($userAllCourseData as $userCouseData) {
-        if (!$userCouseData['isCompleted']) {
+        if ($userCouseData['isCompleted']) {
+          continue;
+        }
+
+        $certificates = \Drupal\wind_lms\WindLMSJSONStructure::getCertificateNode($userCouseData['nid'], $user->id());
+        // If user has not completed the course AND there are no certificate uploaded
+        if(empty($certificates)){
           $collection[$uid] = $user;
+        } else {
+          // If certification exist, check if field_completion_verified is NOT checked
+          if($certificates['field_completion_verified'] != '1'){
+            $collection[$uid] = $user;
+          }
         }
       }
     }
