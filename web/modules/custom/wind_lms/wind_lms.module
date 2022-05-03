@@ -454,8 +454,9 @@ function _wind_lms_get_test_courses() {
   ];
   return $test_courses;
 }
+
 /**
- * Return array of course paid by the user
+ * Return array of course assigned to the user
  * @param $user
  *
  * @return array
@@ -466,7 +467,7 @@ function _wind_lms_get_user_all_assigned_course_data($user, $language = null){
   $isTestActive = \Drupal::request()->get('test');
   // Add testing courses if user has permission and parameter test is true
   if($isTestActive == 'true'){
-    $test_courses = _wind_lms_get_test_courses();
+//    $test_courses = _wind_lms_get_test_courses();
   }
 
   // Get all of the course nid(s) assigned to $user
