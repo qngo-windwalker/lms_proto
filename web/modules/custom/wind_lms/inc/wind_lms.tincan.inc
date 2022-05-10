@@ -52,12 +52,16 @@ function _wind_lms_course_add_tincan_course_data($user, string $TC_COURSE_ID) {
     $result = $query->execute();
     if ($result) {
       return [
-        'progress' => 'InComplete'
+        'progress' => 'Incomplete'
       ];
     } else {
-      return [
-        'progress' => 'Not Started'
-      ];
+      $query = \Drupal::entityQuery('tincan_statement');
+      $query->condition('field_tincan_actor', $agentID);
+      $query->condition('field_tincan_object.id', $TC_COURSE_ID);
+      $query->condition('json', 'attempted', 'CONTAINS');
+      $attempResult = $query->execute();
+
+      return $attempResult ? ['progress' => 'Incomplete'] : ['progress' => 'Not Started'];
     }
   }
   $statements = TincanStatement::loadMultiple($result);
@@ -73,7 +77,7 @@ function _wind_lms_course_add_tincan_course_data($user, string $TC_COURSE_ID) {
   }
 
   return [
-    'progress' => 'InComplete'
+    'progress' => 'Incomplete'
   ];
 }
 
