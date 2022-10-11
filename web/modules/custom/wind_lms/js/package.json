@@ -26,7 +26,7 @@
     "react-router-dom": "^5.2.0",
     "react-toastify": "^7.0.3",
     "reactstrap": "^8.9.0",
-    "read-excel-file": "^5.2.26",
+    "read-excel-file": "^5.5.0",
     "redux": "^4.0.5",
     "shortid": "^2.2.15"
   },
