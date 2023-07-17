@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import UserMenu from './userMenu';
 import HeaderTopLeft from './headerTopLeft';
-import LanguageSwitcher from './languageSwitcher';
 
 export default class SiteTopHeader extends Component{
   constructor(props) {
@@ -18,18 +17,41 @@ export default class SiteTopHeader extends Component{
       });
   }
 
+  getDashboardLink() {
+    let pathname = window.location.pathname;
+    // if we are on 'es' spanish mode
+    if(pathname.split('/')[1] == 'es'){
+      return {
+        href : '/es/dashboard',
+        label : 'Tablero'
+      }
+    }
+    return {
+      href: '/dashboard',
+      label: 'Dashboard'
+    };
+  }
+
   render(){
     // Todo: (Low priority) See https://getbootstrap.com/docs/4.5/components/navbar/ for a more clearner markup structure.
+
+    let authenticatedOutput;
+    let dashboardLink = this.getDashboardLink();
+    if (this.state.isLogin) {
+      authenticatedOutput = <><a className="link link-dashboard" href={dashboardLink.href} className="nav-link">{dashboardLink.label}</a></>;
+    }
+
     return (
       <>
-        <div id="header-top-left" className="col-md-8">
+        <div id="header-top-left" className="my-0 mr-md-auto ">
           <HeaderTopLeft data={this.state}/>
         </div>
 
-        <div id="header-top-right" className="col-md-4">
+        <div id="header-top-right" className="">
           <nav className="navbar navbar-expand-lg">
             <ul className="navbar-nav mr-auto">
               {/*<li className="nav-item"><LanguageSwitcher /></li>*/}
+              <li className="nav-item">{authenticatedOutput}</li>
               <li className="nav-item"><UserMenu /></li>
             </ul>
           </nav>

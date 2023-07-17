@@ -15,6 +15,6 @@ global-css:
       css/wind_theme.css: {}
 global-js:
   js:
-    js/dist/wind_theme.main.bundle.js: {}
+    js/dist/wind_theme.main.bundle.js: { minified: true, preprocess: false}
   dependencies:
     - core/drupal

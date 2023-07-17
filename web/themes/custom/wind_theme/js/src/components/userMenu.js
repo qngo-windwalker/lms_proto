@@ -28,6 +28,20 @@ export default class UserMenu extends Component{
     this.setState({isUserMenuActive: this.state.isUserMenuActive ? false : true});
   }
 
+  getGreeting() {
+    let greeting = this.isEnglishMode() ? 'Hi' : 'Hola';
+    return greeting + ' ' + this.getUserFirstName();
+  }
+
+  getUserFirstName() {
+    return '';
+    if(!this.state.currentUser){
+      return '';
+    }
+
+    return this.state.currentUser.name;
+  }
+
   isEnglishMode() {
     let pathname = window.location.pathname;
     // if we are on 'es' spanish mode
@@ -54,7 +68,7 @@ export default class UserMenu extends Component{
         <>
           <div className={`user-block ml-3 dropdown ${this.state.isUserMenuActive && 'show'}`}>
             <a href="/user/1" className="nav-link d-flex align-items-center" data-toggle="dropdown" aria-expanded="false" onClick={this.handleUserMenuClick}>
-              {this.isEnglishMode() ? 'Hi' : 'Hola'},  &nbsp; <i className="fas fa-user-circle"> </i> &nbsp; <i className="fas fa-sort-down"> </i>
+              {this.getGreeting()},  &nbsp; <i className="fas fa-user-circle"> </i> &nbsp; <i className="fas fa-sort-down"> </i>
             </a>
             <div className={`dropdown-menu dropdown-menu-right ${this.state.isUserMenuActive && 'show'}`}
                  x-placement="bottom-end"

@@ -46,11 +46,11 @@ export default class HeaderTopLeft extends Component{
     return (
       <>
         <a id="site-logo"  className="my-0 mr-md-auto font-weight-normal" href="/" rel="Home" title="Home">
-          <img height="55" src={this.state.siteLogoImgSrc} alt="Company Logo"/>
+          <img src={this.state.siteLogoImgSrc} alt="Company Logo"/>
         </a>
-        <nav id="site-header-left-nav" className="my-2 my-md-0 mr-md-3">
-          {authenticatedOutput}
-        </nav>
+        {/*<nav id="site-header-left-nav" className="my-2 my-md-0 mr-md-3">*/}
+        {/*  {authenticatedOutput}*/}
+        {/*</nav>*/}
       </>
     );
   }
